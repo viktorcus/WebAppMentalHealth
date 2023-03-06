@@ -9,6 +9,10 @@ type UserInfo = {
   place: string;
 };
 
+type UserIdParam = {
+  userId: number;
+};
+
 export declare enum Gender {
   Male,
   Female,
