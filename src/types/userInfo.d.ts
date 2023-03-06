@@ -1,15 +1,16 @@
 type UserInfo = {
-    userId: number,
-    name: string,
-    email: string,
-    password: string,
-    birthdate: Date,
-    gender: Gender,
-    place: string,
+  userId: number;
+  userName: string;
+  email: string;
+  verifiedEmail: boolean;
+  passwordHash: string;
+  birthday: Date;
+  gender: Gender;
+  place: string;
 };
 
-enum Gender {
-    Male, 
-    Female,
-    Other
-};
+export declare enum Gender {
+  Male,
+  Female,
+  Other,
+}
