@@ -1,8 +1,8 @@
 type MedicalHistory = {
-    medicalHistoryId: number,
-    userId: number,
-    conditionName: string,
-    diagnosisDate: Date,
-    treatment: string,
-    note: string
+  medicalHistoryId: string;
+  userId: string;
+  conditionName: string;
+  diagnosisDate: Date;
+  treatment: string;
+  note: string;
 };

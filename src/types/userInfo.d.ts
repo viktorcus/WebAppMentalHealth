@@ -1,5 +1,5 @@
 type UserInfo = {
-  userId: number;
+  userId: string;
   userName: string;
   email: string;
   verifiedEmail: boolean;
@@ -14,3 +14,5 @@ export declare enum Gender {
   Female,
   Other,
 }
+
+export { UserInfo };
