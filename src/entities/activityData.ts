@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from 'typeorm';
+import { User } from './user'
 
 @Entity()
 export class ActivityData {
@@ -6,7 +7,7 @@ export class ActivityData {
     @PrimaryGeneratedColumn()
     activityDataId: number;
 
-    @Column()
+    @ManyToOne(() => User, (user) => user.userId)
     userId: number;
 
     @Column()
