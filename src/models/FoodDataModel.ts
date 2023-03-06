@@ -9,8 +9,12 @@ async function addFoodData(foodData: FoodData): Promise<FoodData> {
     newFoodData.userId = foodData.userId;
     newFoodData.meal = foodData.meal;
     newFoodData.mealDate = foodData.mealDate;
-    newFoodData.calorieIntake = foodData.calorieIntake;
-    newFoodData.note = foodData.note;
+    if(foodData.calorieIntake) {
+        newFoodData.calorieIntake = foodData.calorieIntake;
+    }
+    if(foodData.note) {
+        newFoodData.note = foodData.note;
+    }
 
     newFoodData = await foodRepository.save(newFoodData);
     return newFoodData;

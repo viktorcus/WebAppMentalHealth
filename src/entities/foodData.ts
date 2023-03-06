@@ -16,9 +16,9 @@ export class FoodData {
     @Column()
     meal: string;
 
-    @Column()
+    @Column({ nullable: true })
     calorieIntake: number;
 
-    @Column()
+    @Column( { nullable: true })
     note: string;
 }

@@ -22,9 +22,9 @@ export class ActivityData {
     @CreateDateColumn()
     endTime: Date;
 
-    @Column()
+    @Column({ nullable: true })
     caloriesBurned: number;
 
-    @Column()
+    @Column({ nullable: true })
     note: string;
 }

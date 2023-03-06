@@ -3,8 +3,8 @@ type FoodData = {
     userId: number,
     mealDate: Date,
     meal: string,
-    calorieIntake: number,
-    note: string,
+    calorieIntake: number | null,
+    note: string | null,
 };
 
 type FoodDataIdParam = {

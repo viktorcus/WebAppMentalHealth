@@ -5,8 +5,8 @@ type ActivityData = {
     date: Date,
     startTime: Date,
     endTime: Date,
-    caloriesBurned: number,
-    note: string,
+    caloriesBurned: number | null,
+    note: string | null,
 };
 
 type ActivityDataIdParam = {
