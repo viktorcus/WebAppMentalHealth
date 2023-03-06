@@ -5,7 +5,6 @@ type ActivityData = {
     date: Date,
     startTime: Date,
     endTime: Date,
-    duration: Date,
     caloriesBurned: number,
     note: string,
 };

@@ -16,4 +16,11 @@ async function addFoodData(foodData: FoodData): Promise<FoodData> {
     return newFoodData;
 }
 
-export { addFoodData };
+async function getAllFoodDataForUser(userId: number): Promise<FoodData[]> {
+    return foodRepository.find({ where: { userId } });
+}
+
+export { 
+    addFoodData,
+    getAllFoodDataForUser,
+ };
