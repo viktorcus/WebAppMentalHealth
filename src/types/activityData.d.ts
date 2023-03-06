@@ -1,10 +1,10 @@
 type ActivityData = {
-    activityDataId: number,
-    userId: number,
-    activityType: string,
-    date: Date,
-    startTime: Date,
-    endTime: Date,
-    caloriesBurned: number,
-    note: string,
+  activityDataId: number;
+  userId: string;
+  activityType: string;
+  date: Date;
+  startTime: Date;
+  endTime: Date;
+  caloriesBurned: number;
+  note: string;
 };
