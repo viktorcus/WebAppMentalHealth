@@ -40,6 +40,7 @@ async function getFoodData(req: Request, res: Response): Promise<void> {
         const foodData = await getFoodDataById(foodDataId);
         if(! foodData) {  // not found
             res.sendStatus(404);
+            return;
         }
         console.log(foodData);
         res.json(foodData);
@@ -58,6 +59,7 @@ async function updateFoodData(req: Request, res: Response): Promise<void> {
         const foodData = await updateFoodDataById(foodDataId, newFood);
         if(! foodData) {  // not found
             res.sendStatus(404);
+            return;
         }
         console.log(foodData);
         res.json(foodData);
