@@ -24,7 +24,7 @@ async function addActivityData(activityData: ActivityData): Promise<ActivityData
     return newActivity;
 }
 
-async function getAllActivityDataForUser(userId: number): Promise<ActivityData[]> {
+async function getAllActivityDataForUser(userId: string): Promise<ActivityData[]> {
     return activityRepository.find({ where: { userId } });
 }
 
@@ -78,7 +78,7 @@ async function updateActivityDataById(activityDataId: number, newActivity: Activ
 
 // finds activity types that the user has submitted before
 // can be used in the UI so that the user can pick from their saved activity types instead of always typing it out
-async function getActivityTypesForUser(userId: number): Promise<string[]> {
+async function getActivityTypesForUser(userId: string): Promise<string[]> {
     const types = await activityRepository
                 .createQueryBuilder('activityData')
                 .where('userId = :userId', { userId })

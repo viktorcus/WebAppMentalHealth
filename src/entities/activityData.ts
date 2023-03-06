@@ -8,7 +8,7 @@ export class ActivityData {
     activityDataId: number;
 
     @ManyToOne(() => User, (user) => user.userId)
-    userId: number;
+    userId: string;
 
     @Column()
     activityType: string;

@@ -1,6 +1,6 @@
 type FoodData = {
     foodDataId: number,
-    userId: number,
+    userId: string,
     mealDate: Date,
     meal: string,
     calorieIntake: number | null,

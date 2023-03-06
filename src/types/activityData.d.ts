@@ -1,6 +1,6 @@
 type ActivityData = {
     activityDataId: number,
-    userId: number,
+    userId: string,
     activityType: string,
     date: Date,
     startTime: Date,

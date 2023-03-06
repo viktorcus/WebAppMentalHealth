@@ -9,7 +9,7 @@ type UserInfo = {
 };
 
 type UserIdParam = {
-    userId: number,
+    userId: string,
 };
 
 export declare enum Gender {

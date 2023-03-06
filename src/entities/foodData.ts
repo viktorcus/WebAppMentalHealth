@@ -8,7 +8,7 @@ export class FoodData {
     foodDataId: number;
 
     @ManyToOne(() => User, (user) => user.userId)
-    userId: number;
+    userId: string;
 
     @CreateDateColumn()
     mealDate: Date;

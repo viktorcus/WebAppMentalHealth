@@ -20,7 +20,7 @@ async function addFoodData(foodData: FoodData): Promise<FoodData> {
     return newFoodData;
 }
 
-async function getAllFoodDataForUser(userId: number): Promise<FoodData[]> {
+async function getAllFoodDataForUser(userId: string): Promise<FoodData[]> {
     return foodRepository.find({ where: { userId } });
 }
 
