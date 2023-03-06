@@ -10,6 +10,9 @@ export class MedicationData {
   user: User;
 
   @Column()
+  userId: string;
+
+  @Column()
   medicationName: string;
 
   @Column({ nullable: true })

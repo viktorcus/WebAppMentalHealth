@@ -10,6 +10,9 @@ export class MedicalHistory {
   user: User;
 
   @Column()
+  userId: string;
+
+  @Column()
   conditionName: string;
 
   @Column()
