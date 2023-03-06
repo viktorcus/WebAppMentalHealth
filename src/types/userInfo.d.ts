@@ -10,7 +10,13 @@ type UserInfo = {
 };
 
 type UserIdParam = {
-  userId: number;
+  userId: string;
+};
+
+type AuthRequest = {
+  userName: string;
+  email: string;
+  password: string;
 };
 
 export declare enum Gender {
@@ -19,4 +25,4 @@ export declare enum Gender {
   Other,
 }
 
-export { UserInfo };
+export { UserInfo, UserIdParam, AuthRequest };
