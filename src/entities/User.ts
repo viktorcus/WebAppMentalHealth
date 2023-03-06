@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Gender } from '../types/userInfo';
+import { MedicalHistory } from './medicalHistory';
+import { MedicationData } from './medicationData';
 
 @Entity()
 export class User {
@@ -26,4 +28,10 @@ export class User {
 
   @Column({ nullable: true })
   place: string;
+
+  @OneToMany(() => MedicalHistory, (medicalHistory) => medicalHistory.user)
+  medicalHistory: MedicalHistory[];
+
+  @OneToMany(() => MedicationData, (medicationData) => medicationData.user)
+  medicationData: MedicationData[];
 }
