@@ -28,8 +28,33 @@ async function getFoodDataById(foodDataId: number): Promise<FoodData | null> {
     return foodRepository.findOne({ where: { foodDataId } });
 }
 
+// generic method to update multiple fields of an activity at once
+async function updateFoodDataById(foodDataId: number, newFood: FoodData): Promise<FoodData | null> {
+    // check that activity exists
+    const food = await foodRepository.findOne({ where: { foodDataId } });
+    if(! food) {  // failed to find
+        return null;
+    }
+
+    if(newFood.meal !== food.meal) {
+        food.meal = newFood.meal;
+    }if(newFood.mealDate !== food.mealDate) {
+        food.mealDate = newFood.mealDate;
+    }
+    if(newFood.calorieIntake && newFood.calorieIntake !== food.calorieIntake) {
+        food.calorieIntake = newFood.calorieIntake;
+    }
+    if(newFood.note && newFood.note !== food.note) {
+        food.note = newFood.note;
+    }
+
+    foodRepository.save(food);
+    return food;
+}
+
 export { 
     addFoodData,
     getAllFoodDataForUser,
     getFoodDataById,
+    updateFoodDataById,
  };

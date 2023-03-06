@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { addFoodData, getAllFoodDataForUser, getFoodDataById } from '../models/FoodDataModel';
+import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById } from '../models/FoodDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
 
@@ -50,8 +50,27 @@ async function getFoodData(req: Request, res: Response): Promise<void> {
     }
 }
 
+async function updateFoodData(req: Request, res: Response): Promise<void> {
+    const { foodDataId } = req.params as unknown as FoodDataIdParam;
+    const newFood = req.body as FoodData;
+
+    try {
+        const foodData = await updateFoodDataById(foodDataId, newFood);
+        if(! foodData) {  // not found
+            res.sendStatus(404);
+        }
+        console.log(foodData);
+        res.json(foodData);
+    } catch(err) {
+        console.error(err);
+        const databaseErrorMessage = parseDatabaseError(err);
+        res.status(500).json(databaseErrorMessage);
+    }
+}
+
 export default { 
     submitFoodData,
     getAllUserFoodData,
     getFoodData,
+    updateFoodData,
 }

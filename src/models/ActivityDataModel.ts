@@ -45,14 +45,35 @@ async function getActivityDuration(activityDataId: number): Promise<number | nul
     return end.diff(start, 'minute');
 }
 
-async function updateActivityDataById(activityDataId: number): Promise<ActivityData | null> {
+// generic method to update multiple fields of an activity at once
+async function updateActivityDataById(activityDataId: number, newActivity: ActivityData): Promise<ActivityData | null> {
     // check that activity exists
-    const activity = await getActivityDataById(activityDataId);
+    const activity = await activityRepository.findOne({ where: { activityDataId } });
     if(! activity) {  // failed to find
         return null;
     }
 
+    if(newActivity.activityType !== activity.activityType) {
+        activity.activityType = newActivity.activityType;
+    }
+    if(newActivity.date !== activity.date) {
+        activity.date = newActivity.date;
+    }
+    if(newActivity.startTime !== activity.startTime) {
+        activity.startTime = newActivity.startTime;
+    }
+    if(newActivity.endTime !== activity.endTime) {
+        activity.endTime = newActivity.endTime;
+    }
+    if(newActivity.caloriesBurned && newActivity.caloriesBurned !== activity.caloriesBurned) {
+        activity.caloriesBurned = newActivity.caloriesBurned;
+    }
+    if(newActivity.note && newActivity.note !== activity.note) {
+        activity.note = newActivity.note;
+    }
 
+    activityRepository.save(activity);
+    return activity;
 }
 
 // finds activity types that the user has submitted before
@@ -72,4 +93,5 @@ export {
     getActivityDataById,
     getActivityDuration,
     getActivityTypesForUser,
+    updateActivityDataById,
 };

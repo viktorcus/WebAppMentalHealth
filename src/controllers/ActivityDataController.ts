@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { addActivityData, getActivityDataById, getAllActivityDataForUser } from '../models/ActivityDataModel';
+import { addActivityData, getActivityDataById, getAllActivityDataForUser, updateActivityDataById } from '../models/ActivityDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
 
@@ -50,8 +50,27 @@ async function getActivityData(req: Request, res: Response): Promise<void> {
     }
 }
 
+async function updateActivityData(req: Request, res: Response): Promise<void> {
+    const { activityDataId } = req.params as unknown as ActivityDataIdParam;
+    const newActivity = req.body as ActivityData;
+
+    try {
+        const activityData = await updateActivityDataById(activityDataId, newActivity);
+        if(! activityData) {  // not found
+            res.sendStatus(404);
+        }
+        console.log(activityData);
+        res.json(activityData);
+    } catch(err) {
+        console.error(err);
+        const databaseErrorMessage = parseDatabaseError(err);
+        res.status(500).json(databaseErrorMessage);
+    }
+}
+
 export default { 
     submitActivityData,
     getAllUserActivityData,
     getActivityData,
+    updateActivityData,
 }

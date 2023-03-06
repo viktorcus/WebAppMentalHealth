@@ -9,13 +9,15 @@ const app: Express = express();
 app.use(express.json());
 const { PORT } = process.env;
 
-app.get('/api/food/:foodDataId', FoodController.getFoodData)
-app.get('/api/food/user/:userId', FoodController.getAllUserFoodData)
+app.get('/api/food/:foodDataId', FoodController.getFoodData);
+app.get('/api/food/user/:userId', FoodController.getAllUserFoodData);
 app.post('/api/food', FoodController.submitFoodData);
+app.post('/app/food/:foodDataId', FoodController.updateFoodData);
 
-app.get('/api/activity/:activityDataId', ActivityController.getActivityData)
-app.get('/api/activity/user/:userId', ActivityController.getAllUserActivityData)
+app.get('/api/activity/:activityDataId', ActivityController.getActivityData);
+app.get('/api/activity/user/:userId', ActivityController.getAllUserActivityData);
 app.post('/api/activity', ActivityController.submitActivityData);
+app.post('/app/activity/:activityDataId', ActivityController.updateActivityData);
 
 
 app.listen(PORT, () => {
