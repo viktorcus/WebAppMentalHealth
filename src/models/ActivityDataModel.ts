@@ -23,7 +23,12 @@ async function getAllActivityDataForUser(userId: number): Promise<ActivityData[]
     return activityRepository.find({ where: { userId } });
 }
 
+async function getActivityDataById(activityDataId: number): Promise<ActivityData | null> {
+    return activityRepository.findOne({ where: { activityDataId } });
+}
+
 export { 
     addActivityData,
     getAllActivityDataForUser,
+    getActivityDataById,
 };

@@ -8,3 +8,7 @@ type ActivityData = {
     caloriesBurned: number,
     note: string,
 };
+
+type ActivityDataIdParam = {
+    activityDataId: number,
+};

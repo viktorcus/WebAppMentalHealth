@@ -6,3 +6,7 @@ type FoodData = {
     calorieIntake: number,
     note: string,
 };
+
+type FoodDataIdParam = {
+    foodDataId: number;
+};

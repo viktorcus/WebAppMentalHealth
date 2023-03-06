@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { addActivityData, getAllActivityDataForUser } from '../models/ActivityDataModel';
+import { addActivityData, getActivityDataById, getAllActivityDataForUser } from '../models/ActivityDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
 
@@ -33,7 +33,25 @@ async function getAllUserActivityData(req: Request, res: Response): Promise<void
     }
 }
 
-export { 
+async function getActivityData(req: Request, res: Response): Promise<void> {
+    const { activityDataId } = req.params as unknown as ActivityDataIdParam;
+
+    try {
+        const activityData = await getActivityDataById(activityDataId);
+        if(! activityData) {  // not found
+            res.sendStatus(404);
+        }
+        console.log(activityData);
+        res.json(activityData);
+    } catch(err) {
+        console.error(err);
+        const databaseErrorMessage = parseDatabaseError(err);
+        res.status(500).json(databaseErrorMessage);
+    }
+}
+
+export default { 
     submitActivityData,
-    getAllUserActivityData
+    getAllUserActivityData,
+    getActivityData,
 }

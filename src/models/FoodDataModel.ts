@@ -20,7 +20,12 @@ async function getAllFoodDataForUser(userId: number): Promise<FoodData[]> {
     return foodRepository.find({ where: { userId } });
 }
 
+async function getFoodDataById(foodDataId: number): Promise<FoodData | null> {
+    return foodRepository.findOne({ where: { foodDataId } });
+}
+
 export { 
     addFoodData,
     getAllFoodDataForUser,
+    getFoodDataById,
  };
