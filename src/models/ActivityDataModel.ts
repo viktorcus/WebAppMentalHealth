@@ -1,6 +1,6 @@
 import moment from 'moment';
-import { AppDataSource } from '../dataSource';
-import { ActivityData as ActivityDataEntity } from '../entities/activityData';
+import { AppDataSource } from '../dataSource.js';
+import { ActivityData as ActivityDataEntity } from '../entities/activityData.js';
 
 
 const activityRepository = AppDataSource.getRepository(ActivityDataEntity);
@@ -9,7 +9,6 @@ async function addActivityData(activityData: ActivityData): Promise<ActivityData
     let newActivity = new ActivityDataEntity();
     newActivity.userId = activityData.userId;
     newActivity.activityType = activityData.activityType;
-    newActivity.date = activityData.date;
     newActivity.startTime = activityData.startTime;
     newActivity.endTime = activityData.endTime;
     if(activityData.caloriesBurned) {
@@ -55,9 +54,6 @@ async function updateActivityDataById(activityDataId: number, newActivity: Activ
 
     if(newActivity.activityType !== activity.activityType) {
         activity.activityType = newActivity.activityType;
-    }
-    if(newActivity.date !== activity.date) {
-        activity.date = newActivity.date;
     }
     if(newActivity.startTime !== activity.startTime) {
         activity.startTime = newActivity.startTime;

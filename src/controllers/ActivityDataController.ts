@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { addActivityData, getActivityDataById, getAllActivityDataForUser, updateActivityDataById } from '../models/ActivityDataModel';
-import { parseDatabaseError } from '../utils/db-utils';
-import { UserIdParam } from '../types/userInfo';
+import { addActivityData, getActivityDataById, getAllActivityDataForUser, updateActivityDataById } from '../models/ActivityDataModel.js';
+import { parseDatabaseError } from '../utils/db-utils.js';
+import { UserIdParam } from '../types/userInfo.js';
 
 async function submitActivityData(req: Request, res: Response): Promise<void> {
     const activityData = req.body as ActivityData;

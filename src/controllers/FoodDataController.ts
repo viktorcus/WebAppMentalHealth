@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById } from '../models/FoodDataModel';
-import { parseDatabaseError } from '../utils/db-utils';
-import { UserIdParam } from '../types/userInfo';
+import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById } from '../models/FoodDataModel.js';
+import { parseDatabaseError } from '../utils/db-utils.js';
+import { UserIdParam } from '../types/userInfo.js';
 
 async function submitFoodData(req: Request, res: Response): Promise<void> {
     const foodData = req.body as FoodData;

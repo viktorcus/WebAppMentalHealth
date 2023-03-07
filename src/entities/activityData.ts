@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from 'typeorm';
-import { User } from './user'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { User } from './user.js'
 
 @Entity()
 export class ActivityData {
@@ -8,13 +8,11 @@ export class ActivityData {
     activityDataId: number;
 
     @ManyToOne(() => User, (user) => user.userId)
+    @JoinColumn({ name: 'userId' })
     userId: string;
 
     @Column()
     activityType: string;
-
-    @CreateDateColumn({ default: new Date() })
-    date: Date;
 
     @CreateDateColumn()
     startTime: Date;
