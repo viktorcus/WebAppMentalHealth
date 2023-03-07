@@ -3,20 +3,15 @@ import { MedicationData } from '../entities/medicationData';
 
 const medicationDataRepository = AppDataSource.getRepository(MedicationData);
 
-async function addMedicationData(
-  userId: string,
-  medicationName: string,
-  dosage: string,
-  frequency: string,
-  note?: string
-): Promise<MedicationData> {
+async function addMedicationData(medicationData: MedicationData): Promise<MedicationData> {
   let newMedicationData = new MedicationData();
-  newMedicationData.userId = userId;
-  newMedicationData.medicationName = medicationName;
-  newMedicationData.dosage = dosage;
-  newMedicationData.frequency = frequency;
-  if (note !== undefined) {
-    newMedicationData.note = note;
+  newMedicationData.medicationDataId = medicationData.medicationDataId;
+  newMedicationData.userId = medicationData.userId;
+  newMedicationData.medicationName = medicationData.medicationName;
+  newMedicationData.dosage = medicationData.dosage;
+  newMedicationData.frequency = medicationData.frequency;
+  if (medicationData.note !== undefined) {
+    newMedicationData.note = medicationData.note;
   }
 
   newMedicationData = await medicationDataRepository.save(newMedicationData);
