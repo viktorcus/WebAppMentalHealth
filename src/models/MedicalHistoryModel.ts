@@ -3,20 +3,14 @@ import { MedicalHistory } from '../entities/medicalHistory';
 
 const medicalHistoryRepository = AppDataSource.getRepository(MedicalHistory);
 
-async function addMedicalHistory(
-  userId: string,
-  conditionName: string,
-  treatment: string,
-  diagnosisDate: Date,
-  note?: string
-): Promise<MedicalHistory> {
+async function addMedicalHistory(medicalHistory: MedicalHistory): Promise<MedicalHistory> {
   const newMedicalHistory = new MedicalHistory();
-  newMedicalHistory.userId = userId;
-  newMedicalHistory.conditionName = conditionName;
-  newMedicalHistory.treatment = treatment;
-  newMedicalHistory.diagnosisDate = diagnosisDate;
-  if (note !== undefined) {
-    newMedicalHistory.note = note;
+  newMedicalHistory.userId = medicalHistory.userId;
+  newMedicalHistory.conditionName = medicalHistory.conditionName;
+  newMedicalHistory.treatment = medicalHistory.treatment;
+  newMedicalHistory.diagnosisDate = medicalHistory.diagnosisDate;
+  if (medicalHistory.note !== undefined) {
+    newMedicalHistory.note = medicalHistory.note;
   }
 
   const savedMedicalHistory = await medicalHistoryRepository.save(newMedicalHistory);
@@ -29,9 +23,9 @@ async function getMedicalHistoryById(medicalHistoryId: string): Promise<MedicalH
   return medicalHistory || null;
 }
 
-async function getMedicalHistoriesByUserId(userId: string): Promise<MedicalHistory[]> {
+async function getMedicalHistoryByUserId(userId: string): Promise<MedicalHistory[]> {
   const medicalHistories = await medicalHistoryRepository.find({ where: { userId } });
   return medicalHistories;
 }
 
-export { addMedicalHistory, getMedicalHistoryById, getMedicalHistoriesByUserId };
+export { addMedicalHistory, getMedicalHistoryById, getMedicalHistoryByUserId };
