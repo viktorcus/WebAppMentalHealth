@@ -7,9 +7,9 @@ export class ActivityData {
     @PrimaryGeneratedColumn()
     activityDataId: number;
 
-    @ManyToOne(() => User, (user) => user.userId)
+    @ManyToOne(() => User, (user) => user.activities)
     @JoinColumn({ name: 'userId' })
-    userId: string;
+    user: User;
 
     @Column()
     activityType: string;

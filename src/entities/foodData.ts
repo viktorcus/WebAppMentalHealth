@@ -7,9 +7,9 @@ export class FoodData {
     @PrimaryGeneratedColumn()
     foodDataId: number;
 
-    @ManyToOne(() => User, (user) => user.userId)
+    @ManyToOne(() => User, (user) => user.foods)
     @JoinColumn({ name: 'userId' })
-    userId: string;
+    user: User;
 
     @CreateDateColumn()
     mealDate: Date;
