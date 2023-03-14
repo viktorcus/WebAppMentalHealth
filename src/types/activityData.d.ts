@@ -1,6 +1,8 @@
+import type { UserInfo } from "./userInfo.js";
+
 type ActivityData = {
     activityDataId: number,
-    userId: string,
+    user: UserInfo,
     activityType: string,
     startTime: Date,
     endTime: Date,

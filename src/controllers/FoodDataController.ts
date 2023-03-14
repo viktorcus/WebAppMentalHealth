@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById } from '../models/FoodDataModel.js';
+import { FoodData, FoodDataIdParam } from '../types/foodData.js';
 import { parseDatabaseError } from '../utils/db-utils.js';
 import { UserIdParam } from '../types/userInfo.js';
 

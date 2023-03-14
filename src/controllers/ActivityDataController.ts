@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { addActivityData, getActivityDataById, getAllActivityDataForUser, updateActivityDataById } from '../models/ActivityDataModel.js';
+import { ActivityData, ActivityDataIdParam } from '../types/activityData.js';
 import { parseDatabaseError } from '../utils/db-utils.js';
 import { UserIdParam } from '../types/userInfo.js';
 
