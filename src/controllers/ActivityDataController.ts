@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
-import { addActivityData, getActivityDataById, getAllActivityDataForUser, updateActivityDataById } from '../models/ActivityDataModel.js';
-import { ActivityData, ActivityDataIdParam } from '../types/activityData.js';
+import { addActivityData, getActivityDataById, getAllActivityDataForUser, updateActivityDataById, deleteActivityDataById } from '../models/ActivityDataModel.js';
 import { parseDatabaseError } from '../utils/db-utils.js';
 import { UserIdParam } from '../types/userInfo.js';
 
@@ -76,9 +75,23 @@ async function updateActivityData(req: Request, res: Response): Promise<void> {
     }
 }
 
+async function deleteActivityData(req: Request, res: Response): Promise<void> {
+    const { foodDataId } = req.params as unknown as FoodDataIdParam;
+
+    try {
+        await deleteActivityDataById(foodDataId);
+        res.sendStatus(200);
+    } catch(err) {
+        console.error(err);
+        const databaseErrorMessage = parseDatabaseError(err);
+        res.status(500).json(databaseErrorMessage);
+    }
+}
+
 export default { 
     submitActivityData,
     getAllUserActivityData,
     getActivityData,
     updateActivityData,
+    deleteActivityData,
 }

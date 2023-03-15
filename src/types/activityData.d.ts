@@ -1,13 +1,11 @@
-import type { UserInfo } from "./userInfo.js";
-
 type ActivityData = {
     activityDataId: number,
-    user: UserInfo,
+    userId: string,
     activityType: string,
     startTime: Date,
     endTime: Date,
-    caloriesBurned: number | null,
-    note: string | null,
+    caloriesBurned: number | undefined,
+    note: string | undefined,
 };
 
 type ActivityDataIdParam = {

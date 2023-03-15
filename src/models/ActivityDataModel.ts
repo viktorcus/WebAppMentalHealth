@@ -5,29 +5,28 @@ import { ActivityData as ActivityDataEntity } from '../entities/activityData.js'
 
 const activityRepository = AppDataSource.getRepository(ActivityDataEntity);
 
-async function addActivityData(activityData: ActivityData): Promise<ActivityData> {
-    let newActivity = new ActivityDataEntity();
-    newActivity.userId = activityData.userId;
-    newActivity.activityType = activityData.activityType;
-    newActivity.startTime = activityData.startTime;
-    newActivity.endTime = activityData.endTime;
-    if(activityData.caloriesBurned) {
-        newActivity.caloriesBurned = activityData.caloriesBurned;
-    }
-    if(activityData.note) {
-        newActivity.note = activityData.note;
-    }
+async function addActivityData(activityData: ActivityData): Promise<void> {
 
-
-    newActivity = await activityRepository.save(newActivity);
-    return newActivity;
+    activityRepository
+        .createQueryBuilder()
+        .insert()
+        .into(ActivityDataEntity)
+        .values({
+            user: { userId: activityData.userId },
+            activityType: activityData.activityType,
+            startTime: activityData.startTime,
+            endTime: activityData.endTime,
+            caloriesBurned: activityData.caloriesBurned,
+            note: activityData.note 
+        })
+        .execute();
 }
 
-async function getAllActivityDataForUser(userId: string): Promise<ActivityData[]> {
-    return activityRepository.find({ where: { userId } });
+async function getAllActivityDataForUser(userId: string): Promise<ActivityDataEntity[]> {
+    return activityRepository.find({ where: { user: { userId } } });
 }
 
-async function getActivityDataById(activityDataId: number): Promise<ActivityData | null> {
+async function getActivityDataById(activityDataId: number): Promise<ActivityDataEntity | null> {
     return activityRepository.findOne({ where: { activityDataId } });
 }
 
@@ -45,7 +44,7 @@ async function getActivityDuration(activityDataId: number): Promise<number | nul
 }
 
 // generic method to update multiple fields of an activity at once
-async function updateActivityDataById(activityDataId: number, newActivity: ActivityData): Promise<ActivityData | null> {
+async function updateActivityDataById(activityDataId: number, newActivity: ActivityData): Promise<ActivityDataEntity | null> {
     // check that activity exists
     const activity = await activityRepository.findOne({ where: { activityDataId } });
     if(! activity) {  // failed to find
@@ -83,6 +82,10 @@ async function getActivityTypesForUser(userId: string): Promise<string[]> {
     return types.map(t => t.activityType);
 }
 
+async function deleteActivityDataById(activityDataId: number): Promise<void> {
+    activityRepository.delete({ activityDataId });
+}
+
 export { 
     addActivityData,
     getAllActivityDataForUser,
@@ -90,4 +93,5 @@ export {
     getActivityDuration,
     getActivityTypesForUser,
     updateActivityDataById,
+    deleteActivityDataById,
 };

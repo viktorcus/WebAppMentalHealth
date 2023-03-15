@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
-import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById } from '../models/FoodDataModel.js';
-import { FoodData, FoodDataIdParam } from '../types/foodData.js';
+import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById, deleteFoodDataById } from '../models/FoodDataModel.js';
 import { parseDatabaseError } from '../utils/db-utils.js';
 import { UserIdParam } from '../types/userInfo.js';
 
@@ -71,9 +70,23 @@ async function updateFoodData(req: Request, res: Response): Promise<void> {
     }
 }
 
+async function deleteFoodData(req: Request, res: Response): Promise<void> {
+    const { foodDataId } = req.params as unknown as FoodDataIdParam;
+
+    try {
+        await deleteFoodDataById(foodDataId);
+        res.sendStatus(200);
+    } catch(err) {
+        console.error(err);
+        const databaseErrorMessage = parseDatabaseError(err);
+        res.status(500).json(databaseErrorMessage);
+    }
+}
+
 export default { 
     submitFoodData,
     getAllUserFoodData,
     getFoodData,
     updateFoodData,
+    deleteFoodData,
 }

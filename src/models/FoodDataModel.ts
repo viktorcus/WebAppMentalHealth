@@ -1,35 +1,33 @@
 import { AppDataSource } from '../dataSource.js';
-import { FoodData as FoodDataEntity } from '../entities/foodData.js';
+import { FoodData as FoodDataEntity } from '../entities/foodData.js'
 
 
 const foodRepository = AppDataSource.getRepository(FoodDataEntity);
 
-async function addFoodData(foodData: FoodData): Promise<FoodData> {
-    let newFoodData = new FoodDataEntity();
-    newFoodData.userId = foodData.userId;
-    newFoodData.meal = foodData.meal;
-    newFoodData.mealDate = foodData.mealDate;
-    if(foodData.calorieIntake) {
-        newFoodData.calorieIntake = foodData.calorieIntake;
-    }
-    if(foodData.note) {
-        newFoodData.note = foodData.note;
-    }
-
-    newFoodData = await foodRepository.save(newFoodData);
-    return newFoodData;
+async function addFoodData(foodData: FoodData): Promise<void> {
+    foodRepository
+        .createQueryBuilder()
+        .insert()
+        .into(FoodDataEntity)
+        .values({
+            user: { userId: foodData.userId },
+            meal: foodData.meal,
+            mealDate: foodData.mealDate,
+            calorieIntake: foodData.calorieIntake,
+            note: foodData.note, })
+        .execute();
 }
 
-async function getAllFoodDataForUser(userId: string): Promise<FoodData[]> {
-    return foodRepository.find({ where: { userId } });
+async function getAllFoodDataForUser(userId: string): Promise<FoodDataEntity[]> {
+    return foodRepository.find({ where: { user: { userId } } });
 }
 
-async function getFoodDataById(foodDataId: number): Promise<FoodData | null> {
+async function getFoodDataById(foodDataId: number): Promise<FoodDataEntity | null> {
     return foodRepository.findOne({ where: { foodDataId } });
 }
 
 // generic method to update multiple fields of an activity at once
-async function updateFoodDataById(foodDataId: number, newFood: FoodData): Promise<FoodData | null> {
+async function updateFoodDataById(foodDataId: number, newFood: FoodData): Promise<FoodDataEntity | null> {
     // check that activity exists
     const food = await foodRepository.findOne({ where: { foodDataId } });
     if(! food) {  // failed to find
@@ -52,9 +50,14 @@ async function updateFoodDataById(foodDataId: number, newFood: FoodData): Promis
     return food;
 }
 
+async function deleteFoodDataById(foodDataId: number): Promise<void> {
+    foodRepository.delete({ foodDataId });
+}
+
 export { 
     addFoodData,
     getAllFoodDataForUser,
     getFoodDataById,
     updateFoodDataById,
+    deleteFoodDataById
  };

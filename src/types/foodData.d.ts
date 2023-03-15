@@ -1,12 +1,10 @@
-import { UserInfo } from "./userInfo.js";
-
 type FoodData = {
     foodDataId: number,
-    user: UserInfo,
+    userId: string,
     mealDate: Date,
     meal: string,
-    calorieIntake: number | null,
-    note: string | null,
+    calorieIntake: number | undefined,
+    note: string | undefined,
 };
 
 type FoodDataIdParam = {
