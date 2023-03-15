@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { SelectQueryBuilder } from 'typeorm';
 import { AppDataSource } from '../dataSource';
 import { ActivityData as ActivityDataEntity } from '../entities/activityData';
 
@@ -27,6 +28,21 @@ async function getAllActivityDataForUser(userId: string): Promise<ActivityDataEn
 
 async function getActivityDataById(activityDataId: number): Promise<ActivityDataEntity | null> {
     return activityRepository.findOne({ where: { activityDataId } });
+}
+
+async function getActivityDataBySearch(start?: Date, end?: Date, keyword?: string): Promise<ActivityDataEntity[]> {
+    const query: SelectQueryBuilder<ActivityDataEntity> = activityRepository
+        .createQueryBuilder('activityData');
+    if(start) {  // add start time to search
+        query.andWhere('activityData.endTime >= :startTime', { startTime: start });
+    }
+    if(end) {  // add end time to search
+        query.andWhere('activityData.startTime <= :endTime', { endTime: end });
+    }
+    if(keyword) {  // search if type or note contains keyword
+        query.andWhere('activityData.activityType like :key or activityData.note like :key', { key: `%${keyword}%` });
+    }
+    return query.getMany();
 }
 
 // calculates the number of minutes an activity endured
@@ -73,7 +89,7 @@ async function updateActivityDataById(activityDataId: number, newActivity: Activ
 // finds activity types that the user has submitted before
 // can be used in the UI so that the user can pick from their saved activity types instead of always typing it out
 async function getActivityTypesForUser(userId: string): Promise<string[]> {
-    const types = await activityRepository
+    const types: ActivityDataEntity[] = await activityRepository
                 .createQueryBuilder('activityData')
                 .where('userId = :userId', { userId })
                 .select(['activityData.activityType'])
@@ -91,6 +107,7 @@ export {
     getActivityDataById,
     getActivityDuration,
     getActivityTypesForUser,
+    getActivityDataBySearch,
     updateActivityDataById,
     deleteActivityDataById,
 };

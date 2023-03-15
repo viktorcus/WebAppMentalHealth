@@ -1,3 +1,4 @@
+import { SelectQueryBuilder } from 'typeorm';
 import { AppDataSource } from '../dataSource';
 import { FoodData as FoodDataEntity } from '../entities/foodData'
 
@@ -24,6 +25,21 @@ async function getAllFoodDataForUser(userId: string): Promise<FoodDataEntity[]> 
 
 async function getFoodDataById(foodDataId: number): Promise<FoodDataEntity | null> {
     return foodRepository.findOne({ where: { foodDataId } });
+}
+
+async function getFoodDataBySearch(start?: Date, end?: Date, keyword?: string): Promise<FoodDataEntity[]> {
+    const query: SelectQueryBuilder<FoodDataEntity> = foodRepository
+        .createQueryBuilder('foodData');
+    if(start) {  // add start time to search
+        query.andWhere('foodData.mealDate >= :startTime', { startTime: start });
+    }
+    if(end) {  // add end time to search
+        query.andWhere('foodData.mealDate <= :endTime', { endTime: end });
+    }
+    if(keyword) {  // search if type or note contains keyword
+        query.andWhere('foodData.meal like :key or foodData.note like :key', { key: `%${keyword}%` });
+    }
+    return query.getMany();
 }
 
 // generic method to update multiple fields of an activity at once
@@ -59,5 +75,6 @@ export {
     getAllFoodDataForUser,
     getFoodDataById,
     updateFoodDataById,
-    deleteFoodDataById
+    deleteFoodDataById,
+    getFoodDataBySearch,
  };

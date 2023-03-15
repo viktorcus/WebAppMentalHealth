@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
-import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById, deleteFoodDataById } from '../models/FoodDataModel';
+import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById, deleteFoodDataById, getFoodDataBySearch } from '../models/FoodDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
+import { FoodData as FoodEntity } from '../entities/foodData';
 
 async function submitFoodData(req: Request, res: Response): Promise<void> {
     const foodData = req.body as FoodData;
@@ -82,10 +83,29 @@ async function deleteFoodData(req: Request, res: Response): Promise<void> {
     }
 }
 
+async function searchFoodData(req: Request, res: Response): Promise<void> {
+    const { start, end, keyword } = req.query as FoodSearchParam;
+
+    if(start && end && start > end) {
+        res.sendStatus(400); // invalid start/end times
+        return;
+    }
+
+    try {
+        const foodData: FoodEntity[] = await getFoodDataBySearch(start, end, keyword);
+        res.json(foodData);
+    } catch(err) {
+        console.error(err);
+        const databaseErrorMessage = parseDatabaseError(err);
+        res.status(500).json(databaseErrorMessage);
+    }
+}
+
 export default { 
     submitFoodData,
     getAllUserFoodData,
     getFoodData,
     updateFoodData,
     deleteFoodData,
+    searchFoodData,
 }
