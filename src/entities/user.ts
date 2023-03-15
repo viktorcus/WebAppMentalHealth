@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, Relation } from 'typeorm';
-import { FoodData } from './foodData.js'
-import { ActivityData } from './activityData.js';
-import { Gender } from '../utils/enums.js';
+import { FoodData } from './foodData'
+import { ActivityData } from './activityData';
+import { Gender } from '../utils/enums';
 
 
 @Entity()

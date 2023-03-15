@@ -1,14 +1,13 @@
 import { Request, Response } from 'express'
-import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById, deleteFoodDataById } from '../models/FoodDataModel.js';
-import { parseDatabaseError } from '../utils/db-utils.js';
-import { UserIdParam } from '../types/userInfo.js';
+import { addFoodData, getAllFoodDataForUser, getFoodDataById, updateFoodDataById, deleteFoodDataById } from '../models/FoodDataModel';
+import { parseDatabaseError } from '../utils/db-utils';
+import { UserIdParam } from '../types/userInfo';
 
 async function submitFoodData(req: Request, res: Response): Promise<void> {
     const foodData = req.body as FoodData;
     
     try {
-        const newFoodData = await addFoodData(foodData);
-        console.log(newFoodData);
+        await addFoodData(foodData);
         res.sendStatus(201);
     } catch(err) {
         console.error(err);

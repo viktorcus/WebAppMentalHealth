@@ -1,5 +1,5 @@
-import { AppDataSource } from '../dataSource.js';
-import { FoodData as FoodDataEntity } from '../entities/foodData.js'
+import { AppDataSource } from '../dataSource';
+import { FoodData as FoodDataEntity } from '../entities/foodData'
 
 
 const foodRepository = AppDataSource.getRepository(FoodDataEntity);

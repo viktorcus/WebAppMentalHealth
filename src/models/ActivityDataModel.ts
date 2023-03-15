@@ -1,12 +1,11 @@
 import moment from 'moment';
-import { AppDataSource } from '../dataSource.js';
-import { ActivityData as ActivityDataEntity } from '../entities/activityData.js';
+import { AppDataSource } from '../dataSource';
+import { ActivityData as ActivityDataEntity } from '../entities/activityData';
 
 
 const activityRepository = AppDataSource.getRepository(ActivityDataEntity);
 
 async function addActivityData(activityData: ActivityData): Promise<void> {
-
     activityRepository
         .createQueryBuilder()
         .insert()

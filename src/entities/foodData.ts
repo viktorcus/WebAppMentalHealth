@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from './user.js'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, Relation } from 'typeorm';
+import { User } from './user'
 
 @Entity()
 export class FoodData {
@@ -9,7 +9,7 @@ export class FoodData {
 
     @ManyToOne(() => User, (user) => user.foods)
     @JoinColumn({ name: 'userId' })
-    user: User;
+    user: Relation<User>;
 
     @CreateDateColumn()
     mealDate: Date;
