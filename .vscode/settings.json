@@ -10,5 +10,9 @@
     },
     "files.exclude": {
       "**/.gitkeep": true
-    }
+    },
+    "cSpell.words": [
+      "typeorm",
+      "userid"
+    ]
 }

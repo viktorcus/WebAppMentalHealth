@@ -2,28 +2,27 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 
 @Entity()
 export class ActivityData {
+  @PrimaryGeneratedColumn()
+  activityDataId: number;
 
-    @PrimaryGeneratedColumn()
-    activityDataId: number;
+  @Column()
+  userId: number;
 
-    @Column()
-    userId: number;
+  @Column()
+  activityType: string;
 
-    @Column()
-    activityType: string;
+  @CreateDateColumn({ default: new Date() })
+  date: Date;
 
-    @CreateDateColumn({ default: new Date() })
-    date: Date;
+  @CreateDateColumn()
+  startTime: Date;
 
-    @CreateDateColumn()
-    startTime: Date;
+  @CreateDateColumn()
+  endTime: Date;
 
-    @CreateDateColumn()
-    endTime: Date;
+  @Column()
+  caloriesBurned: number;
 
-    @Column()
-    caloriesBurned: number;
-
-    @Column()
-    note: string;
+  @Column()
+  note: string;
 }

@@ -2,22 +2,21 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 
 @Entity()
 export class FoodData {
+  @PrimaryGeneratedColumn()
+  foodDataId: number;
 
-    @PrimaryGeneratedColumn()
-    foodDataId: number;
+  @Column()
+  userId: number;
 
-    @Column()
-    userId: number;
+  @CreateDateColumn()
+  mealDate: Date;
 
-    @CreateDateColumn()
-    mealDate: Date;
+  @Column()
+  meal: string;
 
-    @Column()
-    meal: string;
+  @Column()
+  calorieIntake: number;
 
-    @Column()
-    calorieIntake: number;
-
-    @Column()
-    note: string;
+  @Column()
+  note: string;
 }
