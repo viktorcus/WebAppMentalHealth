@@ -67,6 +67,12 @@ async function getActivityDuration(activityDataId: number): Promise<number | nul
   return end.diff(start, 'minute');
 }
 
+function getDuration(startTime: Date, endTime: Date): number {
+  const start = moment(startTime);
+  const end = moment(endTime);
+  return end.diff(start, 'minute');
+}
+
 // generic method to update multiple fields of an activity at once
 async function updateActivityDataById(
   activityDataId: number,
@@ -114,6 +120,29 @@ async function deleteActivityDataById(activityDataId: number): Promise<void> {
   activityRepository.delete({ activityDataId });
 }
 
+async function generateActivityStats(start: Date, end: Date): Promise<ActivityStats[]> {
+  // will also include userid once session management is in place
+  const activities: ActivityDataEntity[] = await activityRepository
+    .createQueryBuilder('activityData')
+    .where('startTime >= :start and endTime <= :end', { start, end })
+    .getMany();
+
+  const stats: ActivityStats[] = [];
+  for (const activity of activities) {
+    const idx = stats.findIndex((s) => s.type === activity.activityType);
+    if (idx >= 0) {
+      const stat = stats.at(idx);
+      stats.at(idx)!.duration = getDuration(activity.startTime, activity.endTime) + stat!.duration;
+    } else {
+      stats.push({
+        type: activity.activityType,
+        duration: getDuration(activity.startTime, activity.endTime),
+      });
+    }
+  }
+  return stats;
+}
+
 export {
   addActivityData,
   getAllActivityDataForUser,
@@ -123,4 +152,5 @@ export {
   getActivityDataBySearch,
   updateActivityDataById,
   deleteActivityDataById,
+  generateActivityStats,
 };

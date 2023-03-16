@@ -17,6 +17,7 @@ app.post('/api/food/:foodDataId', FoodController.updateFoodData);
 app.delete('/api/food/:foodDataId', FoodController.deleteFoodData);
 
 app.get('/api/activity/search', ActivityController.searchActivityData);
+app.get('/api/activity/stats', ActivityController.getActivityStats);
 app.get('/api/activity/:activityDataId', ActivityController.getActivityData);
 app.get('/api/activity/user/:userId', ActivityController.getAllUserActivityData);
 app.post('/api/activity', ActivityController.submitActivityData);

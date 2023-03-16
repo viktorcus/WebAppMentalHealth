@@ -6,6 +6,7 @@ import {
   updateActivityDataById,
   deleteActivityDataById,
   getActivityDataBySearch,
+  generateActivityStats,
 } from '../models/ActivityDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
@@ -115,6 +116,22 @@ async function searchActivityData(req: Request, res: Response): Promise<void> {
   }
 }
 
+async function getActivityStats(req: Request, res: Response): Promise<void> {
+  const { start, end } = req.query as ActivitySearchParam;
+  if (!start || !end || start > end) {
+    res.sendStatus(400); // invalid start/end times
+    return;
+  }
+  try {
+    const stats: ActivityStats[] = await generateActivityStats(start, end);
+    res.json(stats);
+  } catch (err) {
+    console.error(err);
+    const databaseErrorMessage = parseDatabaseError(err);
+    res.status(500).json(databaseErrorMessage);
+  }
+}
+
 export default {
   submitActivityData,
   getAllUserActivityData,
@@ -122,4 +139,5 @@ export default {
   updateActivityData,
   deleteActivityData,
   searchActivityData,
+  getActivityStats,
 };

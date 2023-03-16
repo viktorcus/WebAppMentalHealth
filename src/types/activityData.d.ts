@@ -17,3 +17,8 @@ type ActivitySearchParam = {
   end?: Date;
   keyword?: string;
 };
+
+type ActivityStats = {
+  type: string;
+  duration: number; // duration in minutes
+};
