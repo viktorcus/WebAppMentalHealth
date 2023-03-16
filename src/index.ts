@@ -4,7 +4,6 @@ import express, { Express } from 'express';
 import FoodController from './controllers/FoodDataController';
 import ActivityController from './controllers/ActivityDataController';
 
-
 const app: Express = express();
 const { PORT } = process.env;
 
@@ -24,7 +23,6 @@ app.post('/api/activity', ActivityController.submitActivityData);
 app.post('/api/activity/:activityDataId', ActivityController.updateActivityData);
 app.delete('/api/activity/:activityDataId', ActivityController.deleteActivityData);
 
-
 app.listen(PORT, () => {
-    console.log(`server listening on http://localhost:${PORT}`);
+  console.log(`server listening on http://localhost:${PORT}`);
 });

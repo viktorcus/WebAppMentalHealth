@@ -1,18 +1,18 @@
 type FoodData = {
-    foodDataId: number,
-    userId: string,
-    mealDate: Date,
-    meal: string,
-    calorieIntake?: number,
-    note?: string,
+  foodDataId: number;
+  userId: string;
+  mealDate: Date;
+  meal: string;
+  calorieIntake?: number;
+  note?: string;
 };
 
 type FoodDataIdParam = {
-    foodDataId: number;
+  foodDataId: number;
 };
 
 type FoodSearchParam = {
-    start?: Date,
-    end?: Date,
-    keyword?: string,
-}
+  start?: Date;
+  end?: Date;
+  keyword?: string;
+};

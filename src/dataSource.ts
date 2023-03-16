@@ -15,12 +15,24 @@ async function loadEntities(): Promise<EntitySchema<unknown>[]> {
   return entities;
 }
 
-export const AppDataSource = new DataSource({
-  synchronize: true,
-  logging: false,
-  entities: await loadEntities(),
-  type: 'sqlite',
-  database: process.env.DATABASE_NAME ?? 'You Forgot to set DATABASE_NAME in .env',
-});
+export const AppDataSource = process.env.CAROLYN_ENV
+  ? new DataSource({
+      type: 'mssql',
+      host: process.env.MSSQL_HOST,
+      port: Number(process.env.MSSQL_PORT),
+      username: process.env.MSSQL_USERNAME,
+      password: process.env.MSSQL_PASSWORD,
+      synchronize: true,
+      logging: false,
+      entities: await loadEntities(),
+      database: process.env.DATABASE_NAME ?? 'You Forgot to set DATABASE_NAME in .env',
+    })
+  : new DataSource({
+      synchronize: true,
+      logging: false,
+      entities: await loadEntities(),
+      type: 'sqlite',
+      database: process.env.DATABASE_NAME ?? 'You Forgot to set DATABASE_NAME in .env',
+    });
 
 await AppDataSource.initialize();

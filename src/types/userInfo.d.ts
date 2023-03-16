@@ -1,19 +1,19 @@
 type UserInfo = {
-    userId: number,
-    name: string,
-    email: string,
-    password: string,
-    birthdate: Date,
-    gender: Gender,
-    place: string,
+  userId: number;
+  name: string;
+  email: string;
+  password: string;
+  birthdate: Date;
+  gender: Gender;
+  place: string;
 };
 
 type UserIdParam = {
-    userId: string,
+  userId: string;
 };
 
 export declare enum Gender {
-    Male, 
-    Female,
-    Other
+  Male,
+  Female,
+  Other,
 }
