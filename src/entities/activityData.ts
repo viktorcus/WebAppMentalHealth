@@ -1,29 +1,35 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  Relation,
+} from 'typeorm';
+import { User } from './user';
 
 @Entity()
 export class ActivityData {
+  @PrimaryGeneratedColumn()
+  activityDataId: number;
 
-    @PrimaryGeneratedColumn()
-    activityDataId: number;
+  @ManyToOne(() => User, (user) => user.activities)
+  @JoinColumn({ name: 'userId' })
+  user: Relation<User>;
 
-    @Column()
-    userId: number;
+  @Column()
+  activityType: string;
 
-    @Column()
-    activityType: string;
+  @CreateDateColumn()
+  startTime: Date;
 
-    @CreateDateColumn({ default: new Date() })
-    date: Date;
+  @CreateDateColumn()
+  endTime: Date;
 
-    @CreateDateColumn()
-    startTime: Date;
+  @Column({ nullable: true })
+  caloriesBurned: number;
 
-    @CreateDateColumn()
-    endTime: Date;
-
-    @Column()
-    caloriesBurned: number;
-
-    @Column()
-    note: string;
+  @Column({ nullable: true })
+  note: string;
 }

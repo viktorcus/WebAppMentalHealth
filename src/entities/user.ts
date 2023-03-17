@@ -1,7 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation } from 'typeorm';
-import { Gender } from '../types/userInfo';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  OneToMany,
+  Relation,
+} from 'typeorm';
 import { HealthData } from './healthData';
 import { SleepData } from './sleepData';
+import { FoodData } from './foodData';
+import { ActivityData } from './activityData';
+import { Gender } from '../utils/enums';
 
 @Entity()
 export class User {
@@ -17,7 +26,7 @@ export class User {
   @Column({ unique: true })
   passwordHash: string;
 
-  @Column()
+  @CreateDateColumn()
   birthDate: Date;
 
   @Column()
@@ -28,4 +37,13 @@ export class User {
 
   @OneToMany(() => SleepData, (sleepData) => sleepData.user)
   sleepData: Relation<SleepData[]>;
+
+  @Column()
+  place: string;
+
+  @OneToMany(() => ActivityData, (activity) => activity.user)
+  activities: Relation<ActivityData>[];
+
+  @OneToMany(() => FoodData, (food) => food.user)
+  foods: Relation<FoodData>[];
 }

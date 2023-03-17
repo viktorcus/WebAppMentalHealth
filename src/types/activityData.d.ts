@@ -1,10 +1,24 @@
 type ActivityData = {
-    activityDataId: number,
-    userId: number,
-    activityType: string,
-    date: Date,
-    startTime: Date,
-    endTime: Date,
-    caloriesBurned: number,
-    note: string,
+  activityDataId: number;
+  userId: string;
+  activityType: string;
+  startTime: Date;
+  endTime: Date;
+  caloriesBurned?: number;
+  note?: string;
+};
+
+type ActivityDataIdParam = {
+  activityDataId: number;
+};
+
+type ActivitySearchParam = {
+  start?: Date;
+  end?: Date;
+  keyword?: string;
+};
+
+type ActivityStats = {
+  type: string;
+  duration: number; // duration in minutes
 };
