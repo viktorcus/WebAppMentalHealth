@@ -1,10 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -15,6 +12,7 @@
   ],
   "rules": {
     "@typescript-eslint/prefer-as-const": "error",
+    "@typescript-eslint/return-await": "off",
     "no-console": "off",
     "@typescript-eslint/explicit-function-return-type": "warn",
     "prettier/prettier": "error",

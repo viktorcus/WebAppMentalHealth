@@ -1,6 +1,8 @@
 import './config'; // Load environment variables
 import 'express-async-errors'; // Enable default error handling for async errors
 import express, { Express } from 'express';
+import session from 'express-session';
+import connectSqlite3 from 'connect-sqlite3';
 import FoodController from './controllers/FoodDataController';
 import ActivityController from './controllers/ActivityDataController';
 import { getAllUserSleepData } from './controllers/SleepDataController';
@@ -9,7 +11,20 @@ import { getAllHealthDataForUser, updateHealthData } from './models/HealthDataMo
 import { getAllSleepDataForUser } from './models/SleepDataModel';
 
 const app: Express = express();
-const { PORT } = process.env;
+const { PORT, COOKIE_SECRET } = process.env;
+
+const SQLiteStore = connectSqlite3(session);
+
+app.use(
+  session({
+    store: new SQLiteStore({ db: 'sessions.sqlite' }),
+    secret: COOKIE_SECRET as string,
+    cookie: { maxAge: 8 * 60 * 60 * 1000 }, // 8 hours
+    name: 'session',
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
 
 app.use(express.json());
 
