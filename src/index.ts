@@ -3,6 +3,18 @@ import 'express-async-errors'; // Enable default error handling for async errors
 import express, { Express } from 'express';
 import session from 'express-session';
 import connectSqlite3 from 'connect-sqlite3';
+import { registerUser, logIn, getUserInfo } from './controllers/UserController';
+import {
+  updateMedicalHistory,
+  getMedicalHistory,
+  getAllMedicalHistoryByUser,
+} from './controllers/MedicalHistoryController';
+import {
+  updateMedicationData,
+  getMedicationData,
+  getAllMedicationDataByUser,
+} from './controllers/MedicationDataController';
+
 import FoodController from './controllers/FoodDataController';
 import ActivityController from './controllers/ActivityDataController';
 import { getAllUserSleepData } from './controllers/SleepDataController';
@@ -27,6 +39,18 @@ app.use(
 );
 
 app.use(express.json());
+
+app.post('/register', registerUser);
+app.post('/login', logIn);
+app.get('/user/:userId', getUserInfo);
+
+app.post('/api/medical-history', updateMedicalHistory);
+app.get('/api/medical-history/:medicalHistoryId', getMedicalHistory);
+app.get('/api/user/:userId/medical-history', getAllMedicalHistoryByUser);
+
+app.post('/api/medication', updateMedicationData);
+app.get('/api/medication/:medicationDataId', getMedicationData);
+app.get('/api/user/:userId/medication', getAllMedicationDataByUser);
 
 app.get('/api/food/search', FoodController.searchFoodData);
 app.get('/api/food/:foodDataId', FoodController.getFoodData);

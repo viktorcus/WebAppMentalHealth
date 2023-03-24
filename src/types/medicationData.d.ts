@@ -1,6 +1,6 @@
 type MedicationData = {
-  medicationDataId: number;
-  userId: number;
+  medicationDataId: string;
+  userId: string;
   medicationName: string;
   dosage: string;
   frequency: string;
