@@ -3,7 +3,7 @@ import {
   addMedicationData,
   getMedicationDataById,
   getMedicationDataByUserId,
-} from '../models/medicationDataModel';
+} from '../models/MedicationDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
 import { MedicationData } from '../entities/medicationData';

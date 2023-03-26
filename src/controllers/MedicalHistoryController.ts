@@ -3,7 +3,7 @@ import {
   addMedicalHistory,
   getMedicalHistoryById,
   getMedicalHistoryByUserId,
-} from '../models/medicalHistoryModel';
+} from '../models/MedicalHistoryModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
 import { MedicalHistory } from '../entities/medicalHistory';
