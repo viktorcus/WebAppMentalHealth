@@ -33,10 +33,21 @@ async function logIn(req: Request, res: Response): Promise<void> {
   const { passwordHash } = user;
 
   if (!(await argon2.verify(passwordHash, password))) {
-    res.sendStatus(404);
+    if (!req.session.logInAttempts) {
+      req.session.logInAttempts = 1; // First attempt
+    } else {
+      req.session.logInAttempts += 1; // increment their attempts
+    }
+    res.sendStatus(403);
     return;
   }
 
+  await req.session.clearSession();
+  req.session.authenticatedUser = {
+    userId: user.userId,
+    email: user.email,
+  };
+  req.session.isLoggedIn = true;
   res.sendStatus(200);
 }
 
