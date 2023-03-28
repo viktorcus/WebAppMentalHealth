@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -7,7 +7,7 @@ export class MedicationData {
   medicationDataId: string;
 
   @ManyToOne(() => User, (user) => user.medicationData)
-  user: User;
+  user: Relation<User>;
 
   @Column()
   userId: string;

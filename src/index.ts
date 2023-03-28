@@ -3,6 +3,9 @@ import 'express-async-errors'; // Enable default error handling for async errors
 import express, { Express } from 'express';
 import session from 'express-session';
 import connectSqlite3 from 'connect-sqlite3';
+import RedisStore from 'connect-redis';
+import { createClient } from 'redis';
+
 import { registerUser, logIn, getUserInfo } from './controllers/UserController';
 import {
   updateMedicalHistory,
@@ -14,7 +17,6 @@ import {
   getMedicationData,
   getAllMedicationDataByUser,
 } from './controllers/MedicationDataController';
-
 import FoodController from './controllers/FoodDataController';
 import ActivityController from './controllers/ActivityDataController';
 import { getAllUserSleepData } from './controllers/SleepDataController';
@@ -25,11 +27,21 @@ import { getAllSleepDataForUser } from './models/SleepDataModel';
 const app: Express = express();
 const { PORT, COOKIE_SECRET } = process.env;
 
-const SQLiteStore = connectSqlite3(session);
+let store;
+if (process.env.CAROLYN_ENV) {
+  const redisClient = createClient();
+  await redisClient.connect();
+  store = new RedisStore({
+    client: redisClient,
+  });
+} else {
+  const SQLiteStore = connectSqlite3(session);
+  store = new SQLiteStore({ db: 'sessions.sqlite' });
+}
 
 app.use(
   session({
-    store: new SQLiteStore({ db: 'sessions.sqlite' }),
+    store,
     secret: COOKIE_SECRET as string,
     cookie: { maxAge: 8 * 60 * 60 * 1000 }, // 8 hours
     name: 'session',

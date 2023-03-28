@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation } from 'typeorm';
-import { Gender } from '../types/userInfo';
+import { Gender } from '../utils/enums';
 import { MedicalHistory } from './medicalHistory';
 import { MedicationData } from './medicationData';
 import { HealthData } from './healthData';
