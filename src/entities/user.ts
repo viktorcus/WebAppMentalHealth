@@ -24,7 +24,7 @@ export class User {
   @Column({ default: false })
   verifiedEmail: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   birthday: Date;
 
   @Column({ default: Gender.Other })

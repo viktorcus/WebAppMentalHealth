@@ -8,6 +8,7 @@ import {
   getActivityDataBySearch,
   generateActivityStats,
 } from '../models/ActivityDataModel';
+import { getUserById } from '../models/UserModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
 import { ActivityData as ActivityEntity } from '../entities/activityData';
@@ -19,10 +20,19 @@ async function submitActivityData(req: Request, res: Response): Promise<void> {
     res.sendStatus(400); // invalid start/end times
     return;
   }
+  // check that user is logged in
+  if (!req.session.isLoggedIn) {
+    res.sendStatus(401);
+    return;
+  }
 
+  // use session to add data for that user only
+  const user = await getUserById(req.session.authenticatedUser.userId);
   try {
-    await addActivityData(activityData);
-    res.sendStatus(201);
+    if (user) {
+      const activity = await addActivityData(activityData, user);
+      res.status(201).json(activity);
+    }
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -33,11 +43,17 @@ async function submitActivityData(req: Request, res: Response): Promise<void> {
 async function getAllUserActivityData(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
 
-  // include check for userid validity here once implemented
+  if (!req.session.isLoggedIn) {
+    res.sendStatus(401);
+    return;
+  }
+  if (!(userId === req.session.authenticatedUser.userId)) {
+    res.sendStatus(403);
+    return;
+  }
 
   try {
     const activityData = await getAllActivityDataForUser(userId);
-    console.log(activityData);
     res.json(activityData);
   } catch (err) {
     console.error(err);
@@ -49,6 +65,12 @@ async function getAllUserActivityData(req: Request, res: Response): Promise<void
 async function getActivityData(req: Request, res: Response): Promise<void> {
   const { activityDataId } = req.params as unknown as ActivityDataIdParam;
 
+  // check that user is logged in
+  if (!req.session.isLoggedIn) {
+    res.sendStatus(401);
+    return;
+  }
+
   try {
     const activityData = await getActivityDataById(activityDataId);
     if (!activityData) {
@@ -56,7 +78,11 @@ async function getActivityData(req: Request, res: Response): Promise<void> {
       res.sendStatus(404);
       return;
     }
-    console.log(activityData);
+    // check that this activityData item belongs to this user
+    if (!(activityData?.user.userId === req.session.authenticatedUser.userId)) {
+      res.sendStatus(403);
+      return;
+    }
     res.json(activityData);
   } catch (err) {
     console.error(err);
@@ -69,7 +95,25 @@ async function updateActivityData(req: Request, res: Response): Promise<void> {
   const { activityDataId } = req.params as unknown as ActivityDataIdParam;
   const newActivity = req.body as ActivityData;
 
+  if (!req.session.isLoggedIn) {
+    // check that user is logged in
+    res.sendStatus(401);
+    return;
+  }
+
   try {
+    const existingData = await getActivityDataById(activityDataId);
+    if (!existingData) {
+      // not found
+      res.sendStatus(404);
+      return;
+    }
+    // check that this activitydata item belongs to this user
+    if (!(existingData?.user.userId === req.session.authenticatedUser.userId)) {
+      res.sendStatus(403);
+      return;
+    }
+
     const activityData = await updateActivityDataById(activityDataId, newActivity);
     if (!activityData) {
       // not found
@@ -88,7 +132,25 @@ async function updateActivityData(req: Request, res: Response): Promise<void> {
 async function deleteActivityData(req: Request, res: Response): Promise<void> {
   const { activityDataId } = req.params as unknown as ActivityDataIdParam;
 
+  if (!req.session.isLoggedIn) {
+    // check that user is logged in
+    res.sendStatus(401);
+    return;
+  }
+
   try {
+    const activityData = await getActivityDataById(activityDataId);
+    if (!activityData) {
+      // not found
+      res.sendStatus(404);
+      return;
+    }
+    // check that this fooddata item belongs to this user
+    if (!(activityData?.user.userId === req.session.authenticatedUser.userId)) {
+      res.sendStatus(403);
+      return;
+    }
+
     await deleteActivityDataById(activityDataId);
     res.sendStatus(200);
   } catch (err) {
@@ -107,7 +169,12 @@ async function searchActivityData(req: Request, res: Response): Promise<void> {
   }
 
   try {
-    const activityData: ActivityEntity[] = await getActivityDataBySearch(start, end, keyword);
+    const activityData: ActivityEntity[] = await getActivityDataBySearch(
+      req.session.authenticatedUser.userId,
+      start,
+      end,
+      keyword,
+    );
     res.json(activityData);
   } catch (err) {
     console.error(err);
@@ -123,7 +190,11 @@ async function getActivityStats(req: Request, res: Response): Promise<void> {
     return;
   }
   try {
-    const stats: ActivityStats[] = await generateActivityStats(start, end);
+    const stats: ActivityStats[] = await generateActivityStats(
+      req.session.authenticatedUser.userId,
+      start,
+      end,
+    );
     res.json(stats);
   } catch (err) {
     console.error(err);

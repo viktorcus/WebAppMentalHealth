@@ -2,40 +2,56 @@ import moment from 'moment';
 import { SelectQueryBuilder } from 'typeorm';
 import { AppDataSource } from '../dataSource';
 import { ActivityData as ActivityDataEntity } from '../entities/activityData';
+import { User } from '../entities/user';
 
 const activityRepository = AppDataSource.getRepository(ActivityDataEntity);
 
-async function addActivityData(activityData: ActivityData): Promise<void> {
-  activityRepository
-    .createQueryBuilder()
-    .insert()
-    .into(ActivityDataEntity)
-    .values({
-      user: { userId: activityData.userId },
-      activityType: activityData.activityType,
-      startTime: activityData.startTime,
-      endTime: activityData.endTime,
-      caloriesBurned: activityData.caloriesBurned,
-      note: activityData.note,
-    })
-    .execute();
+async function addActivityData(
+  activityData: ActivityData,
+  user: User,
+): Promise<ActivityDataEntity | null> {
+  console.log(user);
+  const newActivity = new ActivityDataEntity();
+  newActivity.activityType = activityData.activityType;
+  newActivity.startTime = activityData.startTime;
+  newActivity.endTime = activityData.endTime;
+  newActivity.user = user;
+  if (activityData.caloriesBurned) {
+    newActivity.caloriesBurned = activityData.caloriesBurned;
+  }
+  if (activityData.note) {
+    newActivity.note = activityData.note;
+  }
+  return await activityRepository.save(newActivity);
 }
 
 async function getAllActivityDataForUser(userId: string): Promise<ActivityDataEntity[]> {
-  return activityRepository.find({ where: { user: { userId } } });
+  return await activityRepository
+    .createQueryBuilder('activity')
+    .leftJoinAndSelect('activity.user', 'user')
+    .where('user.userId = :userId', { userId })
+    .select(['activity', 'user.userId'])
+    .getMany();
 }
 
 async function getActivityDataById(activityDataId: number): Promise<ActivityDataEntity | null> {
-  return activityRepository.findOne({ where: { activityDataId } });
+  return await activityRepository
+    .createQueryBuilder('activity')
+    .leftJoinAndSelect('activity.user', 'user')
+    .where('activity.activityDataId = :activityDataId', { activityDataId })
+    .select(['activity', 'user.userId'])
+    .getOne();
 }
 
 async function getActivityDataBySearch(
+  userId: string,
   start?: Date,
   end?: Date,
   keyword?: string,
 ): Promise<ActivityDataEntity[]> {
   const query: SelectQueryBuilder<ActivityDataEntity> =
     activityRepository.createQueryBuilder('activityData');
+  query.andWhere('activityData.user.userId = :user', { user: userId });
   if (start) {
     // add start time to search
     query.andWhere('activityData.endTime >= :startTime', { startTime: start });
@@ -50,7 +66,7 @@ async function getActivityDataBySearch(
       key: `%${keyword}%`,
     });
   }
-  return query.getMany();
+  return await query.getMany();
 }
 
 // calculates the number of minutes an activity endured
@@ -101,8 +117,7 @@ async function updateActivityDataById(
     activity.note = newActivity.note;
   }
 
-  activityRepository.save(activity);
-  return activity;
+  return await activityRepository.save(activity);
 }
 
 // finds activity types that the user has submitted before
@@ -117,14 +132,22 @@ async function getActivityTypesForUser(userId: string): Promise<string[]> {
 }
 
 async function deleteActivityDataById(activityDataId: number): Promise<void> {
-  activityRepository.delete({ activityDataId });
+  await activityRepository.delete({ activityDataId });
 }
 
-async function generateActivityStats(start: Date, end: Date): Promise<ActivityStats[]> {
+async function generateActivityStats(
+  userId: string,
+  start: Date,
+  end: Date,
+): Promise<ActivityStats[]> {
   // will also include userid once session management is in place
   const activities: ActivityDataEntity[] = await activityRepository
     .createQueryBuilder('activityData')
-    .where('startTime >= :start and endTime <= :end', { start, end })
+    .where('activityData.user.userId = :userId and startTime >= :start and endTime <= :end', {
+      userId,
+      start,
+      end,
+    })
     .getMany();
 
   const stats: ActivityStats[] = [];

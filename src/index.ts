@@ -27,6 +27,8 @@ import { getAllSleepDataForUser } from './models/SleepDataModel';
 const app: Express = express();
 const { PORT, COOKIE_SECRET } = process.env;
 
+app.use(express.static('public', { extensions: ['.html'] }));
+
 let store;
 if (process.env.CAROLYN_ENV) {
   const redisClient = createClient();
@@ -50,6 +52,7 @@ app.use(
   }),
 );
 
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.post('/register', registerUser);
@@ -65,6 +68,7 @@ app.get('/api/medication/:medicationDataId', getMedicationData);
 app.get('/api/user/:userId/medication', getAllMedicationDataByUser);
 
 app.get('/api/food/search', FoodController.searchFoodData);
+app.get('/api/food/stats', FoodController.getFoodStats);
 app.get('/api/food/:foodDataId', FoodController.getFoodData);
 app.get('/api/food/user/:userId', FoodController.getAllUserFoodData);
 app.post('/api/food', FoodController.submitFoodData);

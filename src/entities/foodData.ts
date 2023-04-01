@@ -15,7 +15,7 @@ export class FoodData {
   foodDataId: number;
 
   @ManyToOne(() => User, (user) => user.foods)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn()
   user: Relation<User>;
 
   @CreateDateColumn()
