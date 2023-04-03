@@ -3,16 +3,27 @@ import 'express-async-errors'; // Enable default error handling for async errors
 import express, { Express } from 'express';
 import session from 'express-session';
 import connectSqlite3 from 'connect-sqlite3';
-import { registerUser, logIn, getUserInfo } from './controllers/UserController';
 import {
-  updateMedicalHistory,
+  registerUser,
+  logIn,
+  getUserInfo,
+  updateBirthday,
+  updateEmailAddress,
+  updateGender,
+  updatePlace,
+  updateUserName,
+} from './controllers/UserController';
+import {
+  addNewMedicalHistory,
   getMedicalHistory,
   getAllMedicalHistoryByUser,
+  updateMedicalHistory,
 } from './controllers/MedicalHistoryController';
 import {
-  updateMedicationData,
+  addNewMedicationData,
   getMedicationData,
   getAllMedicationDataByUser,
+  updateMedicationData,
 } from './controllers/MedicationDataController';
 
 import FoodController from './controllers/FoodDataController';
@@ -35,7 +46,7 @@ app.use(
     name: 'session',
     resave: false,
     saveUninitialized: false,
-  }),
+  })
 );
 
 app.use(express.json());
@@ -43,14 +54,21 @@ app.use(express.json());
 app.post('/register', registerUser);
 app.post('/login', logIn);
 app.get('/user/:userId', getUserInfo);
+app.post('/api/user/:userId/email', updateEmailAddress);
+app.post('/api/user/:userId/gender', updateGender);
+app.post('/api/user/:userId/place', updatePlace);
+app.post('/api/user/:userId/birthday', updateBirthday);
+app.post('/api/user/:userId/name', updateUserName);
 
-app.post('/api/medical-history', updateMedicalHistory);
+app.post('/api/medical-history', addNewMedicalHistory);
 app.get('/api/medical-history/:medicalHistoryId', getMedicalHistory);
 app.get('/api/user/:userId/medical-history', getAllMedicalHistoryByUser);
+app.post('/api/medical-history/:medicalHistoryId/update', updateMedicalHistory);
 
-app.post('/api/medication', updateMedicationData);
+app.post('/api/medication', addNewMedicationData);
 app.get('/api/medication/:medicationDataId', getMedicationData);
 app.get('/api/user/:userId/medication', getAllMedicationDataByUser);
+app.post('api/medication/:medicationDataId', updateMedicationData);
 
 app.get('/api/food/search', FoodController.searchFoodData);
 app.get('/api/food/:foodDataId', FoodController.getFoodData);

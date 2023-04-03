@@ -6,3 +6,7 @@ type MedicationData = {
   frequency: string;
   note: string;
 };
+
+type MedicationDataIdParam = {
+  medicationDataId: string;
+};

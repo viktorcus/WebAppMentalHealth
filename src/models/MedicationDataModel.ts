@@ -6,7 +6,6 @@ const medicationDataRepository = AppDataSource.getRepository(MedicationData);
 async function addMedicationData(medicationData: MedicationData): Promise<MedicationData> {
   let newMedicationData = new MedicationData();
   newMedicationData.medicationDataId = medicationData.medicationDataId;
-  newMedicationData.userId = medicationData.userId;
   newMedicationData.medicationName = medicationData.medicationName;
   newMedicationData.dosage = medicationData.dosage;
   newMedicationData.frequency = medicationData.frequency;
@@ -25,8 +24,25 @@ async function getMedicationDataById(medicationDataId: string): Promise<Medicati
 }
 
 async function getMedicationDataByUserId(userId: string): Promise<MedicationData[]> {
-  const medicationData = await medicationDataRepository.find({ where: { userId } });
+  const medicationData = await medicationDataRepository.find({ where: { user: { userId } } });
   return medicationData;
 }
 
-export { addMedicationData, getMedicationDataById, getMedicationDataByUserId };
+async function updateMedicationDataById(
+  medicationDataId: string,
+  newMedicationData: Partial<MedicationData>
+): Promise<void> {
+  await medicationDataRepository
+    .createQueryBuilder()
+    .update(MedicationData)
+    .set(newMedicationData)
+    .where({ medicationDataId })
+    .execute();
+}
+
+export {
+  addMedicationData,
+  getMedicationDataById,
+  getMedicationDataByUserId,
+  updateMedicationDataById,
+};

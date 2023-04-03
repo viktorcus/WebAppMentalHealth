@@ -5,7 +5,6 @@ const medicalHistoryRepository = AppDataSource.getRepository(MedicalHistory);
 
 async function addMedicalHistory(medicalHistory: MedicalHistory): Promise<MedicalHistory> {
   const newMedicalHistory = new MedicalHistory();
-  newMedicalHistory.userId = medicalHistory.userId;
   newMedicalHistory.conditionName = medicalHistory.conditionName;
   newMedicalHistory.treatment = medicalHistory.treatment;
   newMedicalHistory.diagnosisDate = medicalHistory.diagnosisDate;
@@ -24,8 +23,25 @@ async function getMedicalHistoryById(medicalHistoryId: string): Promise<MedicalH
 }
 
 async function getMedicalHistoryByUserId(userId: string): Promise<MedicalHistory[]> {
-  const medicalHistories = await medicalHistoryRepository.find({ where: { userId } });
+  const medicalHistories = await medicalHistoryRepository.find({ where: { user: { userId } } });
   return medicalHistories;
 }
 
-export { addMedicalHistory, getMedicalHistoryById, getMedicalHistoryByUserId };
+async function updateMedicalHistoryDataById(
+  medicalHistoryId: string,
+  newMedicalHistory: Partial<MedicalHistory>
+): Promise<void> {
+  await medicalHistoryRepository
+    .createQueryBuilder()
+    .update(MedicalHistory)
+    .set(newMedicalHistory)
+    .where({ medicalHistoryId })
+    .execute();
+}
+
+export {
+  addMedicalHistory,
+  getMedicalHistoryById,
+  getMedicalHistoryByUserId,
+  updateMedicalHistoryDataById,
+};
