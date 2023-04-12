@@ -3,6 +3,7 @@ import argon2 from 'argon2';
 import { addUser, getUserByEmail, getUserById } from '../models/UserModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { AuthRequest, UserIdParam } from '../types/userInfo';
+import { getActivityDataToday } from '../models/ActivityDataModel';
 
 async function registerUser(req: Request, res: Response): Promise<void> {
   const { userName, email, password } = req.body as AuthRequest;
@@ -48,7 +49,7 @@ async function logIn(req: Request, res: Response): Promise<void> {
     email: user.email,
   };
   req.session.isLoggedIn = true;
-  res.sendStatus(200);
+  res.redirect('/');
 }
 
 async function getUserInfo(req: Request, res: Response): Promise<void> {
@@ -63,4 +64,19 @@ async function getUserInfo(req: Request, res: Response): Promise<void> {
 
   res.json(user);
 }
-export { registerUser, logIn, getUserInfo };
+
+async function getUserDashboard(req: Request, res: Response): Promise<void> {
+  if (!req.session.isLoggedIn) {
+    // check that user is logged in
+    res.redirect('/login');
+    return;
+  }
+
+  const user = await getUserById(req.session.authenticatedUser.userId);
+  const dashData = {
+    activityData: await getActivityDataToday(req.session.authenticatedUser.userId),
+  };
+  console.log({ dashData, user });
+  res.render('dashboard', { dashData, user });
+}
+export { registerUser, logIn, getUserInfo, getUserDashboard };

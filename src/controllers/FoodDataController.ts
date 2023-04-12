@@ -9,7 +9,6 @@ import {
   generateFoodStats,
 } from '../models/FoodDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
-import { UserIdParam } from '../types/userInfo';
 import { FoodData as FoodEntity } from '../entities/foodData';
 import { getUserById } from '../models/UserModel';
 
@@ -37,23 +36,16 @@ async function submitFoodData(req: Request, res: Response): Promise<void> {
 }
 
 async function getAllUserFoodData(req: Request, res: Response): Promise<void> {
-  const { userId } = req.params as unknown as UserIdParam;
-
   // check that user is logged in
   if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
-    return;
-  }
-
-  // check that user accesses only their data based on session
-  if (!(userId === req.session.authenticatedUser.userId)) {
-    res.sendStatus(403);
+    res.redirect('/login');
     return;
   }
 
   try {
-    const foodData = await getAllFoodDataForUser(userId);
-    res.json(foodData);
+    const user = await getUserById(req.session.authenticatedUser.userId);
+    const foodData = await getAllFoodDataForUser(req.session.authenticatedUser.userId);
+    res.render('foodPage', { user, foodData });
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -66,7 +58,7 @@ async function getFoodData(req: Request, res: Response): Promise<void> {
 
   // check that user is logged in
   if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
 

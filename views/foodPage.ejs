@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body class="body-wrap">
+  <div>
+    <header class="page-header">
+      <p><%= user.userName %>'s Activity</p>
+    </header>
+    <section class="page-tabs">
+      <div>
+        <span>History</span>
+        <span>|</span>
+        <span>Progress</span>
+        <span>|</span>
+        <span>Create New</span>
+      </div>
+    </section>
+    <section class="page-body">
+      <% for (const food of foodData) { %>
+      <div class="flex-fill">
+        <div class="data-card">
+          <h3><%= food.meal %></h3>
+          <p class="data-card-time"><%= food.mealDate %></p>
+          <% if (food.calorieIntake) { %>
+          Calories: <%= food.calorieIntake %>
+          <% } %>
+          <% if (food.note) { %>
+          <%= food.note %>
+          <% } %>
+        </div>
+      </div>
+      <% } %>
+    </section>
+  </div>
+</body>
+
+</html>

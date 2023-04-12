@@ -10,7 +10,6 @@ import {
 } from '../models/ActivityDataModel';
 import { getUserById } from '../models/UserModel';
 import { parseDatabaseError } from '../utils/db-utils';
-import { UserIdParam } from '../types/userInfo';
 import { ActivityData as ActivityEntity } from '../entities/activityData';
 
 async function submitActivityData(req: Request, res: Response): Promise<void> {
@@ -41,20 +40,15 @@ async function submitActivityData(req: Request, res: Response): Promise<void> {
 }
 
 async function getAllUserActivityData(req: Request, res: Response): Promise<void> {
-  const { userId } = req.params as UserIdParam;
-
   if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
-  if (!(userId === req.session.authenticatedUser.userId)) {
-    res.sendStatus(403);
-    return;
-  }
+  const user = await getUserById(req.session.authenticatedUser.userId);
 
   try {
-    const activityData = await getAllActivityDataForUser(userId);
-    res.json(activityData);
+    const activityData = await getAllActivityDataForUser(req.session.authenticatedUser.userId);
+    res.render('activityPage', { user, activityData });
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -67,7 +61,7 @@ async function getActivityData(req: Request, res: Response): Promise<void> {
 
   // check that user is logged in
   if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
 
