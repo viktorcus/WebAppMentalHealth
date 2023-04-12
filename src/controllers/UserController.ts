@@ -60,7 +60,6 @@ async function logIn(req: Request, res: Response): Promise<void> {
     email: user.email,
   };
   req.session.isLoggedIn = true;
-
   res.sendStatus(200);
 }
 

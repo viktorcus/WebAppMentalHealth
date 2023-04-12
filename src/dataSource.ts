@@ -26,6 +26,7 @@ export const AppDataSource = process.env.CAROLYN_ENV
       logging: false,
       entities: await loadEntities(),
       database: process.env.DATABASE_NAME ?? 'You Forgot to set DATABASE_NAME in .env',
+      extra: { trustServerCertificate: true },
     })
   : new DataSource({
       synchronize: true,

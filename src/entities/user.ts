@@ -2,6 +2,10 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation } from 'typ
 import { Gender } from '../types/userInfo';
 import { MedicalHistory } from './medicalHistory';
 import { MedicationData } from './medicationData';
+import { HealthData } from './healthData';
+import { SleepData } from './sleepData';
+import { FoodData } from './foodData';
+import { ActivityData } from './activityData';
 
 @Entity()
 export class User {
@@ -20,7 +24,7 @@ export class User {
   @Column({ default: false })
   verifiedEmail: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   birthday: Date;
 
   @Column({ default: Gender.Other })
@@ -28,6 +32,12 @@ export class User {
 
   @Column({ nullable: true })
   place: string;
+
+  @OneToMany(() => HealthData, (healthData) => healthData.user)
+  healthData: Relation<HealthData>[];
+
+  @OneToMany(() => SleepData, (sleepData) => sleepData.user)
+  sleepData: Relation<SleepData>[];
 
   @OneToMany(() => MedicalHistory, (medicalHistory) => medicalHistory.user, {
     cascade: ['insert', 'update'],
@@ -38,4 +48,10 @@ export class User {
     cascade: ['insert', 'update'],
   })
   medicationData: Relation<MedicationData>[];
+
+  @OneToMany(() => ActivityData, (activity) => activity.user)
+  activities: Relation<ActivityData>[];
+
+  @OneToMany(() => FoodData, (food) => food.user)
+  foods: Relation<FoodData>[];
 }

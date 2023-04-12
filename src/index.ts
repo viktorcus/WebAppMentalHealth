@@ -38,12 +38,23 @@ import { getAllSleepDataForUser } from './models/SleepDataModel';
 
 const app: Express = express();
 const { PORT, COOKIE_SECRET } = process.env;
+app.use(express.static('public', { extensions: ['html'] }));
 
-const SQLiteStore = connectSqlite3(session);
+let store;
+if (process.env.CAROLYN_ENV) {
+  const redisClient = createClient();
+  await redisClient.connect();
+  store = new RedisStore({
+    client: redisClient,
+  });
+} else {
+  const SQLiteStore = connectSqlite3(session);
+  store = new SQLiteStore({ db: 'sessions.sqlite' });
+}
 
 app.use(
   session({
-    store: new SQLiteStore({ db: 'sessions.sqlite' }),
+    store,
     secret: COOKIE_SECRET as string,
     cookie: { maxAge: 8 * 60 * 60 * 1000 }, // 8 hours
     name: 'session',
@@ -52,6 +63,7 @@ app.use(
   })
 );
 
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.post('/register', registerUser);
@@ -74,6 +86,7 @@ app.get('/api/user/:userId/medication', getAllMedicationDataByUser);
 app.post('api/medication/:medicationDataId', updateMedicationData);
 
 app.get('/api/food/search', FoodController.searchFoodData);
+app.get('/api/food/stats', FoodController.getFoodStats);
 app.get('/api/food/:foodDataId', FoodController.getFoodData);
 app.get('/api/food/user/:userId', FoodController.getAllUserFoodData);
 app.post('/api/food', FoodController.submitFoodData);

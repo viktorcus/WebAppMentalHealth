@@ -15,7 +15,7 @@ export class ActivityData {
   activityDataId: number;
 
   @ManyToOne(() => User, (user) => user.activities)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn()
   user: Relation<User>;
 
   @Column()
