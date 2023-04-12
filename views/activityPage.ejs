@@ -16,11 +16,11 @@
     </header>
     <section class="page-tabs">
       <div>
-        <span>History</span>
+        <span><a href="/activity">History</a></span>
         <span>|</span>
         <span>Progress</span>
         <span>|</span>
-        <span>Create New</span>
+        <span><a href="/activity/create">Create New</a></span>
       </div>
     </section>
     <section class="page-body">
@@ -28,7 +28,7 @@
       <div class="flex-fill">
         <div class="data-card">
           <h3><%= activity.activityType %></h3>
-          <p class="data-card-time"><%= activity.startTime %> - <%= activity.endTime %></p>
+          <p class="data-card-time"><%= activity.startTime.toLocaleString('en-US') %> - <%= activity.endTime.toLocaleString('en-US') %></p>
           <% if (activity.caloriesBurned) { %>
           Calories: <%= activity.caloriesBurned %>
           <% } %>

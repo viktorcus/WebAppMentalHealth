@@ -17,7 +17,7 @@ async function submitFoodData(req: Request, res: Response): Promise<void> {
 
   // check that user is logged in
   if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
 
@@ -26,7 +26,11 @@ async function submitFoodData(req: Request, res: Response): Promise<void> {
   try {
     if (user) {
       const food = await addFoodData(foodData, user);
-      res.status(201).json(food);
+      if (food) {
+        res.status(201).redirect('/food');
+      } else {
+        res.sendStatus(500);
+      }
     }
   } catch (err) {
     console.error(err);
@@ -88,7 +92,7 @@ async function updateFoodData(req: Request, res: Response): Promise<void> {
 
   if (!req.session.isLoggedIn) {
     // check that user is logged in
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
 

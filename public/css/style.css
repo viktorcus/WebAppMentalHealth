@@ -40,3 +40,7 @@
 .data-card-time {
   color: #585858;
 }
+
+.form div {
+  padding: 0.5rem;
+}

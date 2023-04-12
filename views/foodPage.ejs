@@ -12,15 +12,15 @@
 <body class="body-wrap">
   <div>
     <header class="page-header">
-      <p><%= user.userName %>'s Activity</p>
+      <p><%= user.userName %>'s Food</p>
     </header>
     <section class="page-tabs">
       <div>
-        <span>History</span>
+        <span><a href="/food">History</a></span>
         <span>|</span>
         <span>Progress</span>
         <span>|</span>
-        <span>Create New</span>
+        <span><a href="/food/create">Create New</a></span>
       </div>
     </section>
     <section class="page-body">
@@ -28,7 +28,7 @@
       <div class="flex-fill">
         <div class="data-card">
           <h3><%= food.meal %></h3>
-          <p class="data-card-time"><%= food.mealDate %></p>
+          <p class="data-card-time"><%= food.mealDate.toLocaleDateString('en-US') %></p>
           <% if (food.calorieIntake) { %>
           Calories: <%= food.calorieIntake %>
           <% } %>

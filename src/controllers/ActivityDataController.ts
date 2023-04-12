@@ -21,7 +21,7 @@ async function submitActivityData(req: Request, res: Response): Promise<void> {
   }
   // check that user is logged in
   if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
 
@@ -30,7 +30,11 @@ async function submitActivityData(req: Request, res: Response): Promise<void> {
   try {
     if (user) {
       const activity = await addActivityData(activityData, user);
-      res.status(201).json(activity);
+      if (activity) {
+        res.status(201).redirect('/activity');
+      } else {
+        res.sendStatus(500);
+      }
     }
   } catch (err) {
     console.error(err);
@@ -91,7 +95,7 @@ async function updateActivityData(req: Request, res: Response): Promise<void> {
 
   if (!req.session.isLoggedIn) {
     // check that user is logged in
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
 
