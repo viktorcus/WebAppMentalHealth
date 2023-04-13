@@ -182,7 +182,20 @@ async function searchActivityData(req: Request, res: Response): Promise<void> {
 }
 
 async function getActivityStats(req: Request, res: Response): Promise<void> {
-  const { start, end } = req.query as ActivitySearchParam;
+  let { start, end } = req.query as ActivitySearchParam;
+
+  if (!req.session.isLoggedIn) {
+    // check that user is logged in
+    res.redirect('/login');
+    return;
+  }
+
+  if (!start && !end) {
+    end = new Date();
+    start = new Date();
+    start.setMonth(end.getMonth() - 1);
+  }
+
   if (!start || !end || start > end) {
     res.sendStatus(400); // invalid start/end times
     return;
@@ -193,7 +206,7 @@ async function getActivityStats(req: Request, res: Response): Promise<void> {
       start,
       end,
     );
-    res.json(stats);
+    res.render('activityStats', { stats });
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);

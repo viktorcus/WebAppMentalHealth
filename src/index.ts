@@ -58,7 +58,9 @@ app.use(express.json());
 
 app.get('/', getUserDashboard);
 app.get('/activity', ActivityController.getAllUserActivityData);
+app.get('/activity/stats', ActivityController.getActivityStats);
 app.get('/food', FoodController.getAllUserFoodData);
+app.get('/food/stats', FoodController.getFoodStats);
 
 app.post('/api/register', registerUser);
 app.post('/api/login', logIn);
