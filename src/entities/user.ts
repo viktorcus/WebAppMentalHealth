@@ -1,11 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation } from 'typeorm';
-import { Gender } from '../utils/enums';
+import { Gender } from '../types/userInfo';
 import { MedicalHistory } from './medicalHistory';
 import { MedicationData } from './medicationData';
 import { HealthData } from './healthData';
 import { SleepData } from './sleepData';
 import { FoodData } from './foodData';
 import { ActivityData } from './activityData';
+import { Reminder } from './reminder';
 
 @Entity()
 export class User {
@@ -33,21 +34,28 @@ export class User {
   @Column({ nullable: true })
   place: string;
 
-  @OneToMany(() => MedicalHistory, (medicalHistory) => medicalHistory.user)
-  medicalHistory: Relation<MedicalHistory>[];
-
-  @OneToMany(() => MedicationData, (medicationData) => medicationData.user)
-  medicationData: Relation<MedicationData>[];
-
   @OneToMany(() => HealthData, (healthData) => healthData.user)
   healthData: Relation<HealthData>[];
 
   @OneToMany(() => SleepData, (sleepData) => sleepData.user)
   sleepData: Relation<SleepData>[];
 
+  @OneToMany(() => MedicalHistory, (medicalHistory) => medicalHistory.user, {
+    cascade: ['insert', 'update'],
+  })
+  medicalHistory: Relation<MedicalHistory>[];
+
+  @OneToMany(() => MedicationData, (medicationData) => medicationData.user, {
+    cascade: ['insert', 'update'],
+  })
+  medicationData: Relation<MedicationData>[];
+
   @OneToMany(() => ActivityData, (activity) => activity.user)
   activities: Relation<ActivityData>[];
 
   @OneToMany(() => FoodData, (food) => food.user)
   foods: Relation<FoodData>[];
+
+  @OneToMany(() => Reminder, (reminder) => reminder.user)
+  reminders: Relation<Reminder>[];
 }

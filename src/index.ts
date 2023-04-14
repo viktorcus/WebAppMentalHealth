@@ -5,18 +5,36 @@ import session from 'express-session';
 import connectSqlite3 from 'connect-sqlite3';
 import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
+import { scheduleJob } from 'node-schedule';
+import { sendOneWeekReminders } from './services/reminderService';
 
-import { registerUser, logIn, getUserInfo, getUserDashboard } from './controllers/UserController';
 import {
-  updateMedicalHistory,
+  registerUser,
+  logIn,
+  getUserInfo,
+  updateBirthday,
+  updateEmailAddress,
+  updateGender,
+  updatePlace,
+  updateUserName,
+  createReminder,
+  getUserDashboard,
+} from './controllers/UserController';
+import {
+  addNewMedicalHistory,
   getMedicalHistory,
   getAllMedicalHistoryByUser,
+  updateMedicalHistory,
+  deleteMedicalHistory,
 } from './controllers/MedicalHistoryController';
 import {
-  updateMedicationData,
+  addNewMedicationData,
   getMedicationData,
   getAllMedicationDataByUser,
+  updateMedicationData,
+  deleteMedicationData,
 } from './controllers/MedicationDataController';
+
 import FoodController from './controllers/FoodDataController';
 import ActivityController from './controllers/ActivityDataController';
 import { getAllUserSleepData } from './controllers/SleepDataController';
@@ -50,7 +68,7 @@ app.use(
     name: 'session',
     resave: false,
     saveUninitialized: false,
-  }),
+  })
 );
 
 app.use(express.urlencoded({ extended: false }));
@@ -62,17 +80,28 @@ app.get('/activity/stats', ActivityController.getActivityStats);
 app.get('/food', FoodController.getAllUserFoodData);
 app.get('/food/stats', FoodController.getFoodStats);
 
-app.post('/api/register', registerUser);
-app.post('/api/login', logIn);
-app.get('/api/user/:userId', getUserInfo);
+app.post('/register', registerUser);
+app.post('/login', logIn);
+app.get('/users/:userId', getUserInfo);
+app.post('/api/users/:userId/email', updateEmailAddress);
+app.post('/api/users/:userId/gender', updateGender);
+app.post('/api/users/:userId/place', updatePlace);
+app.post('/api/users/:userId/birthday', updateBirthday);
+app.post('/api/users/:userId/name', updateUserName);
 
-app.post('/api/medical-history', updateMedicalHistory);
+app.post('/api/reminders', createReminder);
+
+app.post('/api/medical-history', addNewMedicalHistory);
 app.get('/api/medical-history/:medicalHistoryId', getMedicalHistory);
-app.get('/api/user/:userId/medical-history', getAllMedicalHistoryByUser);
+app.get('/api/users/:userId/medical-history', getAllMedicalHistoryByUser);
+app.post('/api/medical-history/:medicalHistoryId/update', updateMedicalHistory);
+app.delete('/api/medical-history/:medicalHistoryId', deleteMedicalHistory);
 
-app.post('/api/medication', updateMedicationData);
+app.post('/api/medication', addNewMedicationData);
 app.get('/api/medication/:medicationDataId', getMedicationData);
-app.get('/api/user/:userId/medication', getAllMedicationDataByUser);
+app.get('/api/users/:userId/medication', getAllMedicationDataByUser);
+app.post('api/medication/:medicationDataId/update', updateMedicationData);
+app.delete('/api/medication/:medicationDataId', deleteMedicationData);
 
 app.get('/api/food/search', FoodController.searchFoodData);
 app.get('/api/food/stats', FoodController.getFoodStats);
@@ -96,6 +125,8 @@ app.post('/api/activity/', updateHealthData);
 
 app.get('/api/activity/:userId', getAllUserHealthData);
 app.post('/api/activity/', getAllSleepDataForUser);
+
+scheduleJob('0 0 7 * * *', sendOneWeekReminders);
 
 app.listen(PORT, () => {
   console.log(`server listening on http://localhost:${PORT}`);

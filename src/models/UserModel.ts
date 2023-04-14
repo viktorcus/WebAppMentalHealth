@@ -1,5 +1,7 @@
+import { addWeeks } from 'date-fns';
 import { AppDataSource } from '../dataSource';
 import { User } from '../entities/user';
+import { Gender } from '../types/userInfo';
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -24,4 +26,74 @@ async function getUserById(userId: string): Promise<User | null> {
   return user;
 }
 
-export { addUser, getUserByEmail, getUserById };
+async function updateEmailAddressById(userId: string, newEmail: string): Promise<void> {
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ email: newEmail })
+    .where({ userId })
+    .execute();
+}
+
+async function updateNameById(userId: string, newUserName: string): Promise<void> {
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ userName: newUserName })
+    .where({ userId })
+    .execute();
+}
+
+async function updatePlaceById(userId: string, newPlace: string): Promise<void> {
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ place: newPlace })
+    .where({ userId })
+    .execute();
+}
+
+async function updateGenderById(userId: string, newGender: Gender): Promise<void> {
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ gender: newGender })
+    .where({ userId })
+    .execute();
+}
+
+async function updateBirthdayById(userId: string, newBirthday: Date): Promise<void> {
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ birthday: newBirthday })
+    .where({ userId })
+    .execute();
+}
+
+async function getRemindersDueInOneWeek(): Promise<User[]> {
+  const today = new Date();
+  const oneWeekFromToday = addWeeks(today, 2);
+
+  const users = await userRepository
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.reminders', 'reminders')
+    .select(['user.userId', 'user.email', 'user.username', 'reminders'])
+    .where('reminders.sendNotificationOn <= :oneWeekFromToday', { oneWeekFromToday })
+    .andWhere('reminders.sendNotificationOn > :today', { today })
+    .getMany();
+
+  return users;
+}
+
+export {
+  addUser,
+  getUserByEmail,
+  getUserById,
+  updateEmailAddressById,
+  updateNameById,
+  updatePlaceById,
+  updateGenderById,
+  updateBirthdayById,
+  getRemindersDueInOneWeek,
+};

@@ -3,12 +3,15 @@ import {
   addMedicationData,
   getMedicationDataById,
   getMedicationDataByUserId,
+  updateMedicationDataById,
+  medicationDataBelongsToUser,
+  deleteMedicationDataById,
 } from '../models/MedicationDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
 import { MedicationData } from '../entities/medicationData';
 
-async function updateMedicationData(req: Request, res: Response): Promise<void> {
+async function addNewMedicationData(req: Request, res: Response): Promise<void> {
   const medicationData = req.body as MedicationData;
 
   try {
@@ -50,4 +53,63 @@ async function getAllMedicationDataByUser(req: Request, res: Response): Promise<
   }
 }
 
-export { updateMedicationData, getMedicationData, getAllMedicationDataByUser };
+async function updateMedicationData(req: Request, res: Response): Promise<void> {
+  const { medicationDataId } = req.params as MedicationDataIdParam;
+  const updatedMedicationData = req.body as Partial<MedicationData>;
+
+  if (!req.session.isLoggedIn) {
+    res.sendStatus(403); // if user did not log in, access is forbidden
+    return;
+  }
+
+  try {
+    const existingMedicationData = await getMedicationDataById(medicationDataId);
+
+    if (!existingMedicationData) {
+      res.status(404).json({ message: `Medication data with ID ${medicationDataId} not found` });
+      return;
+    }
+
+    const mergedMedicationData = { ...existingMedicationData, ...updatedMedicationData };
+    await updateMedicationDataById(medicationDataId, mergedMedicationData);
+
+    const updatedData = await getMedicationDataById(medicationDataId);
+    console.log(updatedData);
+    res.json(updatedData);
+  } catch (err) {
+    console.error(err);
+    const databaseErrorMessage = parseDatabaseError(err);
+    res.status(500).json(databaseErrorMessage);
+  }
+}
+
+async function deleteMedicationData(req: Request, res: Response): Promise<void> {
+  const { isLoggedIn, authenticatedUser } = req.session;
+  if (!isLoggedIn) {
+    res.sendStatus(401); // 401 Unauthorized
+    return;
+  }
+
+  const { medicationDataId } = req.params as MedicationDataIdParam;
+
+  const medicationDataExists = await medicationDataBelongsToUser(
+    medicationDataId,
+    authenticatedUser.userId
+  );
+  if (!medicationDataExists) {
+    res.sendStatus(403); // 403 Forbidden
+    return;
+  }
+
+  await deleteMedicationDataById(medicationDataId);
+
+  res.sendStatus(204); // 204 No Content
+}
+
+export {
+  addNewMedicationData,
+  getMedicationData,
+  getAllMedicationDataByUser,
+  updateMedicationData,
+  deleteMedicationData,
+};

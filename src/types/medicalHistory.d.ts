@@ -6,3 +6,7 @@ type MedicalHistory = {
   treatment: string;
   note: string;
 };
+
+type MedicalHistoryIdParam = {
+  medicalHistoryId: string;
+};
