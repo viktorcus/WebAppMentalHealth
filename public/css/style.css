@@ -1,3 +1,145 @@
+* {
+  padding: 0;
+  margin:0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+/* .eye-icon {
+  font-size: 18px;
+  color: #8b8b8b;
+} */
+
+.content__label {
+  font-size: 30px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.card {
+  width: 90%;
+  min-height: 500px;
+}
+
+.showcase {
+  background: url("https://img.freepik.com/premium-vector/mental-health-concept-flowers-leaves-head-woman-world-mental-health-day-vector-illustration_502651-19.jpg");
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 50px;
+  /*display: none;*/
+}
+
+.showcase span {
+  font-size: 100px;
+}
+
+.signinwithgoogle .icon {
+  width: 40px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.signinwithgoogle {
+  padding: 10px;
+  text-align: center;
+  border: 2px solid gray;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.signinwithgoogle:hover {
+  background: rgb(236, 218, 228);
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  display: grid;
+}
+
+.auth {
+  padding: 30px 10px;
+}
+
+/* a.guest {
+  border: 2px solid white;
+  background: rgb(19, 18, 18);
+  text-decoration: none;
+  padding: 10px;
+  color: #fff;
+  margin-top: 20px;
+}
+
+a.guest:hover {
+  background: yellowgreen;
+} */
+
+.form {
+  margin-block: 20px;
+}
+
+.form__group {
+  display: grid;
+}
+
+.form__group label {
+  font-weight: 500;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.form__group input {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 20px;
+  border-color: gray;
+  border-width: 1px;
+}
+
+.form group button[type="submit"] {
+  background: green;
+  border: none;
+  padding: 10px;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.form__group button[type="submit"]:hover {
+  background: yellowgreen;
+  margin-top: 30px;
+}
+
+.action {
+  display: grid;
+  margin-top: 30px;
+}
+
+.divider {
+  width: fit-content;
+  padding: 10px 15px;
+  margin-inline: auto;
+  box-shadow: 0px 10px 15px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+}
+
+@media screen and (min-width:768px) {
+  .card {
+    width: 60%;
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    box-shadow: 0px 10px 15px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
 .body-wrap {
   background-color: #a4faae;
 }
