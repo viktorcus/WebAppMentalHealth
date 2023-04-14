@@ -3,5 +3,4 @@ enum Gender {
   Female,
   Other,
 }
-
 export { Gender };

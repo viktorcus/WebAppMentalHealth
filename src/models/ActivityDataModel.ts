@@ -8,7 +8,7 @@ const activityRepository = AppDataSource.getRepository(ActivityDataEntity);
 
 async function addActivityData(
   activityData: ActivityData,
-  user: User,
+  user: User
 ): Promise<ActivityDataEntity | null> {
   console.log(user);
   const newActivity = new ActivityDataEntity();
@@ -60,7 +60,7 @@ async function getActivityDataBySearch(
   userId: string,
   start?: Date,
   end?: Date,
-  keyword?: string,
+  keyword?: string
 ): Promise<ActivityDataEntity[]> {
   const query: SelectQueryBuilder<ActivityDataEntity> =
     activityRepository.createQueryBuilder('activityData');
@@ -105,7 +105,7 @@ function getDuration(startTime: Date, endTime: Date): number {
 // generic method to update multiple fields of an activity at once
 async function updateActivityDataById(
   activityDataId: number,
-  newActivity: ActivityData,
+  newActivity: ActivityData
 ): Promise<ActivityDataEntity | null> {
   // check that activity exists
   const activity = await activityRepository.findOne({ where: { activityDataId } });
@@ -151,7 +151,7 @@ async function deleteActivityDataById(activityDataId: number): Promise<void> {
 async function generateActivityStats(
   userId: string,
   start: Date,
-  end: Date,
+  end: Date
 ): Promise<ActivityStats[]> {
   // will also include userid once session management is in place
   const activities: ActivityDataEntity[] = await activityRepository

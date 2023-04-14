@@ -23,7 +23,12 @@ async function getMedicalHistoryById(medicalHistoryId: string): Promise<MedicalH
 }
 
 async function getMedicalHistoryByUserId(userId: string): Promise<MedicalHistory[]> {
-  const medicalHistories = await medicalHistoryRepository.find({ where: { user: { userId } } });
+  const medicalHistories = await medicalHistoryRepository
+    .createQueryBuilder('medicalHistory')
+    .leftJoinAndSelect('medicalHistory.user', 'user')
+    .where('user.userId = :userId', { userId })
+    .getMany();
+
   return medicalHistories;
 }
 

@@ -1,7 +1,7 @@
 import { addWeeks } from 'date-fns';
 import { AppDataSource } from '../dataSource';
 import { User } from '../entities/user';
-import { Gender } from '../types/userInfo';
+import { Gender } from '../utils/enums';
 
 const userRepository = AppDataSource.getRepository(User);
 

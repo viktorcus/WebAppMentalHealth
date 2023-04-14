@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation } from 'typeorm';
-import { Gender } from '../types/userInfo';
+import { Gender } from '../utils/enums';
 import { MedicalHistory } from './medicalHistory';
 import { MedicationData } from './medicationData';
 import { HealthData } from './healthData';
@@ -40,12 +40,12 @@ export class User {
   @OneToMany(() => SleepData, (sleepData) => sleepData.user)
   sleepData: Relation<SleepData>[];
 
-  @OneToMany(() => MedicalHistory, (medicalHistory) => medicalHistory.user, {
+  @OneToMany(() => MedicalHistory, (medicalHistory) => medicalHistory.users, {
     cascade: ['insert', 'update'],
   })
   medicalHistory: Relation<MedicalHistory>[];
 
-  @OneToMany(() => MedicationData, (medicationData) => medicationData.user, {
+  @OneToMany(() => MedicationData, (medicationData) => medicationData.users, {
     cascade: ['insert', 'update'],
   })
   medicationData: Relation<MedicationData>[];

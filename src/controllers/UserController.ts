@@ -12,7 +12,8 @@ import {
 } from '../models/UserModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { getActivityDataToday } from '../models/ActivityDataModel';
-import { AuthRequest, Gender, UserIdParam } from '../types/userInfo';
+import { AuthRequest, UserIdParam } from '../types/userInfo';
+import { Gender } from '../utils/enums';
 import { sendEmail } from '../services/emailService';
 import { addReminder } from '../models/ReminderModel';
 

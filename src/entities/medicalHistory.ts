@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Relation } from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -19,6 +19,6 @@ export class MedicalHistory {
   note: string;
 
   @ManyToOne(() => User, (user) => user.medicalHistory, { cascade: ['insert', 'update'] })
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  @JoinColumn()
+  users: Relation<User>[];
 }

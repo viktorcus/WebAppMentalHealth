@@ -24,7 +24,11 @@ async function getMedicationDataById(medicationDataId: string): Promise<Medicati
 }
 
 async function getMedicationDataByUserId(userId: string): Promise<MedicationData[]> {
-  const medicationData = await medicationDataRepository.find({ where: { user: { userId } } });
+  const medicationData = await medicationDataRepository
+    .createQueryBuilder('medicationData')
+    .leftJoinAndSelect('medicationData.user', 'user')
+    .where('user.userId = :userId', { userId })
+    .getMany();
   return medicationData;
 }
 

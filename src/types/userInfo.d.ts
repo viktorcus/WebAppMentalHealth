@@ -1,3 +1,5 @@
+import { Gender } from '../utils/enums';
+
 type UserInfo = {
   userId: string;
   userName: string;
@@ -18,11 +20,5 @@ type AuthRequest = {
   email: string;
   password: string;
 };
-
-export declare enum Gender {
-  Male,
-  Female,
-  Other,
-}
 
 export { UserInfo, UserIdParam, AuthRequest };
