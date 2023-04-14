@@ -39,9 +39,33 @@ async function updateMedicalHistoryDataById(
     .execute();
 }
 
+async function medicalHistoryBelongsToUser(
+  medicalHistoryId: string,
+  userId: string
+): Promise<boolean> {
+  const medicalHistoryExists = await medicalHistoryRepository
+    .createQueryBuilder('medicalHistory')
+    .leftJoinAndSelect('medicalHistory.user', 'user')
+    .where('medicalHistory.medicalHistoryId = :medicalHistoryId', { medicalHistoryId })
+    .andWhere('user.userId = :userId', { userId })
+    .getExists();
+
+  return medicalHistoryExists;
+}
+
+async function deleteMedicalHistoryById(medicalHistoryId: string): Promise<void> {
+  await medicalHistoryRepository
+    .createQueryBuilder('medicalHistory')
+    .delete()
+    .where('medicalHistoryId = :medicalHistoryId', { medicalHistoryId })
+    .execute();
+}
+
 export {
   addMedicalHistory,
   getMedicalHistoryById,
   getMedicalHistoryByUserId,
   updateMedicalHistoryDataById,
+  medicalHistoryBelongsToUser,
+  deleteMedicalHistoryById,
 };

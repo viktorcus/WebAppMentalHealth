@@ -4,6 +4,8 @@ import {
   getMedicalHistoryById,
   getMedicalHistoryByUserId,
   updateMedicalHistoryDataById,
+  medicalHistoryBelongsToUser,
+  deleteMedicalHistoryById,
 } from '../models/MedicalHistoryModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
@@ -81,9 +83,33 @@ async function updateMedicalHistory(req: Request, res: Response): Promise<void> 
   }
 }
 
+async function deleteMedicalHistory(req: Request, res: Response): Promise<void> {
+  const { isLoggedIn, authenticatedUser } = req.session;
+  if (!isLoggedIn) {
+    res.sendStatus(401); // 401 Unauthorized
+    return;
+  }
+
+  const { medicalHistoryId } = req.params as MedicalHistoryIdParam;
+
+  const medicalHistoryExists = await medicalHistoryBelongsToUser(
+    medicalHistoryId,
+    authenticatedUser.userId
+  );
+  if (!medicalHistoryExists) {
+    res.sendStatus(403); // 403 Forbidden
+    return;
+  }
+
+  await deleteMedicalHistoryById(medicalHistoryId);
+
+  res.sendStatus(204); // 204 No Content
+}
+
 export {
   addNewMedicalHistory,
   getMedicalHistory,
   getAllMedicalHistoryByUser,
   updateMedicalHistory,
+  deleteMedicalHistory,
 };

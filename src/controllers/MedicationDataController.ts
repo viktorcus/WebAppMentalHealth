@@ -4,6 +4,8 @@ import {
   getMedicationDataById,
   getMedicationDataByUserId,
   updateMedicationDataById,
+  medicationDataBelongsToUser,
+  deleteMedicationDataById,
 } from '../models/MedicationDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
@@ -81,9 +83,33 @@ async function updateMedicationData(req: Request, res: Response): Promise<void> 
   }
 }
 
+async function deleteMedicationData(req: Request, res: Response): Promise<void> {
+  const { isLoggedIn, authenticatedUser } = req.session;
+  if (!isLoggedIn) {
+    res.sendStatus(401); // 401 Unauthorized
+    return;
+  }
+
+  const { medicationDataId } = req.params as MedicationDataIdParam;
+
+  const medicationDataExists = await medicationDataBelongsToUser(
+    medicationDataId,
+    authenticatedUser.userId
+  );
+  if (!medicationDataExists) {
+    res.sendStatus(403); // 403 Forbidden
+    return;
+  }
+
+  await deleteMedicationDataById(medicationDataId);
+
+  res.sendStatus(204); // 204 No Content
+}
+
 export {
   addNewMedicationData,
   getMedicationData,
   getAllMedicationDataByUser,
   updateMedicationData,
+  deleteMedicationData,
 };

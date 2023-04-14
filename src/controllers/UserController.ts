@@ -12,6 +12,8 @@ import {
 } from '../models/UserModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { AuthRequest, Gender, UserIdParam } from '../types/userInfo';
+import { sendEmail } from '../services/emailService';
+import { addReminder } from '../models/ReminderModel';
 
 async function registerUser(req: Request, res: Response): Promise<void> {
   const { userName, email, password } = req.body as AuthRequest;
@@ -21,6 +23,7 @@ async function registerUser(req: Request, res: Response): Promise<void> {
   try {
     const newUser = await addUser(userName, email, passwordHash);
     console.log(newUser);
+    await sendEmail(email, 'Welcome!', `Thank you for joining my application!`);
     res.sendStatus(201);
   } catch (err) {
     console.error(err);
@@ -236,6 +239,23 @@ async function updateBirthday(req: Request, res: Response): Promise<void> {
   res.sendStatus(200);
 }
 
+async function createReminder(req: Request, res: Response): Promise<void> {
+  if (!req.session.isLoggedIn) {
+    res.sendStatus(401); // 401 Unauthorized
+    return;
+  }
+
+  const { authenticatedUser } = req.session;
+  const user = await getUserById(authenticatedUser.userId);
+
+  if (user) {
+    const { sendNotificationOn, items } = req.body as CreateReminderBody;
+    await addReminder(sendNotificationOn, items, user);
+  }
+
+  res.sendStatus(201);
+}
+
 export {
   registerUser,
   logIn,
@@ -245,4 +265,5 @@ export {
   updateGender,
   updateUserName,
   updateBirthday,
+  createReminder,
 };

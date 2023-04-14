@@ -40,9 +40,33 @@ async function updateMedicationDataById(
     .execute();
 }
 
+async function medicationDataBelongsToUser(
+  medicationDataId: string,
+  userId: string
+): Promise<boolean> {
+  const medicationDataExists = await medicationDataRepository
+    .createQueryBuilder('medicationData')
+    .leftJoinAndSelect('medicationData.user', 'user')
+    .where('medicationData.medicationDataId = :medicationDataId', { medicationDataId })
+    .andWhere('user.userId = :userId', { userId })
+    .getExists();
+
+  return medicationDataExists;
+}
+
+async function deleteMedicationDataById(medicationDataId: string): Promise<void> {
+  await medicationDataRepository
+    .createQueryBuilder('medicationData')
+    .delete()
+    .where('medicationDataId = :medicationDataId', { medicationDataId })
+    .execute();
+}
+
 export {
   addMedicationData,
   getMedicationDataById,
   getMedicationDataByUserId,
   updateMedicationDataById,
+  medicationDataBelongsToUser,
+  deleteMedicationDataById,
 };

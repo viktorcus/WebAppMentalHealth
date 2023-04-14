@@ -6,6 +6,7 @@ import { HealthData } from './healthData';
 import { SleepData } from './sleepData';
 import { FoodData } from './foodData';
 import { ActivityData } from './activityData';
+import { Reminder } from './reminder';
 
 @Entity()
 export class User {
@@ -54,4 +55,7 @@ export class User {
 
   @OneToMany(() => FoodData, (food) => food.user)
   foods: Relation<FoodData>[];
+
+  @OneToMany(() => Reminder, (reminder) => reminder.user)
+  reminders: Relation<Reminder>[];
 }
