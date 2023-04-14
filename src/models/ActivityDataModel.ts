@@ -43,6 +43,19 @@ async function getActivityDataById(activityDataId: number): Promise<ActivityData
     .getOne();
 }
 
+async function getActivityDataToday(userId: string): Promise<ActivityDataEntity | null> {
+  const startOfDay = new Date();
+  startOfDay.setHours(0);
+  startOfDay.setMinutes(0);
+  startOfDay.setSeconds(0);
+
+  const query: SelectQueryBuilder<ActivityDataEntity> =
+    activityRepository.createQueryBuilder('activityData');
+  query.andWhere('activityData.user.userId = :user', { user: userId });
+  query.andWhere('activityData.endTime >= :startTime', { startTime: startOfDay });
+  return await query.getOne();
+}
+
 async function getActivityDataBySearch(
   userId: string,
   start?: Date,
@@ -155,7 +168,9 @@ async function generateActivityStats(
     const idx = stats.findIndex((s) => s.type === activity.activityType);
     if (idx >= 0) {
       const stat = stats.at(idx);
-      stats.at(idx)!.duration = getDuration(activity.startTime, activity.endTime) + stat!.duration;
+      if (stat) {
+        stat.duration = getDuration(activity.startTime, activity.endTime) + stat.duration;
+      }
     } else {
       stats.push({
         type: activity.activityType,
@@ -176,4 +191,5 @@ export {
   updateActivityDataById,
   deleteActivityDataById,
   generateActivityStats,
+  getActivityDataToday,
 };

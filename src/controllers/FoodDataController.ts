@@ -9,7 +9,6 @@ import {
   generateFoodStats,
 } from '../models/FoodDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
-import { UserIdParam } from '../types/userInfo';
 import { FoodData as FoodEntity } from '../entities/foodData';
 import { getUserById } from '../models/UserModel';
 
@@ -18,7 +17,7 @@ async function submitFoodData(req: Request, res: Response): Promise<void> {
 
   // check that user is logged in
   if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
 
@@ -27,7 +26,11 @@ async function submitFoodData(req: Request, res: Response): Promise<void> {
   try {
     if (user) {
       const food = await addFoodData(foodData, user);
-      res.status(201).json(food);
+      if (food) {
+        res.status(201).redirect('/food');
+      } else {
+        res.sendStatus(500);
+      }
     }
   } catch (err) {
     console.error(err);
@@ -37,23 +40,16 @@ async function submitFoodData(req: Request, res: Response): Promise<void> {
 }
 
 async function getAllUserFoodData(req: Request, res: Response): Promise<void> {
-  const { userId } = req.params as unknown as UserIdParam;
-
   // check that user is logged in
   if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
-    return;
-  }
-
-  // check that user accesses only their data based on session
-  if (!(userId === req.session.authenticatedUser.userId)) {
-    res.sendStatus(403);
+    res.redirect('/login');
     return;
   }
 
   try {
-    const foodData = await getAllFoodDataForUser(userId);
-    res.json(foodData);
+    const user = await getUserById(req.session.authenticatedUser.userId);
+    const foodData = await getAllFoodDataForUser(req.session.authenticatedUser.userId);
+    res.render('foodPage', { user, foodData });
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -66,7 +62,7 @@ async function getFoodData(req: Request, res: Response): Promise<void> {
 
   // check that user is logged in
   if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
 
@@ -96,7 +92,7 @@ async function updateFoodData(req: Request, res: Response): Promise<void> {
 
   if (!req.session.isLoggedIn) {
     // check that user is logged in
-    res.sendStatus(401);
+    res.redirect('/login');
     return;
   }
 
@@ -182,7 +178,20 @@ async function searchFoodData(req: Request, res: Response): Promise<void> {
 }
 
 async function getFoodStats(req: Request, res: Response): Promise<void> {
-  const { start, end } = req.query as FoodSearchParam;
+  let { start, end } = req.query as FoodSearchParam;
+
+  if (!req.session.isLoggedIn) {
+    // check that user is logged in
+    res.redirect('/login');
+    return;
+  }
+
+  if (!start && !end) {
+    end = new Date();
+    start = new Date();
+    start.setMonth(end.getMonth() - 1);
+  }
+
   if (!start || !end || start > end) {
     res.sendStatus(400); // invalid start/end times
     return;
@@ -193,7 +202,7 @@ async function getFoodStats(req: Request, res: Response): Promise<void> {
       start,
       end,
     );
-    res.json(stats);
+    res.render('foodStats', { stats });
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body class="body-wrap">
+  <div>
+    <header class="page-header">
+      <p>Create Food</p>
+    </header>
+    <section class="page-tabs">
+      <div>
+        <span><a href="/food">History</a></span>
+        <span>|</span>
+        <span><a href="/food/stats">Stats</a></span>
+        <span>|</span>
+        <span><a href="/food/create">Create New</a></span>
+      </div>
+    </section>
+    <section class="page-body">
+      <div class="flex-fill">
+        <div class="data-card">
+          <h3>New Food Data</h3>
+          <form method="POST" action="/api/food" class="form">
+            <div>
+              <label for="meal">Meal Description: </label>
+              <input name="meal" id="meal" class="text" placeholder="Meal" type="text" required />
+            </div>
+            <div>
+              <label for="mealDate">Date: </label>
+              <input name="mealDate" id="mealDate" class="text" placeholder="Date" type="date" required />
+            </div>
+            <div>
+              <label for="calorieIntake">Calorie Intake (optional): </label>
+              <input name="calorieIntake" id="calorieIntake" class="text" placeholder="Calorie Intake" type="text" />
+            </div>
+            <div>
+              <label for="note">Note (optional): </label>
+              <input name="note" id="note" class="text" placeholder="Note" type="text" />
+            </div>
+            <div>
+              <button class="btn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>

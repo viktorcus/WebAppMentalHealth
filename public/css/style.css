@@ -1,0 +1,46 @@
+.body-wrap {
+  background-color: #a4faae;
+}
+
+.page-body {
+  padding-top: 1rem;
+}
+
+.page-tabs {
+  padding: 75px 1.5rem 1rem 1.5rem;
+  margin: -8px -8px -8px -8px;
+  font-size: large;
+  background-color: #f2fef7;
+}
+.page-tabs span {
+  padding: 1rem;
+}
+
+.page-header {
+  background-color: black;
+  color: #f2fef7;
+  display: flex;
+  padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+  margin: -8px -8px -8px -8px;
+  font-size: large;
+  position: fixed;
+  width: 100%;
+}
+
+.data-card {
+  display: block;
+  margin: 0.75rem;
+  padding: 1rem;
+  border-style: solid;
+  border-radius: 0.5rem;
+  background-color: #f2fef7;
+  border-color: #f2fef7;
+}
+
+.data-card-time {
+  color: #585858;
+}
+
+.form div {
+  padding: 0.5rem;
+}

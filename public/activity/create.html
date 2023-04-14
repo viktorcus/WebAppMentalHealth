@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body class="body-wrap">
+  <div>
+    <header class="page-header">
+      <p>Create Activity</p>
+    </header>
+    <section class="page-tabs">
+      <div>
+        <span><a href="/activity">History</a></span>
+        <span>|</span>
+        <span><a href="/activity/stats">Stats</a></span>
+        <span>|</span>
+        <span><a href="/activity/create">Create New</a></span>
+      </div>
+    </section>
+    <section class="page-body">
+      <div class="flex-fill">
+        <div class="data-card">
+          <h3>New Activity Data</h3>
+          <form method="POST" action="/api/activity" class="form">
+            <div>
+              <label for="activityType">Activity Type: </label>
+              <input name="activityType" id="activityType" class="text" placeholder="Activity" type="text" required />
+            </div>
+            <div>
+              <label for="startTime">Start Time: </label>
+              <input name="startTime" id="startTime" class="text" placeholder="Start Time" type="datetime-local" required />
+            </div>
+            <div>
+              <label for="endTime">End Time: </label>
+              <input name="endTime" id="endTime" class="text" placeholder="End Time" type="datetime-local" required />
+            </div>
+            <div>
+              <label for="caloriesBurned">Calories Burned (optional): </label>
+              <input name="caloriesBurned" id="caloriesBurned" class="text" placeholder="Calories Burned" type="text" />
+            </div>
+            <div>
+              <label for="note">Note (optional): </label>
+              <input name="note" id="note" class="text" placeholder="Note" type="text" />
+            </div>
+            <div>
+              <button class="btn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>

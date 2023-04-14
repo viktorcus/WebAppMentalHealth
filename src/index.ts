@@ -6,7 +6,7 @@ import connectSqlite3 from 'connect-sqlite3';
 import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
 
-import { registerUser, logIn, getUserInfo } from './controllers/UserController';
+import { registerUser, logIn, getUserInfo, getUserDashboard } from './controllers/UserController';
 import {
   updateMedicalHistory,
   getMedicalHistory,
@@ -25,6 +25,8 @@ import { getAllHealthDataForUser, updateHealthData } from './models/HealthDataMo
 import { getAllSleepDataForUser } from './models/SleepDataModel';
 
 const app: Express = express();
+app.set('view engine', 'ejs');
+
 const { PORT, COOKIE_SECRET } = process.env;
 app.use(express.static('public', { extensions: ['html'] }));
 
@@ -54,9 +56,15 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.post('/register', registerUser);
-app.post('/login', logIn);
-app.get('/user/:userId', getUserInfo);
+app.get('/', getUserDashboard);
+app.get('/activity', ActivityController.getAllUserActivityData);
+app.get('/activity/stats', ActivityController.getActivityStats);
+app.get('/food', FoodController.getAllUserFoodData);
+app.get('/food/stats', FoodController.getFoodStats);
+
+app.post('/api/register', registerUser);
+app.post('/api/login', logIn);
+app.get('/api/user/:userId', getUserInfo);
 
 app.post('/api/medical-history', updateMedicalHistory);
 app.get('/api/medical-history/:medicalHistoryId', getMedicalHistory);
