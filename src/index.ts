@@ -7,6 +7,7 @@ import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
 import { scheduleJob } from 'node-schedule';
 import { sendOneWeekReminders } from './services/reminderService';
+import { validateNewUserBody, validateLoginBody } from './validators/authValidator';
 
 import {
   registerUser,
@@ -62,7 +63,6 @@ import {
   renderHealthProgressPage,
   updateHealthProgressPage,
 } from './controllers/HealthDataController';
-import { validateLoginBody, validateNewUserBody } from './validators/authValidator';
 
 const app: Express = express();
 app.set('view engine', 'ejs');

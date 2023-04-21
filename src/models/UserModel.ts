@@ -11,7 +11,7 @@ async function addUser(
   passwordHash: string,
   birthday?: Date,
   place?: string,
-  gender?: Gender,
+  gender?: Gender
 ): Promise<User> {
   let newUser = new User();
   newUser.userName = userName;
@@ -36,14 +36,6 @@ async function getUserByUserName(userName: string): Promise<User | null> {
   const user = await userRepository
     .createQueryBuilder('user')
     .where('userName = :userName', { userName })
-    .getOne();
-  return user;
-}
-
-async function getUserByUserNameAndEmail(userName: string, email: string): Promise<User | null> {
-  const user = await userRepository
-    .createQueryBuilder('user')
-    .where('userName = :userName OR email = :email', { userName, email })
     .getOne();
   return user;
 }
@@ -123,7 +115,6 @@ export {
   getUserByUserName,
   getUserByEmail,
   getUserById,
-  getUserByUserNameAndEmail,
   updateEmailAddressById,
   updateNameById,
   updatePlaceById,

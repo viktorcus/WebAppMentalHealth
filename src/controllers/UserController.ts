@@ -4,7 +4,7 @@ import {
   addUser,
   getUserByEmail,
   getUserById,
-  getUserByUserNameAndEmail,
+  getUserByUserName,
   updateBirthdayById,
   updateEmailAddressById,
   updateGenderById,
@@ -21,9 +21,9 @@ import { addReminder } from '../models/ReminderModel';
 async function registerUser(req: Request, res: Response): Promise<void> {
   const { userName, email, password, birthday, place, gender } = req.body as AuthRequest;
 
-  const user = await getUserByUserNameAndEmail(userName, email);
+  const user = await getUserByUserName(userName);
   if (user) {
-    res.send('Username or email already exists!');
+    res.sendStatus(409);
     return;
   }
 
