@@ -4,6 +4,7 @@ import {
   addUser,
   getUserByEmail,
   getUserById,
+  getUserByUserName,
   updateBirthdayById,
   updateEmailAddressById,
   updateGenderById,
@@ -20,13 +21,19 @@ import { addReminder } from '../models/ReminderModel';
 async function registerUser(req: Request, res: Response): Promise<void> {
   const { userName, email, password } = req.body as AuthRequest;
 
+  const user = await getUserByUserName(userName);
+  if (user) {
+    res.sendStatus(409);
+    return;
+  }
+
   const passwordHash = await argon2.hash(password);
 
   try {
     const newUser = await addUser(userName, email, passwordHash);
     console.log(newUser);
     await sendEmail(email, 'Welcome!', `Thank you for joining my application!`);
-    res.sendStatus(201);
+    res.redirect('/login');
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -40,19 +47,14 @@ async function logIn(req: Request, res: Response): Promise<void> {
   const user = await getUserByEmail(email);
 
   if (!user) {
-    res.sendStatus(404);
+    res.redirect('/register');
     return;
   }
 
   const { passwordHash } = user;
 
   if (!(await argon2.verify(passwordHash, password))) {
-    if (!req.session.logInAttempts) {
-      req.session.logInAttempts = 1; // First attempt
-    } else {
-      req.session.logInAttempts += 1; // increment their attempts
-    }
-    res.sendStatus(403);
+    res.redirect('/login');
     return;
   }
 
@@ -78,7 +80,18 @@ async function getUserInfo(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  res.json(user);
+  // Check if the logged-in user has the same userId as the requested user
+  if (user.userId !== req.session.authenticatedUser.userId) {
+    res.sendStatus(401);
+    return;
+  }
+
+  res.render('dashboard', {
+    email: user.email,
+    birthday: user.birthday,
+    gender: user.gender,
+    place: user.place,
+  });
 }
 
 async function getUserDashboard(req: Request, res: Response): Promise<void> {
@@ -100,7 +113,11 @@ async function updateEmailAddress(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
   const { isLoggedIn, authenticatedUser } = req.session;
 
-  if (!isLoggedIn || authenticatedUser.userId !== userId) {
+  if (!isLoggedIn) {
+    res.redirect('/login');
+  }
+
+  if (authenticatedUser.userId !== userId) {
     res.sendStatus(403); // 403 forbidden
     return;
   }
@@ -132,8 +149,12 @@ async function updatePlace(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
   const { isLoggedIn, authenticatedUser } = req.session;
 
-  if (!isLoggedIn || authenticatedUser.userId !== userId) {
-    res.sendStatus(403);
+  if (!isLoggedIn) {
+    res.redirect('/login');
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    res.sendStatus(403); // 403 forbidden
     return;
   }
 
@@ -164,8 +185,12 @@ async function updateGender(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
   const { isLoggedIn, authenticatedUser } = req.session;
 
-  if (!isLoggedIn || authenticatedUser.userId !== userId) {
-    res.sendStatus(403);
+  if (!isLoggedIn) {
+    res.redirect('/login');
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    res.sendStatus(403); // 403 forbidden
     return;
   }
 
@@ -196,8 +221,12 @@ async function updateUserName(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
   const { isLoggedIn, authenticatedUser } = req.session;
 
-  if (!isLoggedIn || authenticatedUser.userId !== userId) {
-    res.sendStatus(403);
+  if (!isLoggedIn) {
+    res.redirect('/login');
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    res.sendStatus(403); // 403 forbidden
     return;
   }
 
@@ -228,8 +257,12 @@ async function updateBirthday(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
   const { isLoggedIn, authenticatedUser } = req.session;
 
-  if (!isLoggedIn || authenticatedUser.userId !== userId) {
-    res.sendStatus(403);
+  if (!isLoggedIn) {
+    res.redirect('/login');
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    res.sendStatus(403); // 403 forbidden
     return;
   }
 

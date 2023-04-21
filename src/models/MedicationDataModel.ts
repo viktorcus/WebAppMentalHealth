@@ -19,7 +19,19 @@ async function addMedicationData(medicationData: MedicationData): Promise<Medica
 }
 
 async function getMedicationDataById(medicationDataId: string): Promise<MedicationData | null> {
-  const medicationData = await medicationDataRepository.findOne({ where: { medicationDataId } });
+  const medicationData = await medicationDataRepository
+    .createQueryBuilder('medicationData')
+    .where({ where: { medicationDataId } })
+    .leftJoin('medicationData.user', 'user')
+    .select([
+      'medicationData.medicationDataId',
+      'medicationData.medicationName',
+      'medicationData.dosage',
+      'medicationData.frequency',
+      'medicationData.note',
+      'user.userId',
+    ])
+    .getOne();
   return medicationData || null;
 }
 
@@ -28,6 +40,7 @@ async function getMedicationDataByUserId(userId: string): Promise<MedicationData
     .createQueryBuilder('medicationData')
     .leftJoinAndSelect('medicationData.user', 'user')
     .where('user.userId = :userId', { userId })
+    .select(['medicationData', 'user.userId'])
     .getMany();
   return medicationData;
 }

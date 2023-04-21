@@ -18,7 +18,7 @@ export class MedicalHistory {
   @Column({ nullable: true })
   note: string;
 
-  @ManyToOne(() => User, (user) => user.medicalHistory, { cascade: ['insert', 'update'] })
+  @ManyToOne(() => User, (user) => user.medicalHistories, { cascade: ['insert', 'update'] })
   @JoinColumn()
-  users: Relation<User>[];
+  user: Relation<User>[];
 }

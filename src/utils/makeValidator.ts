@@ -15,8 +15,8 @@ function makeValidator(schema: joi.ObjectSchema<unknown>, prop: RequestField) {
       const endpoint = `${req.method} ${req.path}`;
       console.error(
         `\n${redBg('ERROR')}: failed to validate ${ur(prop)} for endpoint: ${uc(endpoint)}. ${ur(
-          prop,
-        )} not defined on request object.\n`,
+          prop
+        )} not defined on request object.\n`
       );
       return;
     }

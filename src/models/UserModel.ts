@@ -16,6 +16,14 @@ async function addUser(userName: string, email: string, passwordHash: string): P
   return newUser;
 }
 
+async function getUserByUserName(userName: string): Promise<User | null> {
+  const user = await userRepository
+    .createQueryBuilder('user')
+    .where('userName = :userName', { userName })
+    .getOne();
+  return user;
+}
+
 async function getUserByEmail(email: string): Promise<User | null> {
   const user = await userRepository.findOne({ where: { email } });
   return user || null;
@@ -88,6 +96,7 @@ async function getRemindersDueInOneWeek(): Promise<User[]> {
 
 export {
   addUser,
+  getUserByUserName,
   getUserByEmail,
   getUserById,
   updateEmailAddressById,

@@ -9,10 +9,10 @@ export class MedicationData {
   @Column()
   medicationName: string;
 
-  @Column({ nullable: true })
+  @Column()
   dosage: string;
 
-  @Column({ nullable: true })
+  @Column()
   frequency: string;
 
   @Column({ nullable: true })
@@ -20,5 +20,5 @@ export class MedicationData {
 
   @ManyToOne(() => User, (user) => user.medicationData, { cascade: ['insert', 'update'] })
   @JoinColumn()
-  users: Relation<User>[];
+  user: Relation<User>[];
 }
