@@ -7,6 +7,7 @@ import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
 import { scheduleJob } from 'node-schedule';
 import { sendOneWeekReminders } from './services/reminderService';
+import { validateNewUserBody, validateLoginBody } from './validators/authValidator';
 
 import {
   registerUser,
@@ -83,7 +84,7 @@ app.use(
     name: 'session',
     resave: false,
     saveUninitialized: false,
-  }),
+  })
 );
 
 app.use(express.urlencoded({ extended: false }));
@@ -97,8 +98,8 @@ app.get('/food/stats', FoodController.getFoodStats);
 app.get('/health/stats', getHealthStats);
 app.get('/sleep/stats', getSleepStats);
 
-app.post('/api/register', registerUser);
-app.post('/api/login', logIn);
+app.post('/register', validateNewUserBody, registerUser);
+app.post('/login', validateLoginBody, logIn);
 app.get('/users/:userId', getUserInfo);
 app.post('/api/users/:userId/email', updateEmailAddress);
 app.post('/api/users/:userId/gender', updateGender);

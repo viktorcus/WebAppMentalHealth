@@ -4,7 +4,7 @@ import { MedicalHistory } from '../entities/medicalHistory';
 const medicalHistoryRepository = AppDataSource.getRepository(MedicalHistory);
 
 async function addMedicalHistory(medicalHistory: MedicalHistory): Promise<MedicalHistory> {
-  const newMedicalHistory = new MedicalHistory();
+  let newMedicalHistory = new MedicalHistory();
   newMedicalHistory.conditionName = medicalHistory.conditionName;
   newMedicalHistory.treatment = medicalHistory.treatment;
   newMedicalHistory.diagnosisDate = medicalHistory.diagnosisDate;
@@ -12,13 +12,25 @@ async function addMedicalHistory(medicalHistory: MedicalHistory): Promise<Medica
     newMedicalHistory.note = medicalHistory.note;
   }
 
-  const savedMedicalHistory = await medicalHistoryRepository.save(newMedicalHistory);
+  newMedicalHistory = await medicalHistoryRepository.save(newMedicalHistory);
 
-  return savedMedicalHistory;
+  return newMedicalHistory;
 }
 
 async function getMedicalHistoryById(medicalHistoryId: string): Promise<MedicalHistory | null> {
-  const medicalHistory = await medicalHistoryRepository.findOne({ where: { medicalHistoryId } });
+  const medicalHistory = await medicalHistoryRepository
+    .createQueryBuilder('medicalHistory')
+    .where({ where: { medicalHistoryId } })
+    .leftJoin('medicalHistory.user', 'user')
+    .select([
+      'medicalHistory.medicalHistoryId',
+      'medicalHistory.conditionName',
+      'medicalHistory.diagnosisDate',
+      'medicalHistory.treatment',
+      'medicalHistory.note',
+      'user.userId',
+    ])
+    .getOne();
   return medicalHistory || null;
 }
 
@@ -27,6 +39,7 @@ async function getMedicalHistoryByUserId(userId: string): Promise<MedicalHistory
     .createQueryBuilder('medicalHistory')
     .leftJoinAndSelect('medicalHistory.user', 'user')
     .where('user.userId = :userId', { userId })
+    .select(['medicalHistory', 'user.userId'])
     .getMany();
 
   return medicalHistories;

@@ -10,14 +10,28 @@ import {
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
 import { MedicalHistory } from '../entities/medicalHistory';
+import { getUserById } from '../models/UserModel';
 
 async function addNewMedicalHistory(req: Request, res: Response): Promise<void> {
+  const { authenticatedUser, isLoggedIn } = req.session;
+  if (!isLoggedIn) {
+    // res.sendStatus(401);
+    res.redirect('/login');
+    return;
+  }
+
   const medicalHistory = req.body as MedicalHistory;
+
+  const user = await getUserById(authenticatedUser.userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
 
   try {
     const newMedicalHistory = await addMedicalHistory(medicalHistory);
     console.log(newMedicalHistory);
-    res.sendStatus(201);
+    res.redirect(`/medical-history/${newMedicalHistory.medicalHistoryId}`);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -27,6 +41,11 @@ async function addNewMedicalHistory(req: Request, res: Response): Promise<void> 
 
 async function getMedicalHistory(req: Request, res: Response): Promise<void> {
   const { medicalHistoryId } = req.body as MedicalHistory;
+
+  if (!req.session.isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
 
   try {
     const medicalHistory = await getMedicalHistoryById(medicalHistoryId);

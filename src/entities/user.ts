@@ -40,12 +40,12 @@ export class User {
   @OneToMany(() => SleepData, (sleepData) => sleepData.user)
   sleepData: Relation<SleepData>[];
 
-  @OneToMany(() => MedicalHistory, (medicalHistory) => medicalHistory.users, {
+  @OneToMany(() => MedicalHistory, (medicalHistory) => medicalHistory.user, {
     cascade: ['insert', 'update'],
   })
-  medicalHistory: Relation<MedicalHistory>[];
+  medicalHistories: Relation<MedicalHistory>[];
 
-  @OneToMany(() => MedicationData, (medicationData) => medicationData.users, {
+  @OneToMany(() => MedicationData, (medicationData) => medicationData.user, {
     cascade: ['insert', 'update'],
   })
   medicationData: Relation<MedicationData>[];

@@ -171,7 +171,7 @@ async function searchActivityData(req: Request, res: Response): Promise<void> {
       req.session.authenticatedUser.userId,
       start,
       end,
-      keyword,
+      keyword
     );
     res.json(activityData);
   } catch (err) {
@@ -204,7 +204,7 @@ async function getActivityStats(req: Request, res: Response): Promise<void> {
     const stats: ActivityStats[] = await generateActivityStats(
       req.session.authenticatedUser.userId,
       start,
-      end,
+      end
     );
     res.render('activityStats', { stats });
   } catch (err) {
