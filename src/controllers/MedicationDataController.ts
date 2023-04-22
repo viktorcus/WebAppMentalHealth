@@ -10,14 +10,27 @@ import {
 import { parseDatabaseError } from '../utils/db-utils';
 import { UserIdParam } from '../types/userInfo';
 import { MedicationData } from '../entities/medicationData';
+import { getUserById } from '../models/UserModel';
 
 async function addNewMedicationData(req: Request, res: Response): Promise<void> {
+  const { authenticatedUser, isLoggedIn } = req.session;
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
   const medicationData = req.body as MedicationData;
+
+  const user = await getUserById(authenticatedUser.userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
 
   try {
     const newMedicationData = await addMedicationData(medicationData);
     console.log(newMedicationData);
-    res.sendStatus(201);
+    res.redirect(`/medication/${newMedicationData.medicationDataId}`);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -27,6 +40,11 @@ async function addNewMedicationData(req: Request, res: Response): Promise<void> 
 
 async function getMedicationData(req: Request, res: Response): Promise<void> {
   const { medicationDataId } = req.body as MedicationData;
+
+  if (!req.session.isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
 
   try {
     const medicationData = await getMedicationDataById(medicationDataId);
@@ -41,6 +59,11 @@ async function getMedicationData(req: Request, res: Response): Promise<void> {
 
 async function getAllMedicationDataByUser(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
+
+  if (!req.session.isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
 
   try {
     const allMedicationData = await getMedicationDataByUserId(userId);
@@ -58,7 +81,7 @@ async function updateMedicationData(req: Request, res: Response): Promise<void> 
   const updatedMedicationData = req.body as Partial<MedicationData>;
 
   if (!req.session.isLoggedIn) {
-    res.sendStatus(403); // if user did not log in, access is forbidden
+    res.redirect('/login');
     return;
   }
 

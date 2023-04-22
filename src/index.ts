@@ -109,13 +109,13 @@ app.post('/api/users/:userId/name', updateUserName);
 
 app.post('/api/reminders', createReminder);
 
-app.post('/api/medical-history', addNewMedicalHistory);
+app.post('/api/medical-history/add', addNewMedicalHistory);
 app.get('/api/medical-history/:medicalHistoryId', getMedicalHistory);
 app.get('/api/users/:userId/medical-history', getAllMedicalHistoryByUser);
 app.post('/api/medical-history/:medicalHistoryId/update', updateMedicalHistory);
 app.delete('/api/medical-history/:medicalHistoryId', deleteMedicalHistory);
 
-app.post('/api/medication', addNewMedicationData);
+app.post('/api/medication/add', addNewMedicationData);
 app.get('/api/medication/:medicationDataId', getMedicationData);
 app.get('/api/users/:userId/medication', getAllMedicationDataByUser);
 app.post('api/medication/:medicationDataId/update', updateMedicationData);

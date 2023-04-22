@@ -15,7 +15,6 @@ import { getUserById } from '../models/UserModel';
 async function addNewMedicalHistory(req: Request, res: Response): Promise<void> {
   const { authenticatedUser, isLoggedIn } = req.session;
   if (!isLoggedIn) {
-    // res.sendStatus(401);
     res.redirect('/login');
     return;
   }
@@ -61,6 +60,11 @@ async function getMedicalHistory(req: Request, res: Response): Promise<void> {
 async function getAllMedicalHistoryByUser(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
 
+  if (!req.session.isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
   try {
     const allMedicalHistory = await getMedicalHistoryByUserId(userId);
     console.log(allMedicalHistory);
@@ -77,7 +81,7 @@ async function updateMedicalHistory(req: Request, res: Response): Promise<void> 
   const updatedMedicalHistory = req.body as Partial<MedicalHistory>;
 
   if (!req.session.isLoggedIn) {
-    res.sendStatus(403); // if user did not log in, access is forbidden
+    res.redirect('/login');
     return;
   }
 
@@ -105,7 +109,7 @@ async function updateMedicalHistory(req: Request, res: Response): Promise<void> 
 async function deleteMedicalHistory(req: Request, res: Response): Promise<void> {
   const { isLoggedIn, authenticatedUser } = req.session;
   if (!isLoggedIn) {
-    res.sendStatus(401); // 401 Unauthorized
+    res.redirect('/login');
     return;
   }
 
