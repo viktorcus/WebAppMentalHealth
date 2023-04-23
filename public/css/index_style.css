@@ -1,0 +1,152 @@
+/* Global styles */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+
+::selection{
+  background: #1b1b1b;
+  color: #ffffff;
+}
+
+.navbar{
+  width: 100%;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5vw;
+  background: #ffffff;
+  z-index: 9;
+  font-weight: bolder;
+  font-size: larger;
+}
+
+.links-container{
+  display: flex;
+  list-style: none;
+}
+
+.link{
+  padding: 10px;
+  margin-left: 10px;
+  text-decoration: none;
+  text-transform: capitalize;
+  color: #000;
+}
+
+.header{
+  margin-top: 60px;
+  width: 100%;
+  height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.theme{
+  height: 500px;
+  width: 500px;
+}
+
+.content{
+  text-align: left;
+}
+
+.heading{
+  color: black;
+  text-transform: capitalize;
+  font-size: 60px;
+  line-height: 40px;
+  margin-bottom: 80px;
+}
+
+.btn{
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #333333;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: capitalize;
+}
+
+/* Services styles */
+
+#services {
+  padding: 40px 20px;
+  background-color: #333333;
+  color: #ffffff;
+  text-align: center;
+}
+
+#services h3 {
+  font-size: 36px;
+  margin: 0 0 40px 0;
+}
+
+
+
+/* Mission styles */
+
+#mission {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+#mission h3 {
+  font-size: 36px;
+  margin: 0 0 0 0;
+}
+
+.mission-content {
+  width: 100%;
+  height: calc(100vh - 60px);
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.mentalhealth{
+  height: 500px;
+  width: 500px;
+}
+
+.mission-vision {
+  text-align: left;
+}
+
+.mission-vision ul {
+  padding: 0;
+  margin: 0;
+}
+
+.mission-vision ul li {
+  margin-bottom: 10px;
+}
+
+#mission h4 {
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+/* Footer styles */
+
+footer {
+  background-color: #333333;
+  color: #ffffff;
+  padding: 20px;
+  text-align: center;
+}
