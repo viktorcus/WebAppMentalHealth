@@ -68,7 +68,7 @@ app.use(
     name: 'session',
     resave: false,
     saveUninitialized: false,
-  })
+  }),
 );
 
 app.use(express.urlencoded({ extended: false }));
@@ -80,8 +80,8 @@ app.get('/activity/stats', ActivityController.getActivityStats);
 app.get('/food', FoodController.getAllUserFoodData);
 app.get('/food/stats', FoodController.getFoodStats);
 
-app.post('/register', registerUser);
-app.post('/login', logIn);
+app.post('/api/register', registerUser);
+app.post('/api/login', logIn);
 app.get('/users/:userId', getUserInfo);
 app.post('/api/users/:userId/email', updateEmailAddress);
 app.post('/api/users/:userId/gender', updateGender);
