@@ -66,7 +66,7 @@ async function generateSleepStats(
       });
     }
   }
-  return stats;
+  return stats.sort((a, b) => a.date.valueOf() - b.date.valueOf());
 }
 
 export { addSleepData, getAllSleepDataForUser, generateSleepStats };

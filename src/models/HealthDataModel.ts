@@ -106,7 +106,7 @@ async function generateHealthStats(
 
     stats.push(statsEntry);
   }
-  return stats;
+  return stats.sort((a, b) => a.date.valueOf() - b.date.valueOf());
 }
 
 export {
