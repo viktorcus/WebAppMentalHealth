@@ -6,3 +6,13 @@ type SleepData = {
   quality: string;
   note: string;
 };
+
+type SleepDataStats = {
+  date: Date;
+  hours: number;
+};
+
+type SleepSearchParam = {
+  start: Date;
+  end: Date;
+};

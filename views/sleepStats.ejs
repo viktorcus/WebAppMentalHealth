@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>Sleep Stats</title>
+</head>
+
+<body class="body-wrap">
+  <div>
+    <section class="page-body">
+      <div class="flex-fill">
+        <div class="data-card">
+          <div>
+            <canvas id="progressChart"></canvas>
+          </div>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+          <script>
+            const ctx = document.getElementById('progressChart');
+            const chartData = JSON.parse(`<%- JSON.stringify(stats)%>`);
+            new Chart(ctx, {
+              type: 'line',
+              options: {
+                scales: {
+                  x: {
+                    type: 'time',
+                    time: {
+                      unit: 'day'
+                    }
+                  },
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              },
+              data: {
+                labels: chartData.map(a => a.date),
+                datasets: [{
+                  label: 'Daily Sleep (Hours)',
+                  data: chartData.map(a => a.hours),
+                  borderWidth: 1
+                }]
+              }
+            });
+          </script>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>
