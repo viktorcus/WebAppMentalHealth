@@ -38,8 +38,12 @@ import {
 import FoodController from './controllers/FoodDataController';
 import ActivityController from './controllers/ActivityDataController';
 import { getAllUserSleepData } from './controllers/SleepDataController';
-import { getAllUserHealthData } from './controllers/HealthDataController';
-import { getAllHealthDataForUser, updateHealthData } from './models/HealthDataModel';
+import {
+  getAllUserHealthData,
+  getHealthStats,
+  addHealthDataController,
+} from './controllers/HealthDataController';
+import { getAllHealthDataForUser } from './models/HealthDataModel';
 import { getAllSleepDataForUser } from './models/SleepDataModel';
 
 const app: Express = express();
@@ -79,6 +83,7 @@ app.get('/activity', ActivityController.getAllUserActivityData);
 app.get('/activity/stats', ActivityController.getActivityStats);
 app.get('/food', FoodController.getAllUserFoodData);
 app.get('/food/stats', FoodController.getFoodStats);
+app.get('/health/stats', getHealthStats);
 
 app.post('/api/register', registerUser);
 app.post('/api/login', logIn);
@@ -119,12 +124,12 @@ app.post('/api/activity', ActivityController.submitActivityData);
 app.post('/api/activity/:activityDataId', ActivityController.updateActivityData);
 app.delete('/api/activity/:activityDataId', ActivityController.deleteActivityData);
 
-app.get('/api/activity/:userId', getAllUserSleepData);
-app.get('/api/activity/:userId', getAllHealthDataForUser);
-app.post('/api/activity/', updateHealthData);
+app.get('/api/sleep/:userId', getAllUserSleepData);
+app.post('/api/sleep/', getAllSleepDataForUser);
 
-app.get('/api/activity/:userId', getAllUserHealthData);
-app.post('/api/activity/', getAllSleepDataForUser);
+app.get('/api/health/:userId', getAllHealthDataForUser);
+app.post('/api/health', addHealthDataController);
+app.get('/api/health/:userId', getAllUserHealthData);
 
 scheduleJob('0 0 7 * * *', sendOneWeekReminders);
 

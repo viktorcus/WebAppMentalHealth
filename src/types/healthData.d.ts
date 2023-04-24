@@ -1,6 +1,6 @@
 type HealthData = {
   healthDataId: number;
-  userId: number;
+  userId: string;
   measurementDate: Date;
   weight: number;
   height: number;
@@ -9,4 +9,19 @@ type HealthData = {
   bloodPressureSystolic: number;
   bloodPressureDiastolic: number;
   note: string;
+};
+
+type HealthDataStats = {
+  date: Date;
+  weight?: number;
+  bmi?: number;
+  heartRate?: number;
+  bloodPressureSystolic?: number;
+  bloodPressureDiastolic?: number;
+};
+
+type HealthSearchParam = {
+  start: Date;
+  end: Date;
+  type: string;
 };

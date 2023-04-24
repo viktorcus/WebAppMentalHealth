@@ -10,7 +10,6 @@ async function addActivityData(
   activityData: ActivityData,
   user: User
 ): Promise<ActivityDataEntity | null> {
-  console.log(user);
   const newActivity = new ActivityDataEntity();
   newActivity.activityType = activityData.activityType;
   newActivity.startTime = activityData.startTime;
