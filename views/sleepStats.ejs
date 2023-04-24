@@ -26,6 +26,29 @@
             new Chart(ctx, {
               type: 'line',
               options: {
+                plugins: {
+                  tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                      title: function(data) {
+                        // console.log(data);
+                        const date = new Date(data[0].parsed.x);
+                        return date.toDateString();
+                      },
+                      label: function(data) {
+                        let details = [`Hours of Sleep: ${chartData[data.dataIndex].hours}`];
+                        if (chartData[data.dataIndex].quality) {
+                          details.push(`Quality of Sleep: ${chartData[data.dataIndex].quality}`);
+                        }
+                        if (chartData[data.dataIndex].note) {
+                          details.push(`Note: ${chartData[data.dataIndex].quality}`);
+                        }
+                        return details;
+                      }
+                    }
+                  },
+                },
                 scales: {
                   x: {
                     type: 'time',

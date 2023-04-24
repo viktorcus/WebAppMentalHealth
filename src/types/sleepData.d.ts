@@ -10,6 +10,8 @@ type SleepData = {
 type SleepDataStats = {
   date: Date;
   hours: number;
+  quality?: string;
+  note?: string;
 };
 
 type SleepSearchParam = {

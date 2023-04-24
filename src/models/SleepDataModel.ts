@@ -61,6 +61,8 @@ async function generateSleepStats(
           data.sleepDate.getDate(),
         ),
         hours: data.hoursSlept,
+        quality: data.quality,
+        note: data.note,
       });
     }
   }

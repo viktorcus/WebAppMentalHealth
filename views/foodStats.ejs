@@ -38,6 +38,18 @@
             new Chart(ctx, {
               type: 'line',
               options: {
+                plugins: {
+                  tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                      title: function(data) {
+                        const date = new Date(data[0].parsed.x);
+                        return date.toDateString();
+                      },
+                    },
+                  }
+                },
                 scales: {
                   x: {
                     type: 'time',

@@ -44,6 +44,18 @@
                 }]
               },
               options: {
+                plugins: {
+                  tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                      title: function(data) {
+                        const date = new Date(data[0].parsed.x);
+                        return date.toDateString();
+                      },
+                    },
+                  }
+                },
                 backgroundColor: '#4ceb7f',
               }
             });
