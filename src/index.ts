@@ -37,10 +37,21 @@ import {
 
 import FoodController from './controllers/FoodDataController';
 import ActivityController from './controllers/ActivityDataController';
-import { getAllUserSleepData } from './controllers/SleepDataController';
-import { getAllUserHealthData } from './controllers/HealthDataController';
-import { getAllHealthDataForUser, updateHealthData } from './models/HealthDataModel';
-import { getAllSleepDataForUser } from './models/SleepDataModel';
+import {
+  addNewSleepData,
+  deleteSleepDataById,
+  getAllSleepDataByUser,
+  getSleepData,
+  getSleepDataByDateRangeFromDb,
+  updateSleepDataById,
+} from './controllers/SleepDataController';
+import {
+  addHealthDataController,
+  deleteHealthDataController,
+  getAllUserHealthData,
+  getHealthDataById,
+  updateHealthDataController,
+} from './controllers/HealthDataController';
 
 const app: Express = express();
 app.set('view engine', 'ejs');
@@ -119,12 +130,18 @@ app.post('/api/activity', ActivityController.submitActivityData);
 app.post('/api/activity/:activityDataId', ActivityController.updateActivityData);
 app.delete('/api/activity/:activityDataId', ActivityController.deleteActivityData);
 
-app.get('/api/activity/:userId', getAllUserSleepData);
-app.get('/api/activity/:userId', getAllHealthDataForUser);
-app.post('/api/activity/', updateHealthData);
+app.post('/api/sleep', addNewSleepData);
+app.get('/api/sleep/:userId', getAllSleepDataByUser);
+app.get('/api/sleep/:sleepDataId', getSleepData);
+app.post('api/sleep/:sleepDataId/update', updateSleepDataById);
+app.get('/api/sleep/:userId', getSleepDataByDateRangeFromDb);
+app.delete('/api/sleep/:sleepDataId', deleteSleepDataById);
 
-app.get('/api/activity/:userId', getAllUserHealthData);
-app.post('/api/activity/', getAllSleepDataForUser);
+app.post('/api/health', addHealthDataController);
+app.get('/api/health/:userId', getAllUserHealthData);
+app.get('/api/health/:healthDataId', getHealthDataById);
+app.post('api/health/:healthDataId/update', updateHealthDataController);
+app.delete('/api/health/:healthDataId', deleteHealthDataController);
 
 scheduleJob('0 0 7 * * *', sendOneWeekReminders);
 
