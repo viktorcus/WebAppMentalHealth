@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleep Data</title>
+  <link rel="stylesheet" href="./css/stylesheet.css" />
+</head>
+
+<body class="body-wrap">
+  <div>
+    <header class="page-header">
+      <p><%= user.userName %>'s Sleep Data</p>
+    </header>
+    <section class="page-tabs">
+      <div>
+        <span><a href="/user/<%= user.userId %>/sleep-data">My Sleep Data</a></span>
+        <span>|</span>
+        <span><a href="/sleep-data">Add New Sleep Data</a></span>
+        <span>|</span>
+        <span><a href="/sleep-data/<%= healthData.healthDataId %>/update">Update Sleep Data</a></span>
+      </div>
+    </section>
+    <section class="page-body">
+      <% for (const data of sleepData) { %>
+      <div class="flex-fill">
+        <div class="data-card">
+          <h3>Sleep Date: <%= data.sleepDate.toDateString() %></h3>
+          <p>Hours Slept: <%= data.hoursSlept %> hours</p>
+          <p>Quality: <%= data.quality %></p>
+          <p>Note: <%= data.note ?? 'Unknown' %></p>
+        </div>
+      </div>
+      <% } %>
+    </section>
+  </div>
+</body>
+
+</html>

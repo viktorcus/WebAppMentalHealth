@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleep Data</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body class="body-wrap">
+  <div>
+    <header class="page-header">
+      <p>Create Sleep Data</p>
+    </header>
+    <section class="page-tabs">
+      <div>
+        <span><a href="/sleep">History</a></span>
+        <span>|</span>
+        <span><a href="/sleep/stats">Stats</a></span>
+        <span>|</span>
+        <span><a href="/sleep/create">Create New</a></span>
+      </div>
+    </section>
+    <section class="page-body">
+      <div class="flex-fill">
+        <div class="data-card">
+          <h3>New Sleep Data</h3>
+          <form method="POST" action="/api/sleep" class="form">
+            <div>
+              <label for="hoursSlept">Sleep Hours: </label>
+              <input name="sleepHours" id="sleepHours" class="text" placeholder="Sleep Hours" type="number" required />
+            </div>
+            <div>
+              <label for="sleepDate">Sleep Time: </label>
+              <input name="sleepDate" id="sleepDate" class="text" placeholder="Sleep Time" type="datetime-local" required />
+            </div>
+            <div>
+              <label for="quality">Sleep Quality (optional): </label>
+              <input name="sleepQuality" id="sleepQuality" class="text" placeholder="Sleep Quality" type="text" />
+            </div>
+            <div>
+              <label for="note">Note (optional): </label>
+              <input name="note" id="note" class="text" placeholder="Note" type="text" />
+            </div>
+            <div>
+              <button class="btn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>

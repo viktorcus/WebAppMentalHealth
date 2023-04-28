@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation, JoinColumn } from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -21,6 +21,7 @@ export class SleepData {
   @Column({ nullable: true })
   note: string;
 
-  @ManyToOne(() => User, (user) => user.sleepData)
+  @ManyToOne(() => User, (user) => user.sleepData, { cascade: ['insert', 'update'] })
+  @JoinColumn()
   user: Relation<User>;
 }
