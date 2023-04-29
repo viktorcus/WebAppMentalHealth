@@ -263,6 +263,30 @@
   background-color: #2b2a3a;
 }
 
+hr {
+  border: none;
+  border-bottom: 1px solid black;
+  margin: 10px 28px 20px 0px;
+}
+
+.wide {
+  width: 200px;
+  height: 30px;
+  font-weight: 600;
+}
+.super-wide {
+  width: 400px;
+  height: 30px;
+}
+.edit-link {
+  float: right;
+}
+.info-item {
+  font-weight: 600;
+}
+.info-value {
+  margin-bottom: 12px;
+}
 @media (max-width: 1024px) {
   .card {
     width: calc(50% - 20px);
