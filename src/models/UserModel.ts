@@ -40,6 +40,14 @@ async function getUserByUserName(userName: string): Promise<User | null> {
   return user;
 }
 
+async function getUserByUserNameAndEmail(userName: string, email: string): Promise<User | null> {
+  const user = await userRepository
+    .createQueryBuilder('user')
+    .where('userName = :userName OR email = :email', { userName, email })
+    .getOne();
+  return user;
+}
+
 async function getUserByEmail(email: string): Promise<User | null> {
   const user = await userRepository.findOne({ where: { email } });
   return user || null;
@@ -115,6 +123,7 @@ export {
   getUserByUserName,
   getUserByEmail,
   getUserById,
+  getUserByUserNameAndEmail,
   updateEmailAddressById,
   updateNameById,
   updatePlaceById,
