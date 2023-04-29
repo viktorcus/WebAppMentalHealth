@@ -18,33 +18,40 @@ async function addHealthData(healthData: HealthData): Promise<HealthData> {
   return newHealthData;
 }
 
-async function getAllHealthDataById(healthDataId: string): Promise<HealthData[]> {
-  const healthData = await healthDataRepository.find({ where: { healthDataId } });
+async function getAllHealthDataById(healthDataId: string): Promise<HealthData | null> {
+  const healthData = await healthDataRepository.findOne({ where: { healthDataId } });
+
+  return healthData || null;
+}
+
+async function getAllHealthDataForUser(userId: string): Promise<HealthData[]> {
+  const healthData = await healthDataRepository
+    .createQueryBuilder('healthData')
+    .leftJoinAndSelect('healthData.user', 'user')
+    .where('user.userId = :userId', { userId })
+    .getMany();
 
   return healthData;
 }
 
-async function getAllHealthDataForUser(userId: number): Promise<HealthData[]> {
-  const healthData = await healthDataRepository.find({ where: { userId } });
-  return healthData || [];
-}
-
-async function updateHealthData(healthData: HealthData): Promise<HealthData | null> {
-  const existingHealthData = await healthDataRepository.findOne({
-    where: { healthDataId: healthData.healthDataId },
-  });
-
-  if (!existingHealthData) {
-    return null;
-  }
-
-  const updatedHealthData = healthDataRepository.merge(existingHealthData, healthData);
-  await healthDataRepository.save(updatedHealthData);
-  return updatedHealthData;
+async function updateHealthData(
+  healthDataId: string,
+  newHealthData: HealthData
+): Promise<void | null> {
+  await healthDataRepository
+    .createQueryBuilder()
+    .update(HealthData)
+    .set(newHealthData)
+    .where({ healthDataId })
+    .execute();
 }
 
 async function deleteHealthData(healthDataId: string): Promise<void> {
-  await healthDataRepository.delete(healthDataId);
+  await healthDataRepository
+    .createQueryBuilder('HealthData')
+    .delete()
+    .where('healthDataId = :healthDataId', { healthDataId })
+    .execute();
 }
 
 export {

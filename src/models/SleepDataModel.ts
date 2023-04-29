@@ -15,26 +15,64 @@ async function addSleepData(sleepData: SleepData): Promise<SleepData> {
   return newSleepData;
 }
 
-async function getAllSleepDataForUser(userId: number): Promise<SleepData[]> {
-  return sleepRepository.find({ where: { userId } });
+async function getAllSleepDataForUser(userId: string): Promise<SleepData[]> {
+  const sleepData = await sleepRepository
+    .createQueryBuilder('sleepData')
+    .leftJoinAndSelect('sleepData.user', 'user')
+    .where('user.userId = :userId', { userId })
+    .getMany();
+  return sleepData;
 }
 
-// async function updateSleepDataById(userId: number, sleepData: SleepData): Promise<SleepData> {
-//   // Get the existing SleepData object from the database
-//   const existingSleepData = await sleepRepository.findOne(userId);
+async function getSleepDataById(sleepDataId: string): Promise<SleepData | null> {
+  const sleepData = await sleepRepository.findOne({ where: { sleepDataId } });
+  return sleepData || null;
+}
 
-//   // Update the existing SleepData object with the new data
-//   existingSleepData.userId = sleepData.userId;
-//   existingSleepData.sleepDate = sleepData.sleepDate;
-//   existingSleepData.hoursSlept = sleepData.hoursSlept;
-//   existingSleepData.quality = sleepData.quality;
-//   existingSleepData.note = sleepData.note;
+async function updateSleepData(sleepDataId: string, sleepData: SleepData): Promise<SleepData | null> {
+  let updatedSleepData = await getSleepDataById(sleepDataId);
 
-//   // Save the updated SleepData object to the database
-//   const updatedSleepData = await sleepRepository.save(existingSleepData);
+  if (!updatedSleepData) {
+    return null;
+  }
 
-//   // Return the updated SleepData object
-//   return updatedSleepData;
-// }
+  updatedSleepData.userId = sleepData.userId;
+  updatedSleepData.sleepDate = sleepData.sleepDate;
+  updatedSleepData.hoursSlept = sleepData.hoursSlept;
+  updatedSleepData.quality = sleepData.quality;
+  updatedSleepData.note = sleepData.note;
 
-export { addSleepData, getAllSleepDataForUser };
+  updatedSleepData = await sleepRepository.save(updatedSleepData);
+  return updatedSleepData;
+}
+
+async function deleteSleepData(sleepDataId: string): Promise<void> {
+  await sleepRepository
+    .createQueryBuilder('sleepData')
+    .delete()
+    .where('sleepDataId = :sleepDataId', { sleepDataId })
+    .execute();
+}
+
+async function getSleepDataByDateRange(
+  userId: string,
+  startDate: Date,
+  endDate: Date
+): Promise<SleepData[]> {
+  return sleepRepository
+    .createQueryBuilder('sleepData')
+    .where('sleepData.userId = :userId', { userId })
+    .andWhere('sleepData.sleepDate >= :startDate', { startDate })
+    .andWhere('sleepData.sleepDate <= :endDate', { endDate })
+    .orderBy('sleepData.sleepDate', 'ASC')
+    .getMany();
+}
+
+export {
+  addSleepData,
+  getAllSleepDataForUser,
+  getSleepDataById,
+  updateSleepData,
+  deleteSleepData,
+  getSleepDataByDateRange,
+};
