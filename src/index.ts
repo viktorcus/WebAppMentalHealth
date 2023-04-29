@@ -119,9 +119,9 @@ app.post('/api/users/:userId/name', updateUserName);
 
 app.post('/api/reminders', createReminder);
 
-app.post('/users/:userId/medicalHistory/add', addNewMedicalHistory);
+app.post('/api/users/:userId/medicalHistory/add', addNewMedicalHistory);
 app.get('/api/medicalHistory/:medicalHistoryId', getMedicalHistory);
-app.get('/users/:userId/medicalHistory', getAllMedicalHistoryByUser);
+app.get('/api/users/:userId/medicalHistory', getAllMedicalHistoryByUser);
 app.post('/api/medicalHistory/:medicalHistoryId/update', updateMedicalHistory);
 app.delete('/api/medicalHistory/:medicalHistoryId', deleteMedicalHistory);
 
