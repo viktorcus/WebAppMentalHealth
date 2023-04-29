@@ -65,10 +65,10 @@ async function getAllMedicalHistoryByUser(req: Request, res: Response): Promise<
     return;
   }
 
+  const user = await getUserById(userId);
   try {
-    const allMedicalHistory = await getMedicalHistoryByUserId(userId);
-    console.log(allMedicalHistory);
-    res.json(allMedicalHistory);
+    const allMedicalHistories = await getMedicalHistoryByUserId(userId);
+    res.render('medicalHistory/medicalHistoryPage', { user, allMedicalHistories });
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);

@@ -21,4 +21,9 @@ type AuthRequest = {
   password: string;
 };
 
-export { UserInfo, UserIdParam, AuthRequest };
+type LoginAuthRequest = {
+  email: string;
+  password: string;
+};
+
+export { UserInfo, UserIdParam, AuthRequest, LoginAuthRequest };

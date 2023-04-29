@@ -20,6 +20,7 @@ import {
   updateUserName,
   createReminder,
   getUserDashboard,
+  renderUpdateProfilePage,
 } from './controllers/UserController';
 import {
   addNewMedicalHistory,
@@ -75,7 +76,7 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.get('/', getUserDashboard);
+app.get('/dashboard', getUserDashboard);
 app.get('/activity', ActivityController.getAllUserActivityData);
 app.get('/activity/stats', ActivityController.getActivityStats);
 app.get('/food', FoodController.getAllUserFoodData);
@@ -84,6 +85,7 @@ app.get('/food/stats', FoodController.getFoodStats);
 app.post('/register', validateNewUserBody, registerUser);
 app.post('/login', validateLoginBody, logIn);
 app.get('/users/:userId', getUserInfo);
+app.get('/users/:userId/updateProfile', renderUpdateProfilePage);
 app.post('/api/users/:userId/email', updateEmailAddress);
 app.post('/api/users/:userId/gender', updateGender);
 app.post('/api/users/:userId/place', updatePlace);
@@ -92,11 +94,11 @@ app.post('/api/users/:userId/name', updateUserName);
 
 app.post('/api/reminders', createReminder);
 
-app.post('/api/medical-history/add', addNewMedicalHistory);
-app.get('/api/medical-history/:medicalHistoryId', getMedicalHistory);
-app.get('/api/users/:userId/medical-history', getAllMedicalHistoryByUser);
-app.post('/api/medical-history/:medicalHistoryId/update', updateMedicalHistory);
-app.delete('/api/medical-history/:medicalHistoryId', deleteMedicalHistory);
+app.post('/api/medicalHistory/add', addNewMedicalHistory);
+app.get('/api/medicalHistory/:medicalHistoryId', getMedicalHistory);
+app.get('/api/users/:userId/medicalHistory', getAllMedicalHistoryByUser);
+app.post('/api/medicalHistory/:medicalHistoryId/update', updateMedicalHistory);
+app.delete('/api/medicalHistory/:medicalHistoryId', deleteMedicalHistory);
 
 app.post('/api/medication/add', addNewMedicationData);
 app.get('/api/medication/:medicationDataId', getMedicationData);

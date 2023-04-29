@@ -4,7 +4,7 @@ import {
   addUser,
   getUserByEmail,
   getUserById,
-  getUserByUserName,
+  getUserByUserNameAndEmail,
   updateBirthdayById,
   updateEmailAddressById,
   updateGenderById,
@@ -13,17 +13,18 @@ import {
 } from '../models/UserModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { getActivityDataToday } from '../models/ActivityDataModel';
-import { AuthRequest, UserIdParam } from '../types/userInfo';
+import { AuthRequest, UserIdParam, LoginAuthRequest } from '../types/userInfo';
 import { Gender } from '../utils/enums';
 import { sendEmail } from '../services/emailService';
 import { addReminder } from '../models/ReminderModel';
 
 async function registerUser(req: Request, res: Response): Promise<void> {
   const { userName, email, password } = req.body as AuthRequest;
+  console.log(req.body);
 
-  const user = await getUserByUserName(userName);
+  const user = await getUserByUserNameAndEmail(userName, email);
   if (user) {
-    res.sendStatus(409);
+    res.send('Username or email already exists!');
     return;
   }
 
@@ -42,12 +43,12 @@ async function registerUser(req: Request, res: Response): Promise<void> {
 }
 
 async function logIn(req: Request, res: Response): Promise<void> {
-  const { email, password } = req.body as AuthRequest;
+  const { email, password } = req.body as LoginAuthRequest;
 
   const user = await getUserByEmail(email);
 
   if (!user) {
-    res.redirect('/register');
+    res.redirect('/login');
     return;
   }
 
@@ -58,16 +59,15 @@ async function logIn(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  // NOTES: Remember to clear the session before setting their authenticated session data
   await req.session.clearSession();
 
-  // NOTES: Now we can add whatever data we want to the session
   req.session.authenticatedUser = {
     userId: user.userId,
     email: user.email,
   };
   req.session.isLoggedIn = true;
-  res.redirect('/');
+
+  res.redirect('/dashboard');
 }
 
 async function getUserInfo(req: Request, res: Response): Promise<void> {
@@ -86,12 +86,7 @@ async function getUserInfo(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  res.render('dashboard', {
-    email: user.email,
-    birthday: user.birthday,
-    gender: user.gender,
-    place: user.place,
-  });
+  res.render('user/profilePage', { user });
 }
 
 async function getUserDashboard(req: Request, res: Response): Promise<void> {
@@ -142,7 +137,7 @@ async function updateEmailAddress(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  res.sendStatus(200);
+  res.render('user/profilePage', { user });
 }
 
 async function updatePlace(req: Request, res: Response): Promise<void> {
@@ -178,7 +173,7 @@ async function updatePlace(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  res.sendStatus(200);
+  res.render('user/profilePage', { user });
 }
 
 async function updateGender(req: Request, res: Response): Promise<void> {
@@ -214,7 +209,7 @@ async function updateGender(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  res.sendStatus(200);
+  res.render('user/profilePage', { user });
 }
 
 async function updateUserName(req: Request, res: Response): Promise<void> {
@@ -249,8 +244,7 @@ async function updateUserName(req: Request, res: Response): Promise<void> {
     res.status(500).json(databaseErrorMessage);
     return;
   }
-
-  res.sendStatus(200);
+  res.render('user/profilePage', { user });
 }
 
 async function updateBirthday(req: Request, res: Response): Promise<void> {
@@ -266,7 +260,7 @@ async function updateBirthday(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  const { birthday } = req.body as { birthday: Date };
+  const { birthday } = req.body as { birthday: string };
 
   // Get the user account
   const user = await getUserById(userId);
@@ -277,16 +271,16 @@ async function updateBirthday(req: Request, res: Response): Promise<void> {
 
   // Now update their birthday using try/catch block
   try {
-    await updateBirthdayById(userId, birthday);
+    const newBirthday = new Date(birthday);
+    await updateBirthdayById(userId, newBirthday);
   } catch (err) {
-    // The birthday was invalid
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
     res.status(500).json(databaseErrorMessage);
     return;
   }
 
-  res.sendStatus(200);
+  res.render('user/profilePage', { user });
 }
 
 async function createReminder(req: Request, res: Response): Promise<void> {
@@ -306,6 +300,30 @@ async function createReminder(req: Request, res: Response): Promise<void> {
   res.sendStatus(201);
 }
 
+async function renderUpdateProfilePage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  // res.render('user/updateProfile', { user });
+  res.render('user/updateProfile', { user, userName: user.userName });
+}
+
 export {
   registerUser,
   logIn,
@@ -317,4 +335,5 @@ export {
   updateBirthday,
   createReminder,
   getUserDashboard,
+  renderUpdateProfilePage,
 };
