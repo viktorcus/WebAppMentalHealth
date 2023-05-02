@@ -87,7 +87,7 @@ app.use(
     name: 'session',
     resave: false,
     saveUninitialized: false,
-  }),
+  })
 );
 
 app.use(express.urlencoded({ extended: false }));
@@ -124,8 +124,8 @@ app.get('/api/users/:userId/medication/create', renderCreateMedicationPage);
 app.get('/api/medication/:medicationDataId', getMedicationData);
 app.get('/api/users/:userId/medication', getAllMedicationDataByUser);
 app.get('/api/users/:userId/medication/:medicationDataId/update', renderUpdateMedicationPage);
-app.post('/api/medication/:medicationDataId/update', updateMedicationData);
-app.delete('/api/medication/:medicationDataId/delete', deleteMedicationData);
+app.post('/api/users/:userId/medication/:medicationDataId/edit', updateMedicationData);
+app.delete('/api/users/:userId/medication/:medicationDataId/delete', deleteMedicationData);
 
 app.get('/api/food/search', FoodController.searchFoodData);
 app.get('/api/food/stats', FoodController.getFoodStats);
