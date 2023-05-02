@@ -124,7 +124,7 @@ async function generateFoodStats(userId: string, start: Date, end: Date): Promis
       });
     }
   }
-  return stats;
+  return stats.sort((a, b) => a.date.valueOf() - b.date.valueOf());
 }
 
 export {

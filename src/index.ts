@@ -41,15 +41,30 @@ import {
 
 import FoodController from './controllers/FoodDataController';
 import ActivityController from './controllers/ActivityDataController';
-import { getAllUserSleepData } from './controllers/SleepDataController';
-import { getAllUserHealthData } from './controllers/HealthDataController';
-import { getAllHealthDataForUser, updateHealthData } from './models/HealthDataModel';
-import { getAllSleepDataForUser } from './models/SleepDataModel';
+import {
+  addNewSleepData,
+  deleteSleepDataById,
+  getAllSleepDataByUser,
+  getSleepData,
+  getSleepDataByDateRangeFromDb,
+  updateSleepDataById,
+  getSleepStats,
+} from './controllers/SleepDataController';
+import {
+  addHealthDataController,
+  deleteHealthDataController,
+  getAllUserHealthData,
+  getHealthDataById,
+  updateHealthDataController,
+  getHealthStats,
+} from './controllers/HealthDataController';
 
 const app: Express = express();
 app.set('view engine', 'ejs');
 
-const { PORT, COOKIE_SECRET } = process.env;
+const { COOKIE_SECRET } = process.env;
+let { PORT } = process.env;
+PORT = process.argv[2] || PORT;
 app.use(express.static('public', { extensions: ['html'] }));
 
 let store;
@@ -72,7 +87,7 @@ app.use(
     name: 'session',
     resave: false,
     saveUninitialized: false,
-  })
+  }),
 );
 
 app.use(express.urlencoded({ extended: false }));
@@ -83,6 +98,8 @@ app.get('/activity', ActivityController.getAllUserActivityData);
 app.get('/activity/stats', ActivityController.getActivityStats);
 app.get('/food', FoodController.getAllUserFoodData);
 app.get('/food/stats', FoodController.getFoodStats);
+app.get('/health/stats', getHealthStats);
+app.get('/sleep/stats', getSleepStats);
 
 app.post('/register', validateNewUserBody, registerUser);
 app.post('/login', validateLoginBody, logIn);
@@ -126,12 +143,18 @@ app.post('/api/activity', ActivityController.submitActivityData);
 app.post('/api/activity/:activityDataId', ActivityController.updateActivityData);
 app.delete('/api/activity/:activityDataId', ActivityController.deleteActivityData);
 
-app.get('/api/activity/:userId', getAllUserSleepData);
-app.get('/api/activity/:userId', getAllHealthDataForUser);
-app.post('/api/activity/', updateHealthData);
+app.post('/api/sleep', addNewSleepData);
+app.get('/api/sleep/:userId', getAllSleepDataByUser);
+app.get('/api/sleep/:sleepDataId', getSleepData);
+app.post('api/sleep/:sleepDataId/update', updateSleepDataById);
+app.get('/api/sleep/:userId', getSleepDataByDateRangeFromDb);
+app.delete('/api/sleep/:sleepDataId', deleteSleepDataById);
 
-app.get('/api/activity/:userId', getAllUserHealthData);
-app.post('/api/activity/', getAllSleepDataForUser);
+app.post('/api/health', addHealthDataController);
+app.get('/api/health/:userId', getAllUserHealthData);
+app.get('/api/health/:healthDataId', getHealthDataById);
+app.post('api/health/:healthDataId/update', updateHealthDataController);
+app.delete('/api/health/:healthDataId', deleteHealthDataController);
 
 scheduleJob('0 0 7 * * *', sendOneWeekReminders);
 

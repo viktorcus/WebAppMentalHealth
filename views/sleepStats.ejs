@@ -6,23 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/style.css" />
-  <title>Food Stats</title>
+  <title>Sleep Stats</title>
 </head>
 
 <body class="body-wrap">
   <div>
-    <header class="page-header">
-      <p>Food Stats</p>
-    </header>
-    <section class="page-tabs">
-      <div>
-        <span><a href="/food">History</a></span>
-        <span>|</span>
-        <span><a href="/food/stats">Stats</a></span>
-        <span>|</span>
-        <span><a href="/food/create">Create New</a></span>
-      </div>
-    </section>
     <section class="page-body">
       <div class="flex-fill">
         <div class="data-card">
@@ -44,11 +32,22 @@
                     intersect: false,
                     callbacks: {
                       title: function(data) {
+                        // console.log(data);
                         const date = new Date(data[0].parsed.x);
                         return date.toDateString();
                       },
-                    },
-                  }
+                      label: function(data) {
+                        let details = [`Hours of Sleep: ${chartData[data.dataIndex].hours}`];
+                        if (chartData[data.dataIndex].quality) {
+                          details.push(`Quality of Sleep: ${chartData[data.dataIndex].quality}`);
+                        }
+                        if (chartData[data.dataIndex].note) {
+                          details.push(`Note: ${chartData[data.dataIndex].quality}`);
+                        }
+                        return details;
+                      }
+                    }
+                  },
                 },
                 scales: {
                   x: {
@@ -65,8 +64,8 @@
               data: {
                 labels: chartData.map(a => a.date),
                 datasets: [{
-                  label: 'Daily Caloric Intake',
-                  data: chartData.map(a => a.calories),
+                  label: 'Daily Sleep (Hours)',
+                  data: chartData.map(a => a.hours),
                   borderWidth: 1
                 }]
               }

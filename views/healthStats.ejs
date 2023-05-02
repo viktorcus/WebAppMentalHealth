@@ -6,23 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/style.css" />
-  <title>Food Stats</title>
+  <title>Health Data Statistics</title>
 </head>
 
 <body class="body-wrap">
   <div>
-    <header class="page-header">
-      <p>Food Stats</p>
-    </header>
-    <section class="page-tabs">
-      <div>
-        <span><a href="/food">History</a></span>
-        <span>|</span>
-        <span><a href="/food/stats">Stats</a></span>
-        <span>|</span>
-        <span><a href="/food/create">Create New</a></span>
-      </div>
-    </section>
     <section class="page-body">
       <div class="flex-fill">
         <div class="data-card">
@@ -30,11 +18,54 @@
             <canvas id="progressChart"></canvas>
           </div>
           <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
           <script>
             const ctx = document.getElementById('progressChart');
             const chartData = JSON.parse(`<%- JSON.stringify(stats)%>`);
+            const healthType = `<%= type  %>`;
+            const chartDataSets = [];
+            switch (healthType) {
+              case 'weight': {
+                chartDataSets.push({
+                  label: 'Weight Over Time',
+                  data: chartData.map(a => a.weight),
+                  borderWidth: 1
+                });
+                break;
+              }
+              case 'bmi': {
+                chartDataSets.push({
+                  label: 'BMI Over Time',
+                  data: chartData.map(a => a.bmi),
+                  borderWidth: 1
+                });
+                break;
+              }
+              case 'heartRate': {
+                chartDataSets.push({
+                  label: 'Heart Rate Over Time',
+                  data: chartData.map(a => a.heartRate),
+                  borderWidth: 1
+                });
+                break;
+              }
+              case 'bloodPressure': {
+                chartDataSets.push({
+                  label: 'Systolic Blood Pressure Over Time',
+                  data: chartData.map(a => a.bloodPressureSystolic),
+                  borderWidth: 1
+                });
+                chartDataSets.push({
+                  label: 'Diastolic Blood Pressure Over Time',
+                  data: chartData.map(a => a.bloodPressureDiastolic),
+                  borderWidth: 1
+                });
+                break;
+              }
+            }
+
             new Chart(ctx, {
               type: 'line',
               options: {
@@ -57,18 +88,11 @@
                       unit: 'day'
                     }
                   },
-                  y: {
-                    beginAtZero: true
-                  }
                 }
               },
               data: {
                 labels: chartData.map(a => a.date),
-                datasets: [{
-                  label: 'Daily Caloric Intake',
-                  data: chartData.map(a => a.calories),
-                  borderWidth: 1
-                }]
+                datasets: chartDataSets
               }
             });
           </script>
