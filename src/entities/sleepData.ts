@@ -7,9 +7,6 @@ export class SleepData {
   sleepDataId: string;
 
   @Column()
-  userId: number;
-
-  @Column()
   sleepDate: Date;
 
   @Column()

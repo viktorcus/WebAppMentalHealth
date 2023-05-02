@@ -10,9 +10,6 @@ export class HealthData {
   measurementDate: Date;
 
   @Column()
-  userId: number;
-
-  @Column()
   weight: number;
 
   @Column()

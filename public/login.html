@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Log In</title>
   <link rel="stylesheet" href="./css/style.css">
-  <script src="UserController.ts"></script>
 </head>
+
 <body>
   <div class="card">
-    <div class = "showcase">
+    <div class="showcase">
       <!-- <span>Click Here</span> -->
       <!-- <a href="" class="guest">Continue as guest</a> -->
 
@@ -18,17 +19,17 @@
     <div class="auth">
       <img src="https://img.freepik.com/free-vector/gradient-mental-health-logo-template_23-2148820570.jpg?w=2000" alt="" class="logo">
       <h2 class="content__label">Log In</h2>
-      <form action="" class="form">
+      <form class="form" method="POST" action="/api/login">
         <div class="form__group">
           <label for="email">Email</label>
-          <input type="email" placeholder="Enter your Email" required>
+          <input name="email" type="text" id="email" placeholder="Enter your Email" required>
         </div>
         <div class="form__group">
           <label for="password">Password</label>
-          <input type="text" placeholder="Enter your Password" required>
+          <input name="password" type="password" id="password" placeholder="Enter your Password" required>
         </div>
         <div class="form__group">
-          <button type="submit">Login &RightArrow;</button>
+          <button class="btn" type="submit">Login &RightArrow;</button>
         </div>
       </form>
       <div class="divider">or</div>
@@ -40,6 +41,8 @@
       </div>
     </div>
   </div>
+  </div>
 
 </body>
+
 </html>

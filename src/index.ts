@@ -44,6 +44,7 @@ import {
   getSleepData,
   getSleepDataByDateRangeFromDb,
   updateSleepDataById,
+  getSleepStats,
 } from './controllers/SleepDataController';
 import {
   addHealthDataController,
@@ -51,6 +52,7 @@ import {
   getAllUserHealthData,
   getHealthDataById,
   updateHealthDataController,
+  getHealthStats,
 } from './controllers/HealthDataController';
 
 const app: Express = express();
@@ -79,7 +81,7 @@ app.use(
     name: 'session',
     resave: false,
     saveUninitialized: false,
-  })
+  }),
 );
 
 app.use(express.urlencoded({ extended: false }));
@@ -90,9 +92,11 @@ app.get('/activity', ActivityController.getAllUserActivityData);
 app.get('/activity/stats', ActivityController.getActivityStats);
 app.get('/food', FoodController.getAllUserFoodData);
 app.get('/food/stats', FoodController.getFoodStats);
+app.get('/health/stats', getHealthStats);
+app.get('/sleep/stats', getSleepStats);
 
-app.post('/register', registerUser);
-app.post('/login', logIn);
+app.post('/api/register', registerUser);
+app.post('/api/login', logIn);
 app.get('/users/:userId', getUserInfo);
 app.post('/api/users/:userId/email', updateEmailAddress);
 app.post('/api/users/:userId/gender', updateGender);

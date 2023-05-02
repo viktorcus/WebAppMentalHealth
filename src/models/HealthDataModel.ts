@@ -1,11 +1,13 @@
 import { AppDataSource } from '../dataSource';
 import { HealthData } from '../entities/healthData';
+import { User } from '../entities/user';
+import { HealthDataStats } from '../types/healthData';
 
 const healthDataRepository = AppDataSource.getRepository(HealthData);
 
-async function addHealthData(healthData: HealthData): Promise<HealthData> {
+async function addHealthData(healthData: HealthData, user: User): Promise<HealthData> {
   let newHealthData = new HealthData();
-  newHealthData.userId = healthData.userId;
+  newHealthData.user = user;
   newHealthData.measurementDate = healthData.measurementDate;
   newHealthData.weight = healthData.weight;
   newHealthData.height = healthData.height;
@@ -36,7 +38,7 @@ async function getAllHealthDataForUser(userId: string): Promise<HealthData[]> {
 
 async function updateHealthData(
   healthDataId: string,
-  newHealthData: HealthData
+  newHealthData: HealthData,
 ): Promise<void | null> {
   await healthDataRepository
     .createQueryBuilder()
@@ -54,10 +56,67 @@ async function deleteHealthData(healthDataId: string): Promise<void> {
     .execute();
 }
 
+async function generateHealthStats(
+  userId: string,
+  start: Date,
+  end: Date,
+  type: string,
+): Promise<HealthDataStats[]> {
+  const healthData: HealthData[] = await healthDataRepository
+    .createQueryBuilder('healthData')
+    .where(
+      'healthData.user.userId = :userId and measurementDate >= :start and measurementDate <= :end',
+      {
+        userId,
+        start,
+        end,
+      },
+    )
+    .getMany();
+
+  const stats: HealthDataStats[] = [];
+  for (const data of healthData) {
+    const statsEntry: HealthDataStats = {
+      date: new Date(
+        data.measurementDate.getFullYear(),
+        data.measurementDate.getMonth(),
+        data.measurementDate.getDate(),
+      ),
+    };
+
+    switch (type) {
+      case 'weight': {
+        statsEntry.weight = data.weight;
+        break;
+      }
+      case 'bmi': {
+        statsEntry.bmi = data.bmi;
+        break;
+      }
+      case 'heartRate': {
+        statsEntry.heartRate = data.heartRate;
+        break;
+      }
+      case 'bloodPressure': {
+        statsEntry.bloodPressureSystolic = data.bloodPressureSystolic;
+        statsEntry.bloodPressureDiastolic = data.bloodPressureDiastolic;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    stats.push(statsEntry);
+  }
+  return stats.sort((a, b) => a.date.valueOf() - b.date.valueOf());
+}
+
 export {
   addHealthData,
   getAllHealthDataById,
   getAllHealthDataForUser,
   updateHealthData,
   deleteHealthData,
+  generateHealthStats,
 };

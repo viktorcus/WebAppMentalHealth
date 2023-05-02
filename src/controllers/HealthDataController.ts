@@ -5,18 +5,22 @@ import {
   updateHealthData,
   deleteHealthData,
   getAllHealthDataById,
+  generateHealthStats,
 } from '../models/HealthDataModel';
 import { parseDatabaseError } from '../utils/db-utils';
 import { HealthData } from '../entities/healthData';
 import { UserIdParam } from '../types/userInfo';
+import { getUserById } from '../models/UserModel';
 
 async function addHealthDataController(req: Request, res: Response): Promise<void> {
   const healthData = req.body as HealthData;
 
+  const user = await getUserById(req.session.authenticatedUser.userId);
   try {
-    const newHealthData = await addHealthData(healthData);
-    console.log(newHealthData);
-    res.status(201);
+    if (user) {
+      const newHealthData = await addHealthData(healthData, user);
+      res.status(201).json(newHealthData);
+    }
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -94,10 +98,56 @@ async function deleteHealthDataController(req: Request, res: Response): Promise<
   }
 }
 
+async function getHealthStats(req: Request, res: Response): Promise<void> {
+  const SearchTypeDictionary: { [key: string]: any } = {
+    bmi: 'BMI',
+    weight: 'Weight',
+    bloodPressure: 'Blood Pressure',
+    heartRate: 'Heart Rate',
+  };
+
+  let { start, end } = req.query as unknown as HealthSearchParam;
+  const { type } = req.query as unknown as HealthSearchParam;
+
+  if (!req.session.isLoggedIn) {
+    // check that user is logged in
+    res.redirect('/login');
+    return;
+  }
+
+  if (!start && !end) {
+    // default to one month
+    end = new Date();
+    start = new Date();
+    start.setMonth(end.getMonth() - 1);
+  }
+
+  const searchType: string = SearchTypeDictionary[type];
+  if (!start || !end || start > end || !searchType) {
+    res.sendStatus(400); // invalid start/end times or search type
+    return;
+  }
+
+  try {
+    const stats: HealthDataStats[] = await generateHealthStats(
+      req.session.authenticatedUser.userId,
+      start,
+      end,
+      type,
+    );
+    res.render('healthStats', { stats, type });
+  } catch (err) {
+    console.error(err);
+    const databaseErrorMessage = parseDatabaseError(err);
+    res.status(500).json(databaseErrorMessage);
+  }
+}
+
 export {
   addHealthDataController,
   getAllUserHealthData,
   getHealthDataById,
   updateHealthDataController,
   deleteHealthDataController,
+  getHealthStats,
 };
