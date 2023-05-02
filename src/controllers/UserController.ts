@@ -91,7 +91,6 @@ async function getUserInfo(req: Request, res: Response): Promise<void> {
 
 async function getUserDashboard(req: Request, res: Response): Promise<void> {
   if (!req.session.isLoggedIn) {
-    // check that user is logged in
     res.redirect('/login');
     return;
   }
@@ -320,7 +319,6 @@ async function renderUpdateProfilePage(req: Request, res: Response): Promise<voi
     return;
   }
 
-  // res.render('user/updateProfile', { user });
   res.render('user/updateProfile', { user, userName: user.userName });
 }
 
