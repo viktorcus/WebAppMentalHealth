@@ -115,7 +115,7 @@
           </tr>
           <tr>
             <td class="wide">Birthday: </td>
-            <td class="super-wide"><%= user.birthday ? user.birthday.toLocaleDateString() : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
+            <td class="super-wide"><%= user.birthday ? user.birthday.toUTCString().slice(0, 16) : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
           </tr>
           <tr>
             <td class="wide">Place: </td>
