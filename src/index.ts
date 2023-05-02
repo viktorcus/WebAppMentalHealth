@@ -35,6 +35,8 @@ import {
   getAllMedicationDataByUser,
   updateMedicationData,
   deleteMedicationData,
+  renderCreateMedicationPage,
+  renderUpdateMedicationPage,
 } from './controllers/MedicationDataController';
 
 import FoodController from './controllers/FoodDataController';
@@ -94,17 +96,19 @@ app.post('/api/users/:userId/name', updateUserName);
 
 app.post('/api/reminders', createReminder);
 
-app.post('/api/medicalHistory/add', addNewMedicalHistory);
+app.post('/api/users/:userId/medicalHistory/add', addNewMedicalHistory);
 app.get('/api/medicalHistory/:medicalHistoryId', getMedicalHistory);
 app.get('/api/users/:userId/medicalHistory', getAllMedicalHistoryByUser);
 app.post('/api/medicalHistory/:medicalHistoryId/update', updateMedicalHistory);
 app.delete('/api/medicalHistory/:medicalHistoryId', deleteMedicalHistory);
 
-app.post('/api/medication/add', addNewMedicationData);
+app.post('/api/users/:userId/medication/add', addNewMedicationData);
+app.get('/api/users/:userId/medication/create', renderCreateMedicationPage);
 app.get('/api/medication/:medicationDataId', getMedicationData);
 app.get('/api/users/:userId/medication', getAllMedicationDataByUser);
-app.post('api/medication/:medicationDataId/update', updateMedicationData);
-app.delete('/api/medication/:medicationDataId', deleteMedicationData);
+app.get('/api/users/:userId/medication/:medicationDataId/update', renderUpdateMedicationPage);
+app.post('/api/medication/:medicationDataId/update', updateMedicationData);
+app.delete('/api/medication/:medicationDataId/delete', deleteMedicationData);
 
 app.get('/api/food/search', FoodController.searchFoodData);
 app.get('/api/food/stats', FoodController.getFoodStats);
