@@ -299,6 +299,10 @@ hr {
   }
 }
 
+.form-field label {
+  display: block;
+  margin-top: 10px;
+}
 
 .card-container {
   display: flex;
