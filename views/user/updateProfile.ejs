@@ -51,14 +51,14 @@
           <span class="tooltip">Food</span>
         </li>
         <li>
-          <a href="medicationData/medicationData.html">
+          <a href="/api/users/<%= user.userId %>/medication">
             <i class="bx bx-first-aid"></i>
             <span class="links_name">Medication</span>
           </a>
           <span class="tooltip">Medication</span>
         </li>
         <li>
-          <a href="medicalHistory/medicalHistory.html">
+          <a href="/api/users/<%= user.userId %>/medicalHistory">
             <i class="bx bx-history"></i>
             <span class="links_name">Medical History</span>
           </a>
@@ -131,7 +131,6 @@
           <button>Save</button>
         </form>
         <br>
-
       </div>
     </section>
     <script>

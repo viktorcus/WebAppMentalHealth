@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BrainCheckr | Profile</title>
+    <title>BrainCheckr | Medication</title>
     <link rel="stylesheet" href="/css/page_style.css" />
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
     <link
@@ -14,6 +14,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
   </head>
+
   <body>
     <div class="sidebar close">
       <div class="logo-details">
@@ -85,43 +86,41 @@
         </li>
       </ul>
     </div>
-    <!-- CHANGE THE LAYOUT IN THIS SECTION -->
     <section class="home-section">
-      <div class="text">Profile</div>
+      <div class="text">Medication Data</div>
       <div class="home-section-content">
-        <p class="start">Personal Info</p>
-        <hr>
-        <table>
-          <tr>
-            <td class="wide">Name: </td>
-            <td class="super-wide"><%= user.userName %><a class="edit-link right" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-          <tr>
-            <td class="wide">Email: </td>
-            <td class="super-wide"><%= user.email %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-          <tr>
-            <td class="wide">Gender: </td>
-            <td class="super-wide">
-              <% if (user.gender === 'Male') { %>
-              Male
-              <% } else if (user.gender === 'Female') { %>
-              Female
-              <% } else { %>
-              Other
-              <% } %>
-              <a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="wide">Birthday: </td>
-            <td class="super-wide"><%= user.birthday ? user.birthday.toLocaleDateString() : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-          <tr>
-            <td class="wide">Place: </td>
-            <td class="super-wide"><%= user.place ? user.place : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-        </table>
+        <p class="start"><%= user.userName %>'s Medication Data</p>
+        <hr />
+        <section class="page-tabs">
+          <div>
+            <span><a href="/api/users/<%= user.userId %>/medication">My Medication Data</a></span>
+            <span>|</span>
+            <span><a href="/api/users/<%= user.userId %>/medication/create">Create New</a></span>
+
+
+          </div>
+        </section>
+        <section class="page-body">
+          <% for (const medication of allMedicationData) { %>
+          <div class="flex-fill">
+            <div class="data-card">
+              <div class="data-card-heading">
+                <h3><%= medication.medicationName %></h3>
+                <span>
+                  <a href="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/update">Update</a>
+                </span>
+                <span>|</span>
+                <span>
+                  <a href="#">Delete</a>
+                </span>
+              </div>
+              <p>Dosage: <%= medication.dosage %></p>
+              <p>Frequency: <%= medication.frequency %></p>
+              <p>Note: <%= medication.note ?? 'Unknown' %></p>
+            </div>
+          </div>
+          <% } %>
+        </section>
       </div>
     </section>
     <script>
