@@ -284,4 +284,45 @@ hr {
   }
 }
 
+.form-field label {
+  display: block;
+  margin-top: 10px;
+}
 
+.form-field input {
+  display: block;
+  width: 200px;
+}
+
+.form-field textarea {
+  width: 200px;
+  height: 100px;
+}
+
+.form-header {
+  font-size: large;
+  font-weight: 700;
+}
+
+.form-container {
+  margin-top: 30px;
+}
+
+.add-btn {
+  display: inline-block;
+  background-color: #fff;
+  color: #000;
+  margin-top: 20px;
+  text-decoration: none;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.flex-fill {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.data-card-heading {
+  display: flex;
+}
