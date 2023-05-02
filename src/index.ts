@@ -126,12 +126,12 @@ app.post('/api/medicalHistory/:medicalHistoryId/update', updateMedicalHistory);
 app.delete('/api/medicalHistory/:medicalHistoryId', deleteMedicalHistory);
 
 app.post('/api/users/:userId/medication/add', addNewMedicationData);
-app.get('/users/:userId/medication/create', renderCreateMedicationPage);
+app.get('/api/users/:userId/medication/create', renderCreateMedicationPage);
 app.get('/api/medication/:medicationDataId', getMedicationData);
-app.get('/users/:userId/medication', getAllMedicationDataByUser);
-app.get('/users/:userId/medication/:medicationDataId/update', renderUpdateMedicationPage);
-app.post('/api/users/:userId/medication/:medicationDataId/edit', updateMedicationData);
-app.delete('/api/users/:userId/medication/:medicationDataId/delete', deleteMedicationData);
+app.get('/api/users/:userId/medication', getAllMedicationDataByUser);
+app.get('/api/users/:userId/medication/:medicationDataId/update', renderUpdateMedicationPage);
+app.post('/api/medication/:medicationDataId/update', updateMedicationData);
+app.delete('/api/medication/:medicationDataId/delete', deleteMedicationData);
 
 app.get('/users/:userId/food', FoodController.getAllUserFoodData);
 app.get('/users/:userId/food/create', FoodController.renderCreateFoodPage);

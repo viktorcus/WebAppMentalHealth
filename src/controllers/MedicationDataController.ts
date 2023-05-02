@@ -184,58 +184,6 @@ async function renderUpdateMedicationPage(req: Request, res: Response): Promise<
   res.render('medicationData/updateMedication', { user, medicationData });
 }
 
-async function renderCreateMedicationPage(req: Request, res: Response): Promise<void> {
-  const { userId } = req.params as UserIdParam;
-  const { isLoggedIn, authenticatedUser } = req.session;
-
-  if (!isLoggedIn) {
-    res.redirect('/login');
-    return;
-  }
-
-  if (authenticatedUser.userId !== userId) {
-    console.log(userId);
-    res.sendStatus(403); // 403 forbidden
-    return;
-  }
-
-  const user = await getUserById(userId);
-  if (!user) {
-    res.sendStatus(404);
-    return;
-  }
-
-  res.render('medicationData/createMedication', { user });
-}
-
-async function renderUpdateMedicationPage(req: Request, res: Response): Promise<void> {
-  const { userId } = req.params as UserIdParam;
-  const { medicationDataId } = req.params as MedicationDataIdParam;
-  const { isLoggedIn, authenticatedUser } = req.session;
-
-  if (!isLoggedIn) {
-    res.redirect('/login');
-    return;
-  }
-
-  if (authenticatedUser.userId !== userId) {
-    console.log(userId);
-    res.sendStatus(403); // 403 forbidden
-    return;
-  }
-
-  const user = await getUserById(userId);
-  if (!user) {
-    res.sendStatus(404);
-    return;
-  }
-
-  const medicationData = await getMedicationDataById(medicationDataId);
-  console.log(medicationDataId);
-
-  res.render('medicationData/updateMedication', { user, medicationData });
-}
-
 export {
   addNewMedicationData,
   getMedicationData,
