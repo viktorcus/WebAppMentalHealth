@@ -58,7 +58,9 @@ import {
 const app: Express = express();
 app.set('view engine', 'ejs');
 
-const { PORT, COOKIE_SECRET } = process.env;
+const { COOKIE_SECRET } = process.env;
+let { PORT } = process.env;
+PORT = process.argv[2] || PORT;
 app.use(express.static('public', { extensions: ['html'] }));
 
 let store;
