@@ -18,15 +18,15 @@ import { sendEmail } from '../services/emailService';
 import { addReminder } from '../models/ReminderModel';
 
 async function registerUser(req: Request, res: Response): Promise<void> {
-  const { userName, email, password } = req.body as AuthRequest;
+  const { userName, email, password, birthday, place, gender } = req.body as AuthRequest;
 
   const passwordHash = await argon2.hash(password);
 
   try {
-    const newUser = await addUser(userName, email, passwordHash);
+    const newUser = await addUser(userName, email, passwordHash, birthday, place, gender);
     console.log(newUser);
     await sendEmail(email, 'Welcome!', `Thank you for joining my application!`);
-    res.sendStatus(201);
+    res.status(201).redirect('/login');
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);

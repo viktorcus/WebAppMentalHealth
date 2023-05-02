@@ -5,11 +5,27 @@ import { Gender } from '../utils/enums';
 
 const userRepository = AppDataSource.getRepository(User);
 
-async function addUser(userName: string, email: string, passwordHash: string): Promise<User> {
+async function addUser(
+  userName: string,
+  email: string,
+  passwordHash: string,
+  birthday?: Date,
+  place?: string,
+  gender?: Gender,
+): Promise<User> {
   let newUser = new User();
   newUser.userName = userName;
   newUser.email = email;
   newUser.passwordHash = passwordHash;
+  if (birthday) {
+    newUser.birthday = birthday;
+  }
+  if (place) {
+    newUser.place = place;
+  }
+  if (gender) {
+    newUser.gender = gender;
+  }
 
   newUser = await userRepository.save(newUser);
 

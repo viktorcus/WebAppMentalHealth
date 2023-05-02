@@ -1,44 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <title>Create an account</title>
-  </head>
-  <body>
-    <div class="formCard">
-      <section class="form-container">
-        <div>
-          <h2>Create an Account</h2>
-        </div>
-        <div class="form">
-          <form method="POST" action="/api/register">
-            <label for="email">Email</label>
-            <input name="email" id="email" class="text" placeholder="Email" type="text" required />
-            <label for="username">Username</label>
-            <input
-              name="username"
-              id="username"
-              class="text"
-              placeholder="Username"
-              type="text"
-              required
-            />
-            <label for="password">Password</label>
-            <input
-              name="password"
-              id="password"
-              class="password"
-              placeholder="Password"
-              type="password"
-              required
-            />
-            <button class="btn">Create Account</button>
-          </form>
-        </div>
-      </section>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+  <div class="card">
+    <div class="showcase">
+      <!-- <span>Click Here</span> -->
+      <!-- <a href="" class="guest">Continue as guest</a> -->
+
     </div>
-  </body>
+    <div class="auth">
+      <img src="https://img.freepik.com/free-vector/gradient-mental-health-logo-template_23-2148820570.jpg?w=2000" alt="" class="logo">
+      <h2 class="content__label">Register New User</h2>
+      <form class="form" method="POST" action="/api/register">
+        <div class="form__group">
+          <label for="email">Email</label>
+          <input name="email" type="text" id="email" placeholder="Enter your Email" required>
+        </div>
+        <div class="form__group">
+          <label for="username">Username</label>
+          <input name="userName" type="text" id="username" placeholder="Enter your Username" required>
+        </div>
+        <div class="form__group">
+          <label for="password">Password</label>
+          <input name="password" type="password" id="password" placeholder="Enter your Password" required>
+        </div>
+        <div class="form__group">
+          <label for="birthday">Birth Date (Optional)</label>
+          <input name="birthday" type="date" id="birthday">
+        </div>
+        <div class="form__group">
+          <label for="place">Location (Optional)</label>
+          <input name="place" type="text" id="place" placeholder="Enter your Location">
+        </div>
+        <div class="form__group">
+          <label for="gender">Gender (Optional)</label>
+          <select name="gender" id="gender">
+            <option selected></option>
+            <option value="0">Male</option>
+            <option value="1">Female</option>
+            <option value="2">Other</option>
+          </select>
+        </div>
+        <div class="form__group">
+          <button class="btn" type="submit">Register &RightArrow;</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+
+</body>
+
 </html>

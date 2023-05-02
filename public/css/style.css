@@ -104,6 +104,14 @@ a.guest:hover {
   border-width: 1px;
 }
 
+.form__group select {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 20px;
+  border-color: gray;
+  border-width: 1px;
+}
+
 .form group button[type="submit"] {
   background: green;
   border: none;
