@@ -1,7 +1,6 @@
 import { AppDataSource } from '../dataSource';
 import { SleepData } from '../entities/sleepData';
 import { User } from '../entities/user';
-import { SleepDataStats } from '../types/sleepData';
 
 const sleepRepository = AppDataSource.getRepository(SleepData);
 

@@ -1,7 +1,6 @@
 import { AppDataSource } from '../dataSource';
 import { HealthData } from '../entities/healthData';
 import { User } from '../entities/user';
-import { HealthDataStats } from '../types/healthData';
 
 const healthDataRepository = AppDataSource.getRepository(HealthData);
 
