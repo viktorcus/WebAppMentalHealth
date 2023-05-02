@@ -1,9 +1,13 @@
 import { AppDataSource } from '../dataSource';
 import { MedicationData } from '../entities/medicationData';
+import { User } from '../entities/user';
 
 const medicationDataRepository = AppDataSource.getRepository(MedicationData);
 
-async function addMedicationData(medicationData: MedicationData): Promise<MedicationData> {
+async function addMedicationData(
+  medicationData: MedicationData,
+  user: User
+): Promise<MedicationData> {
   let newMedicationData = new MedicationData();
   newMedicationData.medicationDataId = medicationData.medicationDataId;
   newMedicationData.medicationName = medicationData.medicationName;
@@ -12,6 +16,7 @@ async function addMedicationData(medicationData: MedicationData): Promise<Medica
   if (medicationData.note !== undefined) {
     newMedicationData.note = medicationData.note;
   }
+  newMedicationData.user = user;
 
   newMedicationData = await medicationDataRepository.save(newMedicationData);
 
@@ -21,7 +26,7 @@ async function addMedicationData(medicationData: MedicationData): Promise<Medica
 async function getMedicationDataById(medicationDataId: string): Promise<MedicationData | null> {
   const medicationData = await medicationDataRepository
     .createQueryBuilder('medicationData')
-    .where({ where: { medicationDataId } })
+    .where('medicationData.medicationDataId = :id', { id: medicationDataId })
     .leftJoin('medicationData.user', 'user')
     .select([
       'medicationData.medicationDataId',
@@ -32,14 +37,14 @@ async function getMedicationDataById(medicationDataId: string): Promise<Medicati
       'user.userId',
     ])
     .getOne();
-  return medicationData || null;
+  return medicationData;
 }
 
 async function getMedicationDataByUserId(userId: string): Promise<MedicationData[]> {
   const medicationData = await medicationDataRepository
     .createQueryBuilder('medicationData')
     .leftJoinAndSelect('medicationData.user', 'user')
-    .where('user.userId = :userId', { userId })
+    .where({ user: { userId } })
     .select(['medicationData', 'user.userId'])
     .getMany();
   return medicationData;
