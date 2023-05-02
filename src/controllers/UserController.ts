@@ -134,8 +134,7 @@ async function updateEmailAddress(req: Request, res: Response): Promise<void> {
     res.status(500).json(databaseErrorMessage);
     return;
   }
-
-  res.render('user/profilePage', { user });
+  res.redirect(`/users/${userId}`);
 }
 
 async function updatePlace(req: Request, res: Response): Promise<void> {
@@ -170,8 +169,7 @@ async function updatePlace(req: Request, res: Response): Promise<void> {
     res.status(500).json(databaseErrorMessage);
     return;
   }
-
-  res.render('user/profilePage', { user });
+  res.redirect(`/users/${userId}`);
 }
 
 async function updateGender(req: Request, res: Response): Promise<void> {
@@ -206,8 +204,7 @@ async function updateGender(req: Request, res: Response): Promise<void> {
     res.status(500).json(databaseErrorMessage);
     return;
   }
-
-  res.render('user/profilePage', { user });
+  res.redirect(`/users/${userId}`);
 }
 
 async function updateUserName(req: Request, res: Response): Promise<void> {
@@ -242,7 +239,7 @@ async function updateUserName(req: Request, res: Response): Promise<void> {
     res.status(500).json(databaseErrorMessage);
     return;
   }
-  res.render('user/profilePage', { user });
+  res.redirect(`/users/${userId}`);
 }
 
 async function updateBirthday(req: Request, res: Response): Promise<void> {
@@ -277,8 +274,7 @@ async function updateBirthday(req: Request, res: Response): Promise<void> {
     res.status(500).json(databaseErrorMessage);
     return;
   }
-
-  res.render('user/profilePage', { user });
+  res.redirect(`/users/${userId}`);
 }
 
 async function createReminder(req: Request, res: Response): Promise<void> {
