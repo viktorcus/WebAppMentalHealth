@@ -13,13 +13,13 @@ import { MedicationData } from '../entities/medicationData';
 import { getUserById } from '../models/UserModel';
 
 async function addNewMedicationData(req: Request, res: Response): Promise<void> {
-  const { authenticatedUser, isLoggedIn } = req.session;
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
   if (!isLoggedIn) {
     res.redirect('/login');
     return;
   }
-
-  const medicationData = req.body as MedicationData;
 
   const user = await getUserById(authenticatedUser.userId);
   if (!user) {
@@ -27,10 +27,13 @@ async function addNewMedicationData(req: Request, res: Response): Promise<void> 
     return;
   }
 
+  const medicationData = req.body as MedicationData;
   try {
-    const newMedicationData = await addMedicationData(medicationData);
+    const newMedicationData = await addMedicationData(medicationData, user);
+    const allMedicationData = await getMedicationDataByUserId(userId);
     console.log(newMedicationData);
-    res.redirect(`/medication/${newMedicationData.medicationDataId}`);
+    console.log(allMedicationData);
+    res.redirect(`/api/users/${userId}/medication`);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -59,16 +62,16 @@ async function getMedicationData(req: Request, res: Response): Promise<void> {
 
 async function getAllMedicationDataByUser(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
-
-  if (!req.session.isLoggedIn) {
+  const { isLoggedIn } = req.session;
+  if (!isLoggedIn) {
     res.redirect('/login');
     return;
   }
 
+  const user = await getUserById(userId);
+  const allMedicationData = await getMedicationDataByUserId(userId);
   try {
-    const allMedicationData = await getMedicationDataByUserId(userId);
-    console.log(allMedicationData);
-    res.json(allMedicationData);
+    res.render('medicationData/medicationPage', { user, allMedicationData });
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -129,10 +132,64 @@ async function deleteMedicationData(req: Request, res: Response): Promise<void> 
   res.sendStatus(204); // 204 No Content
 }
 
+async function renderCreateMedicationPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  res.render('medicationData/createMedication', { user });
+}
+
+async function renderUpdateMedicationPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { medicationDataId } = req.params as MedicationDataIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  const medicationData = await getMedicationDataById(medicationDataId);
+  console.log(medicationDataId);
+
+  res.render('medicationData/updateMedication', { user, medicationData });
+}
+
 export {
   addNewMedicationData,
   getMedicationData,
   getAllMedicationDataByUser,
   updateMedicationData,
   deleteMedicationData,
+  renderCreateMedicationPage,
+  renderUpdateMedicationPage,
 };
