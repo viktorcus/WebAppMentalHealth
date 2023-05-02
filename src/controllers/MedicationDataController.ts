@@ -80,6 +80,7 @@ async function getAllMedicationDataByUser(req: Request, res: Response): Promise<
 }
 
 async function updateMedicationData(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
   const { medicationDataId } = req.params as MedicationDataIdParam;
   const updatedMedicationData = req.body as Partial<MedicationData>;
 
@@ -87,7 +88,6 @@ async function updateMedicationData(req: Request, res: Response): Promise<void> 
     res.redirect('/login');
     return;
   }
-
   try {
     const existingMedicationData = await getMedicationDataById(medicationDataId);
 
@@ -101,7 +101,7 @@ async function updateMedicationData(req: Request, res: Response): Promise<void> 
 
     const updatedData = await getMedicationDataById(medicationDataId);
     console.log(updatedData);
-    res.json(updatedData);
+    res.redirect(`/api/users/${userId}/medication`);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -110,6 +110,7 @@ async function updateMedicationData(req: Request, res: Response): Promise<void> 
 }
 
 async function deleteMedicationData(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
   const { isLoggedIn, authenticatedUser } = req.session;
   if (!isLoggedIn) {
     res.sendStatus(401); // 401 Unauthorized
@@ -128,8 +129,7 @@ async function deleteMedicationData(req: Request, res: Response): Promise<void> 
   }
 
   await deleteMedicationDataById(medicationDataId);
-
-  res.sendStatus(204); // 204 No Content
+  res.redirect(`/api/users/${userId}/medication`);
 }
 
 async function renderCreateMedicationPage(req: Request, res: Response): Promise<void> {
