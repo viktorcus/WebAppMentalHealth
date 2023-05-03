@@ -160,7 +160,7 @@ async function getSleepStats(req: Request, res: Response): Promise<void> {
     const stats: SleepDataStats[] = await generateSleepStats(
       req.session.authenticatedUser.userId,
       start,
-      end,
+      end
     );
     console.log(stats);
     res.render('sleepStats', { stats });
