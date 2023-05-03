@@ -104,7 +104,10 @@
         <button>Save</button>
       </form>
       <br>
-      <p class="info-value"><span class="info-item">Current Gender: </span><%= user.gender %></p>
+      <p class="info-value">
+        <span class="info-item">Current Gender: </span>
+        <%= user.gender === 0 ? 'Male' : user.gender === 1 ? 'Female' : 'Other/Not Specified' %>
+      </p>
       <form method="POST" action="/api/users/<%= user.userId %>/gender">
         <label class="info-item" for="gender">New Gender:</label>
         <select id="gender" name="gender" required>
@@ -116,10 +119,10 @@
         <button>Save</button>
       </form>
       <br>
-      <p class="info-value"><span class="info-item">Current Birthday: </span><%= user.birthday.toLocaleDateString() %></p>
+      <p class="info-value"><span class="info-item">Current Birthday: </span><%= user.birthday ? user.birthday.toLocaleDateString() : 'Not specified' %></p>
       <form method="POST" action="/api/users/<%= user.userId %>/birthday">
         <label class="info-item" for="birthday">New Birthday:</label>
-        <input type="date" id="birthday" name="birthday" value="<%= user.birthday.toISOString().slice(0,10) %>" required>
+        <input type="date" id="birthday" name="birthday" value="<%= user.birthday ? user.birthday.toISOString().slice(0,10) : new Date() %>" required>
         <button>Save</button>
       </form>
       <br>
