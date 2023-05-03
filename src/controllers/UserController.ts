@@ -69,6 +69,12 @@ async function logIn(req: Request, res: Response): Promise<void> {
   res.redirect('/dashboard');
 }
 
+async function logOut(req: Request, res: Response): Promise<void> {
+  await req.session.destroy(() => {
+    res.redirect('/');
+  });
+}
+
 async function getUserInfo(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
 
@@ -320,6 +326,7 @@ async function renderUpdateProfilePage(req: Request, res: Response): Promise<voi
 export {
   registerUser,
   logIn,
+  logOut,
   getUserInfo,
   updateEmailAddress,
   updatePlace,

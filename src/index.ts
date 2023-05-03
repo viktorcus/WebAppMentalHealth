@@ -21,6 +21,7 @@ import {
   createReminder,
   getUserDashboard,
   renderUpdateProfilePage,
+  logOut,
 } from './controllers/UserController';
 import {
   addNewMedicalHistory,
@@ -103,6 +104,7 @@ app.get('/sleep/stats', getSleepStats);
 
 app.post('/register', validateNewUserBody, registerUser);
 app.post('/login', validateLoginBody, logIn);
+app.get('/logout', logOut);
 app.get('/users/:userId', getUserInfo);
 app.get('/users/:userId/updateProfile', renderUpdateProfilePage);
 app.post('/api/users/:userId/email', updateEmailAddress);
