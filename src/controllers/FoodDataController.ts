@@ -11,6 +11,7 @@ import {
 import { parseDatabaseError } from '../utils/db-utils';
 import { FoodData as FoodEntity } from '../entities/foodData';
 import { getUserById } from '../models/UserModel';
+import { UserIdParam } from '../types/userInfo';
 
 async function submitFoodData(req: Request, res: Response): Promise<void> {
   const foodData = req.body as FoodData;
@@ -27,7 +28,7 @@ async function submitFoodData(req: Request, res: Response): Promise<void> {
     if (user) {
       const food = await addFoodData(foodData, user);
       if (food) {
-        res.status(201).redirect('/food');
+        res.status(201).redirect(`/users/${req.session.authenticatedUser.userId}/food`);
       } else {
         res.sendStatus(500);
       }
@@ -49,7 +50,7 @@ async function getAllUserFoodData(req: Request, res: Response): Promise<void> {
   try {
     const user = await getUserById(req.session.authenticatedUser.userId);
     const foodData = await getAllFoodDataForUser(req.session.authenticatedUser.userId);
-    res.render('foodPage', { user, foodData });
+    res.render('food/foodPage', { user, foodData });
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -110,7 +111,13 @@ async function updateFoodData(req: Request, res: Response): Promise<void> {
     }
 
     const foodData = await updateFoodDataById(foodDataId, newFood);
-    res.json(foodData);
+    if (!foodData) {
+      // not found
+      res.sendStatus(404);
+      return;
+    }
+    console.log(foodData);
+    res.redirect(`/users/${req.session.authenticatedUser.userId}/food`);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -141,7 +148,7 @@ async function deleteFoodData(req: Request, res: Response): Promise<void> {
     }
 
     await deleteFoodDataById(foodDataId);
-    res.sendStatus(200);
+    res.redirect(`/users/${req.session.authenticatedUser.userId}/food`);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -210,6 +217,58 @@ async function getFoodStats(req: Request, res: Response): Promise<void> {
   }
 }
 
+async function renderCreateFoodPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  res.render('food/createFood', { user });
+}
+
+async function renderUpdateFoodPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { foodDataId } = req.params as unknown as FoodDataIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  const foodData = await getFoodDataById(foodDataId);
+  console.log(foodDataId);
+
+  res.render('food/updateFood', { user, foodData });
+}
+
 export default {
   submitFoodData,
   getAllUserFoodData,
@@ -218,4 +277,6 @@ export default {
   deleteFoodData,
   searchFoodData,
   getFoodStats,
+  renderCreateFoodPage,
+  renderUpdateFoodPage,
 };

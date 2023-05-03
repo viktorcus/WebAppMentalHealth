@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BrainCheckr | Medication</title>
+  <title>BrainCheckr | Update Activity</title>
   <link rel="stylesheet" href="/css/page_style.css" />
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -85,38 +85,49 @@
     </ul>
   </div>
   <section class="home-section">
-    <div class="text">Medication Data</div>
+    <div class="text">Activity Data</div>
     <div class="home-section-content">
-      <p class="start">Add New Medication Data</p>
-      <hr>
+      <p class="start">Update Activity Data</p>
+      <hr />
       <section class="page-tabs">
         <div>
-          <span><a href="/users/<%= user.userId %>/medication">My Medication Data</a></span>
+          <span><a href="/users/<%= user.userId %>/activity">My Activity Data</a></span>
           <span>|</span>
-          <span><a href="/users/<%= user.userId %>/medication/create">Create New</a></span>
+          <span><a href="/users/<%= user.userId %>/activity/create">Create New</a></span>
+        </div>
       </section>
-      <div class="form-container">
-        <form method="POST" action="/api/users/<%= user.userId %>/medication/add">
-          <p class="form-header">New Medication</p>
-          <div class="form-field">
-            <label class="info-item" for="medicationName">Medication Name:</label>
-            <input type="text" id="medicationName" name="medicationName" required>
-          </div>
-          <div class="form-field">
-            <label class="info-item" for="dosage">Dosage:</label>
-            <input type="text" id="dosage" name="dosage" required>
-          </div>
-          <div class="form-field">
-            <label class="info-item" for="frequency">Frequency:</label>
-            <input type="text" id="frequency" name="frequency" required>
-          </div>
-          <div class="form-field">
-            <label class="info-item" for="note">Note:</label>
-            <textarea id="note" name="note"></textarea>
-          </div>
-          <button class="add-btn">Add Medication</button>
-        </form>
-      </div>
+      <section class="page-body">
+        <div class="form-container">
+          <form method="POST" action="/users/<%= user.userId %>/activity/<%= activityData.activityDataId %>/edit">
+            <p class="form-header">Update Activity</p>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current Activity Description: </span><%= activityData.activityType %></p>
+              <label class="info-item" for="activityType">New Activity Description:</label>
+              <input type="text" id="activityType" name="activityType" value="<%= activityData.activityType %>" required>
+            </div>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current Start Time: </span><%= activityData.startTime %></p>
+              <label class="info-item" for="startTime">New Start Time:</label>
+              <input type="datetime-local" id="startTime" name="startTime" value="<%= activityData.startTime %>" required>
+            </div>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current End Time: </span><%= activityData.endTime %></p>
+              <label class="info-item" for="endTime">New End Time:</label>
+              <input type="datetime-local" id="endTime" name="endTime" value="<%= activityData.endTime %>" required>
+            </div>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current Calories Burned: </span><%= activityData.caloriesBurned %></p>
+              <label class="info-item" for="caloriesBurned">New Calories Burned:</label>
+              <input type="text" id="caloriesBurned" name="caloriesBurned" value="<%= activityData.caloriesBurned %>">
+            </div>
+            <div class="form-field">
+              <label class="info-item note" for="note">New Note:</label>
+              <textarea id="note" name="note" value="<%= activityData.note %>"></textarea>
+            </div>
+            <button class="add-btn">Save</button>
+          </form>
+        </div>
+      </section>
     </div>
   </section>
   <script>

@@ -113,35 +113,45 @@ app.post('/api/users/:userId/name', updateUserName);
 
 app.post('/api/reminders', createReminder);
 
-app.post('/api/users/:userId/medicalHistory/add', addNewMedicalHistory);
+app.post('/users/:userId/medicalHistory/add', addNewMedicalHistory);
 app.get('/api/medicalHistory/:medicalHistoryId', getMedicalHistory);
-app.get('/api/users/:userId/medicalHistory', getAllMedicalHistoryByUser);
+app.get('/users/:userId/medicalHistory', getAllMedicalHistoryByUser);
 app.post('/api/medicalHistory/:medicalHistoryId/update', updateMedicalHistory);
 app.delete('/api/medicalHistory/:medicalHistoryId', deleteMedicalHistory);
 
 app.post('/api/users/:userId/medication/add', addNewMedicationData);
-app.get('/api/users/:userId/medication/create', renderCreateMedicationPage);
+app.get('/users/:userId/medication/create', renderCreateMedicationPage);
 app.get('/api/medication/:medicationDataId', getMedicationData);
-app.get('/api/users/:userId/medication', getAllMedicationDataByUser);
-app.get('/api/users/:userId/medication/:medicationDataId/update', renderUpdateMedicationPage);
+app.get('/users/:userId/medication', getAllMedicationDataByUser);
+app.get('/users/:userId/medication/:medicationDataId/update', renderUpdateMedicationPage);
 app.post('/api/users/:userId/medication/:medicationDataId/edit', updateMedicationData);
 app.delete('/api/users/:userId/medication/:medicationDataId/delete', deleteMedicationData);
 
+app.get('/users/:userId/food', FoodController.getAllUserFoodData);
+app.get('/users/:userId/food/create', FoodController.renderCreateFoodPage);
+app.get('/users/:userId/food/:foodDataId/update', FoodController.renderUpdateFoodPage);
 app.get('/api/food/search', FoodController.searchFoodData);
 app.get('/api/food/stats', FoodController.getFoodStats);
 app.get('/api/food/:foodDataId', FoodController.getFoodData);
-app.get('/api/food/user/:userId', FoodController.getAllUserFoodData);
-app.post('/api/food', FoodController.submitFoodData);
+app.post('/api/food/add', FoodController.submitFoodData);
 app.post('/api/food/:foodDataId', FoodController.updateFoodData);
-app.delete('/api/food/:foodDataId', FoodController.deleteFoodData);
+app.delete('/api/users/:userId/food/:foodDataId/delete', FoodController.deleteFoodData);
 
+app.get('/users/:userId/activity', ActivityController.getAllUserActivityData);
+app.get('/users/:userId/activity/create', ActivityController.renderCreateActivityPage);
+app.get(
+  '/users/:userId/activity/:activityDataId/update',
+  ActivityController.renderUpdateActivityPage,
+);
 app.get('/api/activity/search', ActivityController.searchActivityData);
 app.get('/api/activity/stats', ActivityController.getActivityStats);
 app.get('/api/activity/:activityDataId', ActivityController.getActivityData);
-app.get('/api/activity/user/:userId', ActivityController.getAllUserActivityData);
-app.post('/api/activity', ActivityController.submitActivityData);
+app.post('/api/activity/add', ActivityController.submitActivityData);
 app.post('/api/activity/:activityDataId', ActivityController.updateActivityData);
-app.delete('/api/activity/:activityDataId', ActivityController.deleteActivityData);
+app.delete(
+  '/api/users/:userId/activity/:activityDataId/delete',
+  ActivityController.deleteActivityData,
+);
 
 app.post('/api/sleep', addNewSleepData);
 app.get('/api/sleep/:userId', getAllSleepDataByUser);
