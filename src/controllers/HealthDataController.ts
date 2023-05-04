@@ -133,7 +133,7 @@ async function getHealthStats(req: Request, res: Response): Promise<void> {
       req.session.authenticatedUser.userId,
       start,
       end,
-      type,
+      type
     );
     res.render('healthStats', { stats, type });
   } catch (err) {
@@ -143,6 +143,74 @@ async function getHealthStats(req: Request, res: Response): Promise<void> {
   }
 }
 
+async function renderHealthProgressPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+  let { start, end, type } = req.body as HealthSearchParam;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  end = new Date();
+  start = new Date();
+  start.setMonth(end.getMonth() - 1);
+  type = 'heartRate';
+
+  const stats: HealthDataStats[] = await generateHealthStats(userId, start, end, type);
+
+  res.render('health/healthStats', { user, stats, start, end, type });
+}
+
+async function updateHealthProgressPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+  const { startStr, endStr, type } = req.body as HealthRefreshParam;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  const startPieces: number[] = startStr.split('-').map((s) => parseInt(s, 10));
+  let start: Date = new Date(startPieces[0], startPieces[1] - 1, startPieces[2]);
+  const endPieces: number[] = endStr.split('-').map((s) => parseInt(s, 10));
+  const end: Date = new Date(endPieces[0], endPieces[1] - 1, endPieces[2]);
+
+  if (start > end) {
+    start = end;
+    return;
+  }
+
+  const stats: HealthDataStats[] = await generateHealthStats(userId, start, end, type);
+  res.render('health/healthStats', { user, stats, start, end, type });
+}
+
 export {
   addHealthDataController,
   getAllUserHealthData,
@@ -150,4 +218,6 @@ export {
   updateHealthDataController,
   deleteHealthDataController,
   getHealthStats,
+  renderHealthProgressPage,
+  updateHealthProgressPage,
 };

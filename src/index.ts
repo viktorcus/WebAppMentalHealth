@@ -59,6 +59,8 @@ import {
   getHealthDataById,
   updateHealthDataController,
   getHealthStats,
+  renderHealthProgressPage,
+  updateHealthProgressPage,
 } from './controllers/HealthDataController';
 import { validateLoginBody, validateNewUserBody } from './validators/authValidator';
 
@@ -175,6 +177,8 @@ app.get('/api/health/:userId', getAllUserHealthData);
 app.get('/api/health/:healthDataId', getHealthDataById);
 app.post('api/health/:healthDataId/update', updateHealthDataController);
 app.delete('/api/health/:healthDataId', deleteHealthDataController);
+app.get('/users/:userId/health/progress', renderHealthProgressPage);
+app.post('/users/:userId/health/progress', updateHealthProgressPage);
 
 scheduleJob('0 0 7 * * *', sendOneWeekReminders);
 

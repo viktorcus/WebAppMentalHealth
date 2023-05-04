@@ -24,3 +24,9 @@ type HealthSearchParam = {
   end: Date;
   type: string;
 };
+
+type HealthRefreshParam = {
+  startStr: string;
+  endStr: string;
+  type: string;
+};
