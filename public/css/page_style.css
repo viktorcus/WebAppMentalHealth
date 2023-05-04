@@ -200,6 +200,7 @@
 }
 .home-section-content{
   margin-left: 28px;
+  margin-right: 28px;
 }
 .home-section-content .start{
   font-size: 20px;
@@ -339,4 +340,12 @@ hr {
 
 .data-card-heading {
   display: flex;
+}
+
+.progress-form {
+  display: flex;
+}
+
+.progress-form span {
+  margin: 0px 10px 16px 10px;
 }

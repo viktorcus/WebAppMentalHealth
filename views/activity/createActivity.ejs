@@ -95,6 +95,8 @@
           <span><a href="/users/<%= user.userId %>/activity">My Activity Data</a></span>
           <span>|</span>
           <span><a href="/users/<%= user.userId %>/activity/create">Create New</a></span>
+          <span>|</span>
+          <span><a href="/users/<%= user.userId %>/activity/progress">View Progress</a></span>
       </section>
       <div class="form-container">
         <form method="POST" action="/api/users/<%= user.userId %>/activity/add">

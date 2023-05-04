@@ -7,7 +7,6 @@ import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
 import { scheduleJob } from 'node-schedule';
 import { sendOneWeekReminders } from './services/reminderService';
-import { validateNewUserBody, validateLoginBody } from './validators/authValidator';
 
 import {
   registerUser,
@@ -59,6 +58,7 @@ import {
   updateHealthDataController,
   getHealthStats,
 } from './controllers/HealthDataController';
+import { validateLoginBody, validateNewUserBody } from './validators/authValidator';
 
 const app: Express = express();
 app.set('view engine', 'ejs');
@@ -145,6 +145,8 @@ app.get(
   '/users/:userId/activity/:activityDataId/update',
   ActivityController.renderUpdateActivityPage,
 );
+app.get('/users/:userId/activity/progress', ActivityController.renderActivityProgressPage);
+app.post('/users/:userId/activity/progress', ActivityController.updateActivityProgressPage);
 app.get('/api/activity/search', ActivityController.searchActivityData);
 app.get('/api/activity/stats', ActivityController.getActivityStats);
 app.get('/api/activity/:activityDataId', ActivityController.getActivityData);
