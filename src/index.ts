@@ -7,6 +7,7 @@ import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
 import { scheduleJob } from 'node-schedule';
 import { sendOneWeekReminders } from './services/reminderService';
+import { validateNewUserBody, validateLoginBody } from './validators/authValidator';
 
 import {
   registerUser,
@@ -19,6 +20,8 @@ import {
   updateUserName,
   createReminder,
   getUserDashboard,
+  renderUpdateProfilePage,
+  logOut,
 } from './controllers/UserController';
 import {
   addNewMedicalHistory,
@@ -33,6 +36,8 @@ import {
   getAllMedicationDataByUser,
   updateMedicationData,
   deleteMedicationData,
+  renderCreateMedicationPage,
+  renderUpdateMedicationPage,
 } from './controllers/MedicationDataController';
 
 import FoodController from './controllers/FoodDataController';
@@ -44,6 +49,9 @@ import {
   getSleepData,
   getSleepDataByDateRangeFromDb,
   updateSleepDataById,
+  getSleepStats,
+  renderCreateSleepPage,
+  renderUpdateSleepPage,
 } from './controllers/SleepDataController';
 import {
   addHealthDataController,
@@ -51,12 +59,17 @@ import {
   getAllUserHealthData,
   getHealthDataById,
   updateHealthDataController,
+  getHealthStats,
+  renderCreateHealthPage,
+  renderUpdateHealthPage,
 } from './controllers/HealthDataController';
 
 const app: Express = express();
 app.set('view engine', 'ejs');
 
-const { PORT, COOKIE_SECRET } = process.env;
+const { COOKIE_SECRET } = process.env;
+let { PORT } = process.env;
+PORT = process.argv[2] || PORT;
 app.use(express.static('public', { extensions: ['html'] }));
 
 let store;
@@ -85,15 +98,19 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.get('/', getUserDashboard);
+app.get('/dashboard', getUserDashboard);
 app.get('/activity', ActivityController.getAllUserActivityData);
 app.get('/activity/stats', ActivityController.getActivityStats);
 app.get('/food', FoodController.getAllUserFoodData);
 app.get('/food/stats', FoodController.getFoodStats);
+app.get('/health/stats', getHealthStats);
+app.get('/sleep/stats', getSleepStats);
 
-app.post('/register', registerUser);
-app.post('/login', logIn);
+app.post('/register', validateNewUserBody, registerUser);
+app.post('/login', validateLoginBody, logIn);
+app.get('/logout', logOut);
 app.get('/users/:userId', getUserInfo);
+app.get('/users/:userId/updateProfile', renderUpdateProfilePage);
 app.post('/api/users/:userId/email', updateEmailAddress);
 app.post('/api/users/:userId/gender', updateGender);
 app.post('/api/users/:userId/place', updatePlace);
@@ -102,46 +119,62 @@ app.post('/api/users/:userId/name', updateUserName);
 
 app.post('/api/reminders', createReminder);
 
-app.post('/api/medical-history', addNewMedicalHistory);
-app.get('/api/medical-history/:medicalHistoryId', getMedicalHistory);
-app.get('/api/users/:userId/medical-history', getAllMedicalHistoryByUser);
-app.post('/api/medical-history/:medicalHistoryId/update', updateMedicalHistory);
-app.delete('/api/medical-history/:medicalHistoryId', deleteMedicalHistory);
+app.post('/users/:userId/medicalHistory/add', addNewMedicalHistory);
+app.get('/api/medicalHistory/:medicalHistoryId', getMedicalHistory);
+app.get('/users/:userId/medicalHistory', getAllMedicalHistoryByUser);
+app.post('/api/medicalHistory/:medicalHistoryId/update', updateMedicalHistory);
+app.delete('/api/medicalHistory/:medicalHistoryId', deleteMedicalHistory);
 
-app.post('/api/medication', addNewMedicationData);
+app.post('/api/users/:userId/medication/add', addNewMedicationData);
+app.get('/users/:userId/medication/create', renderCreateMedicationPage);
 app.get('/api/medication/:medicationDataId', getMedicationData);
-app.get('/api/users/:userId/medication', getAllMedicationDataByUser);
-app.post('api/medication/:medicationDataId/update', updateMedicationData);
-app.delete('/api/medication/:medicationDataId', deleteMedicationData);
+app.get('/users/:userId/medication', getAllMedicationDataByUser);
+app.get('/users/:userId/medication/:medicationDataId/update', renderUpdateMedicationPage);
+app.post('/api/users/:userId/medication/:medicationDataId/edit', updateMedicationData);
+app.delete('/api/users/:userId/medication/:medicationDataId/delete', deleteMedicationData);
 
+app.get('/users/:userId/food', FoodController.getAllUserFoodData);
+app.get('/users/:userId/food/create', FoodController.renderCreateFoodPage);
+app.get('/users/:userId/food/:foodDataId/update', FoodController.renderUpdateFoodPage);
 app.get('/api/food/search', FoodController.searchFoodData);
 app.get('/api/food/stats', FoodController.getFoodStats);
 app.get('/api/food/:foodDataId', FoodController.getFoodData);
-app.get('/api/food/user/:userId', FoodController.getAllUserFoodData);
-app.post('/api/food', FoodController.submitFoodData);
+app.post('/api/food/add', FoodController.submitFoodData);
 app.post('/api/food/:foodDataId', FoodController.updateFoodData);
-app.delete('/api/food/:foodDataId', FoodController.deleteFoodData);
+app.delete('/api/users/:userId/food/:foodDataId/delete', FoodController.deleteFoodData);
 
+app.get('/users/:userId/activity', ActivityController.getAllUserActivityData);
+app.get('/users/:userId/activity/create', ActivityController.renderCreateActivityPage);
+app.get(
+  '/users/:userId/activity/:activityDataId/update',
+  ActivityController.renderUpdateActivityPage
+);
 app.get('/api/activity/search', ActivityController.searchActivityData);
 app.get('/api/activity/stats', ActivityController.getActivityStats);
 app.get('/api/activity/:activityDataId', ActivityController.getActivityData);
-app.get('/api/activity/user/:userId', ActivityController.getAllUserActivityData);
-app.post('/api/activity', ActivityController.submitActivityData);
+app.post('/api/activity/add', ActivityController.submitActivityData);
 app.post('/api/activity/:activityDataId', ActivityController.updateActivityData);
-app.delete('/api/activity/:activityDataId', ActivityController.deleteActivityData);
+app.delete(
+  '/api/users/:userId/activity/:activityDataId/delete',
+  ActivityController.deleteActivityData
+);
 
-app.post('/api/sleep/add', addNewSleepData);
+app.post('/api/sleep', addNewSleepData);
 app.get('/api/sleep/:userId', getAllSleepDataByUser);
 app.get('/api/sleep/:sleepDataId', getSleepData);
-app.post('/api/sleep/:sleepDataId/update', updateSleepDataById);
+app.post('api/sleep/:sleepDataId/update', updateSleepDataById);
 app.get('/api/sleep/:userId/date', getSleepDataByDateRangeFromDb);
 app.delete('/api/sleep/:sleepDataId/delete', deleteSleepDataById);
+app.get('/users/:userId/sleep/create', renderCreateSleepPage);
+app.get('/users/:userId/sleep/:sleepId/update', renderUpdateSleepPage);
 
-app.post('/api/health/add', addHealthDataController);
+app.post('/api/health', addHealthDataController);
 app.get('/api/health/:userId', getAllUserHealthData);
 app.get('/api/health/:healthDataId', getHealthDataById);
 app.post('api/health/:healthDataId/update', updateHealthDataController);
 app.delete('/api/health/:healthDataId/delete', deleteHealthDataController);
+app.get('/users/:userId/health/create', renderCreateHealthPage);
+app.get('/users/:userId/health/:healthId/update', renderUpdateHealthPage);
 
 scheduleJob('0 0 7 * * *', sendOneWeekReminders);
 
