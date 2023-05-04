@@ -262,8 +262,6 @@ async function renderUpdateActivityPage(req: Request, res: Response): Promise<vo
   }
 
   const activityData = await getActivityDataById(activityDataId);
-  console.log(activityDataId);
-
   res.render('activity/updateActivity', { user, activityData });
 }
 
@@ -300,7 +298,7 @@ async function renderActivityProgressPage(req: Request, res: Response): Promise<
     return;
   }
 
-  const stats = await generateActivityStats(userId, start, end);
+  const stats: ActivityStats[] = await generateActivityStats(userId, start, end);
 
   res.render('activity/activityStats', { user, stats, start, end });
 }
@@ -328,16 +326,16 @@ async function updateActivityProgressPage(req: Request, res: Response): Promise<
   }
 
   const startPieces: number[] = startStr.split('-').map((s) => parseInt(s, 10));
-  const start = new Date(startPieces[0], startPieces[1] - 1, startPieces[2]);
+  const start: Date = new Date(startPieces[0], startPieces[1] - 1, startPieces[2]);
   const endPieces: number[] = endStr.split('-').map((s) => parseInt(s, 10));
-  const end = new Date(endPieces[0], endPieces[1] - 1, endPieces[2]);
+  const end: Date = new Date(endPieces[0], endPieces[1] - 1, endPieces[2]);
 
   if (start > end) {
     res.sendStatus(400); // invalid start/end times
     return;
   }
 
-  const stats = await generateActivityStats(userId, start, end);
+  const stats: ActivityStats[] = await generateActivityStats(userId, start, end);
   res.render('activity/activityStats', { user, stats, start, end });
 }
 
