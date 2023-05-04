@@ -101,7 +101,7 @@
       </section>
       <section class="page-body">
         <div class="form-container">
-          <form method="POST" action="/users/<%= user.userId %>/activity/<%= activityData.activityDataId %>/edit">
+          <form method="POST" action="/api/users/<%= user.userId %>/activity/<%= activityData.activityDataId %>/edit">
             <p class="form-header">Update Activity</p>
             <div class="form-field">
               <p class="info-value"><span class="info-item">Current Activity Description: </span><%= activityData.activityType %></p>

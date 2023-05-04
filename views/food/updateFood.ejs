@@ -101,7 +101,7 @@
       </section>
       <section class="page-body">
         <div class="form-container">
-          <form method="POST" action="/users/<%= user.userId %>/fctivity/<%= foodData.foodDataId %>/edit">
+          <form method="POST" action="/api/users/<%= user.userId %>/food/<%= foodData.foodDataId %>/edit">
             <p class="form-header">Update Food</p>
             <div class="form-field">
               <p class="info-value"><span class="info-item">Current Food Description: </span><%= foodData.meal %></p>

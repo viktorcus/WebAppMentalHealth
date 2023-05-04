@@ -141,8 +141,8 @@ app.post('/users/:userId/food/progress', FoodController.updateFoodProgressPage);
 app.get('/api/food/search', FoodController.searchFoodData);
 app.get('/api/food/stats', FoodController.getFoodStats);
 app.get('/api/food/:foodDataId', FoodController.getFoodData);
-app.post('/api/food/add', FoodController.submitFoodData);
-app.post('/api/food/:foodDataId', FoodController.updateFoodData);
+app.post('/api/users/:userId/food/add', FoodController.submitFoodData);
+app.post('/api/users/:userId/food/:foodDataId/edit', FoodController.updateFoodData);
 app.delete('/api/users/:userId/food/:foodDataId/delete', FoodController.deleteFoodData);
 
 app.get('/users/:userId/activity', ActivityController.getAllUserActivityData);
@@ -156,8 +156,8 @@ app.post('/users/:userId/activity/progress', ActivityController.updateActivityPr
 app.get('/api/activity/search', ActivityController.searchActivityData);
 app.get('/api/activity/stats', ActivityController.getActivityStats);
 app.get('/api/activity/:activityDataId', ActivityController.getActivityData);
-app.post('/api/activity/add', ActivityController.submitActivityData);
-app.post('/api/activity/:activityDataId', ActivityController.updateActivityData);
+app.post('/api/users/:userId/activity/add', ActivityController.submitActivityData);
+app.post('/api/users/:userId/activity/:activityDataId/edit', ActivityController.updateActivityData);
 app.delete(
   '/api/users/:userId/activity/:activityDataId/delete',
   ActivityController.deleteActivityData
