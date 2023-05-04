@@ -113,9 +113,9 @@
                 <button>Delete</button>
               </form>
             </div>
-            <p>Meal Date: <%= food.mealDate %></p>
-            <p>Calorie Intake: <%= food.calorieIntake %></p>
-            <p>Note: <%= food.note ?? 'Unknown' %></p>
+            <p>Meal Date: <%= food.mealDate.toLocaleDateString() %></p>
+            <p>Calorie Intake: <%= food.calorieIntake ?? '' %></p>
+            <p>Note: <%= food.note ?? '' %></p>
           </div>
         </div>
         <% } %>
@@ -154,9 +154,7 @@
 
       const response = await fetch(path, {
         method: "DELETE"
-      })
-
-      console.log(response)
+      });
 
       if (response.redirected) {
         window.location.href = response.url;

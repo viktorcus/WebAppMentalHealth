@@ -113,10 +113,10 @@
                 <button>Delete</button>
               </form>
             </div>
-            <p>Start Time: <%= activity.startTime %></p>
-            <p>End Time: <%= activity.endTime %></p>
-            <p>Calories Burned: <%= activity.caloriesBurned %></p>
-            <p>Note: <%= activity.note ?? 'Unknown' %></p>
+            <p>Start Time: <%= activity.startTime.toLocaleString() %></p>
+            <p>End Time: <%= activity.endTime.toLocaleString() %></p>
+            <p>Calories Burned: <%= activity.caloriesBurned ?? '' %></p>
+            <p>Note: <%= activity.note ?? '' %></p>
           </div>
         </div>
         <% } %>

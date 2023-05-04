@@ -15,6 +15,8 @@ import { UserIdParam } from '../types/userInfo';
 
 async function submitActivityData(req: Request, res: Response): Promise<void> {
   const activityData = req.body as ActivityData;
+  activityData.startTime = new Date(activityData.startTime);
+  activityData.endTime = new Date(activityData.endTime);
 
   if (activityData.startTime > activityData.endTime) {
     res.sendStatus(400); // invalid start/end times
@@ -95,6 +97,13 @@ async function getActivityData(req: Request, res: Response): Promise<void> {
 async function updateActivityData(req: Request, res: Response): Promise<void> {
   const { activityDataId } = req.params as unknown as ActivityDataIdParam;
   const newActivity = req.body as ActivityData;
+  if (newActivity.startTime) {
+    console.log(newActivity.startTime);
+    newActivity.startTime = new Date(newActivity.startTime);
+  }
+  if (newActivity.endTime) {
+    newActivity.endTime = new Date(newActivity.endTime);
+  }
 
   if (!req.session.isLoggedIn) {
     // check that user is logged in

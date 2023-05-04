@@ -109,14 +109,14 @@
               <input type="text" id="activityType" name="activityType" value="<%= activityData.activityType %>" required>
             </div>
             <div class="form-field">
-              <p class="info-value"><span class="info-item">Current Start Time: </span><%= activityData.startTime %></p>
+              <p class="info-value"><span class="info-item">Current Start Time: </span><%= activityData.startTime.toLocaleString() %></p>
               <label class="info-item" for="startTime">New Start Time:</label>
-              <input type="datetime-local" id="startTime" name="startTime" value="<%= activityData.startTime %>" required>
+              <input type="datetime-local" id="startTime" name="startTime" value="<%= activityData.startTime.toLocaleString('sv').replace(' ', 'T') %>" required>
             </div>
             <div class="form-field">
-              <p class="info-value"><span class="info-item">Current End Time: </span><%= activityData.endTime %></p>
+              <p class="info-value"><span class="info-item">Current End Time: </span><%= activityData.endTime.toLocaleString() %></p>
               <label class="info-item" for="endTime">New End Time:</label>
-              <input type="datetime-local" id="endTime" name="endTime" value="<%= activityData.endTime %>" required>
+              <input type="datetime-local" id="endTime" name="endTime" value="<%= activityData.endTime.toLocaleString('sv').replace(' ', 'T') %>" required>
             </div>
             <div class="form-field">
               <p class="info-value"><span class="info-item">Current Calories Burned: </span><%= activityData.caloriesBurned %></p>

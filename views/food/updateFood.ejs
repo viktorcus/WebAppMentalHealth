@@ -109,9 +109,9 @@
               <input type="text" id="meal" name="meal" value="<%= foodData.meal %>" required>
             </div>
             <div class="form-field">
-              <p class="info-value"><span class="info-item">Current Meal Date: </span><%= foodData.mealDate %></p>
+              <p class="info-value"><span class="info-item">Current Meal Date: </span><%= foodData.mealDate.toLocaleDateString() %></p>
               <label class="info-item" for="mealDate">New Meal Date:</label>
-              <input type="datetime-local" id="mealDate" name="mealDate" value="<%= foodData.mealDate %>" required>
+              <input type="date" id="mealDate" name="mealDate" value="<%= foodData.mealDate.toLocaleString('sv').split(' ')[0] %>" required>
             </div>
             <div class="form-field">
               <p class="info-value"><span class="info-item">Current Calorie Intake: </span><%= foodData.calorieIntake %></p>
