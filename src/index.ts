@@ -49,6 +49,8 @@ import {
   getSleepDataByDateRangeFromDb,
   updateSleepDataById,
   getSleepStats,
+  renderSleepProgressPage,
+  updateSleepProgressPage,
 } from './controllers/SleepDataController';
 import {
   addHealthDataController,
@@ -165,6 +167,8 @@ app.get('/api/sleep/:sleepDataId', getSleepData);
 app.post('api/sleep/:sleepDataId/update', updateSleepDataById);
 app.get('/api/sleep/:userId', getSleepDataByDateRangeFromDb);
 app.delete('/api/sleep/:sleepDataId', deleteSleepDataById);
+app.get('/users/:userId/sleep/progress', renderSleepProgressPage);
+app.post('/users/:userId/sleep/progress', updateSleepProgressPage);
 
 app.post('/api/health', addHealthDataController);
 app.get('/api/health/:userId', getAllUserHealthData);

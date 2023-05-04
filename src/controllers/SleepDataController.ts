@@ -171,6 +171,80 @@ async function getSleepStats(req: Request, res: Response): Promise<void> {
   }
 }
 
+async function renderSleepProgressPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+  let { start, end } = req.body as SleepSearchParam;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  if (!start && !end) {
+    end = new Date();
+    start = new Date();
+    start.setMonth(end.getMonth() - 1);
+  }
+
+  if (!start || !end || start > end) {
+    res.sendStatus(400); // invalid start/end times
+    return;
+  }
+
+  const stats: SleepDataStats[] = await generateSleepStats(userId, start, end);
+
+  res.render('sleep/sleepStats', { user, stats, start, end });
+}
+
+async function updateSleepProgressPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+  const { startStr, endStr } = req.body as SleepRefreshParam;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  const startPieces: number[] = startStr.split('-').map((s) => parseInt(s, 10));
+  let start: Date = new Date(startPieces[0], startPieces[1] - 1, startPieces[2]);
+  const endPieces: number[] = endStr.split('-').map((s) => parseInt(s, 10));
+  const end: Date = new Date(endPieces[0], endPieces[1] - 1, endPieces[2]);
+
+  if (start > end) {
+    start = end;
+    return;
+  }
+
+  const stats: SleepDataStats[] = await generateSleepStats(userId, start, end);
+  res.render('sleep/sleepStats', { user, stats, start, end });
+}
+
 export {
   addNewSleepData,
   getAllSleepDataByUser,
@@ -179,4 +253,6 @@ export {
   deleteSleepDataById,
   getSleepDataByDateRangeFromDb,
   getSleepStats,
+  renderSleepProgressPage,
+  updateSleepProgressPage,
 };

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrainCheckr | Sleep</title>
+  <link rel="stylesheet" href="/css/page_style.css" />
+  <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+</head>
+
+<body>
+  <div class="sidebar close">
+    <div class="logo-details">
+      <i class="bx bx-brain"></i>
+      <div class="logo_name">BrainCheckr</div>
+      <i class="bx bx-menu" id="btn"></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <a href="/dashboard">
+          <i class="bx bx-grid-alt"></i>
+          <span class="links_name">Dashboard</span>
+        </a>
+        <span class="tooltip">Dashboard</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>">
+          <i class="bx bx-user"></i>
+          <span class="links_name">User</span>
+        </a>
+        <span class="tooltip">User</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/activity">
+          <i class="bx bx-run"></i>
+          <span class="links_name">Activity</span>
+        </a>
+        <span class="tooltip">Activity</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/food">
+          <i class="bx bx-food-menu"></i>
+          <span class="links_name">Food</span>
+        </a>
+        <span class="tooltip">Food</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/medication">
+          <i class="bx bx-first-aid"></i>
+          <span class="links_name">Medication</span>
+        </a>
+        <span class="tooltip">Medication</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/medicalHistory">
+          <i class="bx bx-history"></i>
+          <span class="links_name">Medical History</span>
+        </a>
+        <span class="tooltip">Medical History</span>
+      </li>
+      <li>
+        <a href="#">
+          <i class="bx bx-bed"></i>
+          <span class="links_name">Sleep</span>
+        </a>
+        <span class="tooltip">Sleep</span>
+      </li>
+      <li>
+        <a href="#">
+          <i class="bx bx-plus-medical"></i>
+          <span class="links_name">Health</span>
+        </a>
+        <span class="tooltip">Health</span>
+      </li>
+      <li class="profile">
+        <div class="profile-details">
+          <div class="name"><%= user.userName %></div>
+          <a href="/logout"><i class="bx bx-log-out" id="btn"></i></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <section class="home-section">
+    <div class="text">Sleep Data</div>
+    <div class="home-section-content">
+      <p class="start">Show Sleep Statistics</p>
+      <hr>
+      <section class="page-tabs">
+        <div>
+          <span><a href="/users/<%= user.userId %>/sleep">My Sleep Data</a></span>
+          <span>|</span>
+          <span><a href="/users/<%= user.userId %>/sleep/create">Create New</a></span>
+          <span>|</span>
+          <span><a href="/users/<%= user.userId %>/sleep/progress">View Statistics</a></span>
+      </section>
+      <div class="form-container">
+        <form method="POST" action="/users/<%= user.userId %>/sleep/progress" id="chartSearchForm">
+          <div class="progress-form">
+            <span>
+              <div class="form-field">
+                <label class="info-item" for="chartStart">Start Date:</label>
+                <input type="date" id="chartStart" name="startStr" value="<%= start.toISOString().split('T')[0] %>" required>
+              </div>
+            </span>
+            <span>
+              <div class="form-field">
+                <label class="info-item" for="chartEnd">End Date:</label>
+                <input type="date" id="chartEnd" name="endStr" value="<%= end.toISOString().split('T')[0] %>" required>
+              </div>
+            </span>
+          </div>
+        </form>
+      </div>
+      <div style="margin-left: 120px; margin-right: 120px;">
+        <div>
+          <canvas id="progressChart"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+        <script>
+          const ctx = document.getElementById('progressChart');
+          const chartData = JSON.parse(`<%- JSON.stringify(stats)%>`);
+          new Chart(ctx, {
+            type: 'line',
+            options: {
+              plugins: {
+                tooltip: {
+                  mode: 'index',
+                  intersect: false,
+                  callbacks: {
+                    title: function(data) {
+                      // console.log(data);
+                      const date = new Date(data[0].parsed.x);
+                      return date.toDateString();
+                    },
+                    label: function(data) {
+                      let details = [`Hours of Sleep: ${chartData[data.dataIndex].hours}`];
+                      if (chartData[data.dataIndex].quality) {
+                        details.push(`Quality of Sleep: ${chartData[data.dataIndex].quality}`);
+                      }
+                      if (chartData[data.dataIndex].note) {
+                        details.push(`Note: ${chartData[data.dataIndex].quality}`);
+                      }
+                      return details;
+                    }
+                  }
+                },
+              },
+              scales: {
+                x: {
+                  type: 'time',
+                  time: {
+                    unit: 'day'
+                  }
+                },
+                y: {
+                  beginAtZero: true
+                }
+              }
+            },
+            data: {
+              labels: chartData.map(a => a.date),
+              datasets: [{
+                label: 'Daily Sleep (Hours)',
+                data: chartData.map(a => a.hours),
+                borderWidth: 1
+              }]
+            }
+          });
+        </script>
+      </div>
+  </section>
+  <script>
+    let sidebar = document.querySelector('.sidebar');
+    let closeBtn = document.querySelector('#btn');
+    let searchBtn = document.querySelector('.bx-search');
+
+    let chartSearchForm = document.querySelector('#chartSearchForm');
+    let chartStart = document.querySelector('#chartStart');
+    let chartEnd = document.querySelector('#chartEnd');
+
+    closeBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      menuBtnChange(); //calling the function
+    });
+
+    chartStart.addEventListener('change', () => {
+      chartSearchForm.submit()
+    });
+
+    chartEnd.addEventListener('change', () => {
+      chartSearchForm.submit()
+    });
+
+    // the code changes sidebar button
+    function menuBtnChange() {
+      if (sidebar.classList.contains('open')) {
+        closeBtn.classList.replace('bx-menu', 'bx-menu-alt-right'); //replacing the icons class
+      } else {
+        closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
+      }
+    }
+  </script>
+</body>
+
+</html>
