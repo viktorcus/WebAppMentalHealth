@@ -69,6 +69,11 @@ async function getAllMedicationDataByUser(req: Request, res: Response): Promise<
   }
 
   const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
   const allMedicationData = await getMedicationDataByUserId(userId);
   try {
     res.render('medicationData/medicationPage', { user, allMedicationData });
@@ -113,7 +118,7 @@ async function deleteMedicationData(req: Request, res: Response): Promise<void> 
   const { userId } = req.params as UserIdParam;
   const { isLoggedIn, authenticatedUser } = req.session;
   if (!isLoggedIn) {
-    res.sendStatus(401); // 401 Unauthorized
+    res.redirect('/login');
     return;
   }
 
@@ -179,7 +184,6 @@ async function renderUpdateMedicationPage(req: Request, res: Response): Promise<
   }
 
   const medicationData = await getMedicationDataById(medicationDataId);
-  console.log(medicationDataId);
 
   res.render('medicationData/updateMedication', { user, medicationData });
 }

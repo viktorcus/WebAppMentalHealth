@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BrainCheckr | Update Medication</title>
+    <title>BrainCheckr | Medical History</title>
     <link rel="stylesheet" href="/css/page_style.css" />
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
     <link
@@ -87,44 +87,38 @@
       </ul>
     </div>
     <section class="home-section">
-      <div class="text">Medication Data</div>
+      <div class="text">Medical History</div>
       <div class="home-section-content">
-        <p class="start">Update Medication Data</p>
-        <hr />
+        <p class="start">Add New Medical History</p>
+        <hr>
         <section class="page-tabs">
           <div>
-            <span><a href="/api/users/<%= user.userId %>/medication">My Medication Data</a></span>
+            <span><a href="/api/users/<%= user.userId %>/medicalHistory">My Medical History</a></span>
             <span>|</span>
-            <span><a href="/api/users/<%= user.userId %>/medication/create">Create New</a></span>
-          </div>
+            <span><a href="/api/users/<%= user.userId %>/medicalHistory/create">Create New</a></span>
         </section>
-        <section class="page-body">
-          <div class="form-container">
-            <form method="POST" action="/api/users/<%= user.userId %>/medication/<%= medicationData.medicationDataId %>/edit">
-              <p class="form-header">Update Medication</p>
-              <div class="form-field">
-                <p class="info-value"><span class="info-item">Current Medication Name: </span><%= medicationData.medicationName %></p>
-                <label class="info-item" for="medicationName">New Medication Name:</label>
-                <input type="text" id="medicationName" name="medicationName" value="<%= medicationData.medicationName %>" required>
-              </div>
-              <div class="form-field">
-                <p class="info-value"><span class="info-item">Current Dosage: </span><%= medicationData.dosage %></p>
-                <label class="info-item" for="dosage">New Dosage:</label>
-                <input type="text" id="dosage" name="dosage" value="<%= medicationData.dosage %>" required>
-              </div>
-              <div class="form-field">
-                <p class="info-value"><span class="info-item">Current Frequency: </span><%= medicationData.frequency %></p>
-                <label class="info-item" for="frequency">New Frequency:</label>
-                <input type="text" id="frequency" name="frequency" value="<%= medicationData.frequency %>" required>
-              </div>
-              <div class="form-field">
-                <label class="info-item note" for="note">New Note:</label>
-                <textarea type="text" id="note" name="note" value="<%= medicationData.note %>" ></textarea>
-              </div>
-              <button class="add-btn">Save</button>
-            </form>
-          </div>
-        </section>
+        <div class="form-container">
+          <form method="POST" action="/api/users/<%= user.userId %>/medicalHistory/add">
+            <p class="form-header">New Medical History</p>
+            <div class="form-field">
+              <label class="info-item" for="conditionName">Condition Name:</label>
+              <input type="text" id="conditionName" name="conditionName" required>
+            </div>
+            <div class="form-field">
+              <label class="info-item" for="dosage">Diagnosis Date:</label>
+              <input type="date" id="diagnosisDate" name="diagnosisDate" required>
+            </div>
+            <div class="form-field">
+              <label class="info-item" for="treatment">Treatment:</label>
+              <input type="text" id="treatment" name="treatment" required>
+            </div>
+            <div class="form-field">
+              <label class="info-item" for="note">Note:</label>
+              <textarea id="note" name="note"></textarea>
+            </div>
+            <button class="add-btn">Add History</button>
+          </form>
+        </div>
       </div>
     </section>
     <script>

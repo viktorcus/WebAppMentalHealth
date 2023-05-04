@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BrainCheckr | Update Medication</title>
+    <title>BrainCheckr | Update MedicalHistory</title>
     <link rel="stylesheet" href="/css/page_style.css" />
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
     <link
@@ -87,39 +87,39 @@
       </ul>
     </div>
     <section class="home-section">
-      <div class="text">Medication Data</div>
+      <div class="text">Medical History</div>
       <div class="home-section-content">
-        <p class="start">Update Medication Data</p>
+        <p class="start">Update Medical History</p>
         <hr />
         <section class="page-tabs">
           <div>
-            <span><a href="/api/users/<%= user.userId %>/medication">My Medication Data</a></span>
+            <span><a href="/api/users/<%= user.userId %>/medicalHistory">My Medical History</a></span>
             <span>|</span>
-            <span><a href="/api/users/<%= user.userId %>/medication/create">Create New</a></span>
+            <span><a href="/api/users/<%= user.userId %>/medicalHistory/create">Create New</a></span>
           </div>
         </section>
         <section class="page-body">
           <div class="form-container">
-            <form method="POST" action="/api/users/<%= user.userId %>/medication/<%= medicationData.medicationDataId %>/edit">
-              <p class="form-header">Update Medication</p>
+            <form method="POST" action="/api/users/<%= user.userId %>/medicalHistory/<%= medicalHistory.medicalHistoryId %>/edit">
+              <p class="form-header">Update Medical History</p>
               <div class="form-field">
-                <p class="info-value"><span class="info-item">Current Medication Name: </span><%= medicationData.medicationName %></p>
-                <label class="info-item" for="medicationName">New Medication Name:</label>
-                <input type="text" id="medicationName" name="medicationName" value="<%= medicationData.medicationName %>" required>
+                <p class="info-value"><span class="info-item">Current Condition Name: </span><%= medicalHistory.conditionName %></p>
+                <label class="info-item" for="conditionName">New Condition Name:</label>
+                <input type="text" id="conditionName" name="conditionName" value="<%= medicalHistory.conditionName %>" required>
               </div>
               <div class="form-field">
-                <p class="info-value"><span class="info-item">Current Dosage: </span><%= medicationData.dosage %></p>
-                <label class="info-item" for="dosage">New Dosage:</label>
-                <input type="text" id="dosage" name="dosage" value="<%= medicationData.dosage %>" required>
+                <p class="info-value"><span class="info-item">Current Diagnosis Date: </span><%= medicalHistory.diagnosisDate.toUTCString().slice(4, 16) %></p>
+                <label class="info-item" for="diagnosis">New Diagnosis Date:</label>
+                <input type="date" id="diagnosisDate" name="diagnosisDate" value="<%= medicalHistory.diagnosisDate.toISOString().slice(0,10) %>" required>
               </div>
               <div class="form-field">
-                <p class="info-value"><span class="info-item">Current Frequency: </span><%= medicationData.frequency %></p>
-                <label class="info-item" for="frequency">New Frequency:</label>
-                <input type="text" id="frequency" name="frequency" value="<%= medicationData.frequency %>" required>
+                <p class="info-value"><span class="info-item">Current Treatment: </span><%= medicalHistory.treatment %></p>
+                <label class="info-item" for="treatment">New Frequency:</label>
+                <input type="text" id="treatment" name="treatment" value="<%= medicalHistory.treatment %>" required>
               </div>
               <div class="form-field">
                 <label class="info-item note" for="note">New Note:</label>
-                <textarea type="text" id="note" name="note" value="<%= medicationData.note %>" ></textarea>
+                <textarea type="text" id="note" name="note" value="<%= medicalHistory.note %>" ></textarea>
               </div>
               <button class="add-btn">Save</button>
             </form>
