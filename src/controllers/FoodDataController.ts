@@ -49,7 +49,9 @@ async function getAllUserFoodData(req: Request, res: Response): Promise<void> {
 
   try {
     const user = await getUserById(req.session.authenticatedUser.userId);
-    const foodData = await getAllFoodDataForUser(req.session.authenticatedUser.userId);
+    const foodData = (await getAllFoodDataForUser(req.session.authenticatedUser.userId)).sort(
+      (a, b) => b.mealDate.valueOf() - a.mealDate.valueOf()
+    );
     res.render('food/foodPage', { user, foodData });
   } catch (err) {
     console.error(err);

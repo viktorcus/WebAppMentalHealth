@@ -52,7 +52,9 @@ async function getAllUserActivityData(req: Request, res: Response): Promise<void
   const user = await getUserById(req.session.authenticatedUser.userId);
 
   try {
-    const activityData = await getAllActivityDataForUser(req.session.authenticatedUser.userId);
+    const activityData: ActivityEntity[] = (
+      await getAllActivityDataForUser(req.session.authenticatedUser.userId)
+    ).sort((a, b) => b.startTime.valueOf() - a.startTime.valueOf());
     res.render('activity/activityPage', { user, activityData });
   } catch (err) {
     console.error(err);
