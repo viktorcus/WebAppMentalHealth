@@ -2,15 +2,16 @@ import { Request, Response } from 'express';
 import {
   addSleepData,
   getAllSleepDataForUser,
+  generateSleepStats,
   getSleepDataById,
   updateSleepData,
   deleteSleepData,
   getSleepDataByDateRange,
 } from '../models/SleepDataModel';
-import { SleepData } from '../entities/sleepData';
 import { parseDatabaseError } from '../utils/db-utils';
 import { getUserById } from '../models/UserModel';
 import { UserIdParam } from '../types/userInfo';
+import { SleepData } from '../entities/sleepData';
 
 async function addNewSleepData(req: Request, res: Response): Promise<void> {
   const { authenticatedUser, isLoggedIn } = req.session;
@@ -20,20 +21,21 @@ async function addNewSleepData(req: Request, res: Response): Promise<void> {
   }
 
   const sleepData = req.body as SleepData;
+
   const user = await getUserById(authenticatedUser.userId);
   if (!user) {
     res.sendStatus(404);
     return;
   }
-
   try {
-    const newSleepData = await addSleepData(sleepData);
-    console.log(newSleepData);
-    res.redirect(`/sleep/${newSleepData.sleepDataId}`);
-  } catch (error) {
-    console.error(error);
-    const databaseErrorMessage = parseDatabaseError(error);
-    res.status(500).json({ databaseErrorMessage });
+    if (user) {
+      const newSleepData = await addSleepData(sleepData, user);
+      res.redirect(`/sleep/${newSleepData.sleepDataId}`);
+    }
+  } catch (err) {
+    console.error(err);
+    const databaseErrorMessage = parseDatabaseError(err);
+    res.status(500).json(databaseErrorMessage);
   }
 }
 
@@ -84,11 +86,18 @@ async function updateSleepDataById(req: Request, res: Response): Promise<void> {
     return;
   }
 
+  const newSleepData = req.body as SleepData;
+
   try {
-    const sleepData = req.body as SleepData;
-    const updatedSleepData = await updateSleepData(sleepDataId, sleepData);
+    const existingSleepData = await getSleepDataById(sleepDataId);
+    if (!existingSleepData) {
+      res.sendStatus(404);
+      return;
+    }
+
+    const updatedSleepData = await updateSleepData(sleepDataId, newSleepData);
     console.log(updatedSleepData);
-    res.status(200).json(updatedSleepData);
+    res.redirect(`/api/users/${req.session.authenticatedUser.userId}/sleep`);
   } catch (error) {
     console.error(error);
     const databaseErrorMessage = parseDatabaseError(error);
@@ -97,18 +106,28 @@ async function updateSleepDataById(req: Request, res: Response): Promise<void> {
 }
 
 async function deleteSleepDataById(req: Request, res: Response): Promise<void> {
-  const { isLoggedIn } = req.session;
+  const { sleepDataId } = req.params;
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
   if (!isLoggedIn) {
     res.redirect('/login');
     return;
   }
 
-  const { sleepData } = req.params;
-
   try {
-    // const sleepData = req.body;
-    await deleteSleepData(sleepData);
-    res.status(204).send();
+    const sleepData = await getSleepDataById(sleepDataId);
+    if (!sleepData) {
+      res.sendStatus(404);
+      return;
+    }
+
+    if (authenticatedUser.userId !== userId) {
+      res.sendStatus(403);
+      return;
+    }
+
+    await deleteSleepData(sleepDataId);
+    res.redirect(`/api/users/${userId}/sleep`);
   } catch (error) {
     console.error(error);
     const databaseErrorMessage = parseDatabaseError(error);
@@ -135,6 +154,92 @@ async function getSleepDataByDateRangeFromDb(req: Request, res: Response): Promi
   }
 }
 
+async function getSleepStats(req: Request, res: Response): Promise<void> {
+  let { start, end } = req.query as unknown as SleepSearchParam;
+
+  if (!req.session.isLoggedIn) {
+    // check that user is logged in
+    res.redirect('/login');
+    return;
+  }
+
+  if (!start && !end) {
+    end = new Date();
+    start = new Date();
+    start.setMonth(end.getMonth() - 1);
+  }
+
+  if (!start || !end || start > end) {
+    res.sendStatus(400); // invalid start/end times
+    return;
+  }
+  try {
+    const stats: SleepDataStats[] = await generateSleepStats(
+      req.session.authenticatedUser.userId,
+      start,
+      end
+    );
+    console.log(stats);
+    res.render('sleepStats', { stats });
+  } catch (err) {
+    console.error(err);
+    const databaseErrorMessage = parseDatabaseError(err);
+    res.status(500).json(databaseErrorMessage);
+  }
+}
+
+async function renderCreateSleepPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403);
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  res.render('sleepData/createSleep', { user });
+}
+
+async function renderUpdateSleepPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { sleepDataId } = req.params;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  const sleepData = await getSleepDataById(sleepDataId);
+  console.log(sleepDataId);
+
+  res.render('sleepData/updateSleep', { user, sleepData });
+}
+
 export {
   addNewSleepData,
   getAllSleepDataByUser,
@@ -142,4 +247,7 @@ export {
   updateSleepDataById,
   deleteSleepDataById,
   getSleepDataByDateRangeFromDb,
+  getSleepStats,
+  renderCreateSleepPage,
+  renderUpdateSleepPage,
 };

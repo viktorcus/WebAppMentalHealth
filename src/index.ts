@@ -130,18 +130,18 @@ app.post('/api/activity', ActivityController.submitActivityData);
 app.post('/api/activity/:activityDataId', ActivityController.updateActivityData);
 app.delete('/api/activity/:activityDataId', ActivityController.deleteActivityData);
 
-app.post('/api/sleep', addNewSleepData);
+app.post('/api/sleep/add', addNewSleepData);
 app.get('/api/sleep/:userId', getAllSleepDataByUser);
 app.get('/api/sleep/:sleepDataId', getSleepData);
-app.post('api/sleep/:sleepDataId/update', updateSleepDataById);
-app.get('/api/sleep/:userId', getSleepDataByDateRangeFromDb);
-app.delete('/api/sleep/:sleepDataId', deleteSleepDataById);
+app.post('/api/sleep/:sleepDataId/update', updateSleepDataById);
+app.get('/api/sleep/:userId/date', getSleepDataByDateRangeFromDb);
+app.delete('/api/sleep/:sleepDataId/delete', deleteSleepDataById);
 
-app.post('/api/health', addHealthDataController);
+app.post('/api/health/add', addHealthDataController);
 app.get('/api/health/:userId', getAllUserHealthData);
 app.get('/api/health/:healthDataId', getHealthDataById);
 app.post('api/health/:healthDataId/update', updateHealthDataController);
-app.delete('/api/health/:healthDataId', deleteHealthDataController);
+app.delete('/api/health/:healthDataId/delete', deleteHealthDataController);
 
 scheduleJob('0 0 7 * * *', sendOneWeekReminders);
 
