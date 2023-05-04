@@ -16,6 +16,11 @@ type FoodSearchParam = {
   keyword?: string;
 };
 
+type FoodRefreshParam = {
+  startStr: string;
+  endStr: string;
+};
+
 type FoodStats = {
   date: Date;
   calories: number;

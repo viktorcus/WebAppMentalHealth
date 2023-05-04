@@ -174,7 +174,7 @@ async function searchFoodData(req: Request, res: Response): Promise<void> {
       req.session.authenticatedUser.userId,
       start,
       end,
-      keyword,
+      keyword
     );
     res.json(foodData);
   } catch (err) {
@@ -207,7 +207,7 @@ async function getFoodStats(req: Request, res: Response): Promise<void> {
     const stats: FoodStats[] = await generateFoodStats(
       req.session.authenticatedUser.userId,
       start,
-      end,
+      end
     );
     res.render('foodStats', { stats });
   } catch (err) {
@@ -269,6 +269,80 @@ async function renderUpdateFoodPage(req: Request, res: Response): Promise<void> 
   res.render('food/updateFood', { user, foodData });
 }
 
+async function renderFoodProgressPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+  let { start, end } = req.body as FoodSearchParam;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  if (!start && !end) {
+    end = new Date();
+    start = new Date();
+    start.setMonth(end.getMonth() - 1);
+  }
+
+  if (!start || !end || start > end) {
+    res.sendStatus(400); // invalid start/end times
+    return;
+  }
+
+  const stats = await generateFoodStats(userId, start, end);
+
+  res.render('food/foodStats', { user, stats, start, end });
+}
+
+async function updateFoodProgressPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+  const { startStr, endStr } = req.body as FoodRefreshParam;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  const startPieces: number[] = startStr.split('-').map((s) => parseInt(s, 10));
+  const start = new Date(startPieces[0], startPieces[1] - 1, startPieces[2]);
+  const endPieces: number[] = endStr.split('-').map((s) => parseInt(s, 10));
+  const end = new Date(endPieces[0], endPieces[1] - 1, endPieces[2]);
+
+  if (start > end) {
+    res.sendStatus(400); // invalid start/end times
+    return;
+  }
+
+  const stats = await generateFoodStats(userId, start, end);
+  res.render('food/foodStats', { user, stats, start, end });
+}
+
 export default {
   submitFoodData,
   getAllUserFoodData,
@@ -279,4 +353,6 @@ export default {
   getFoodStats,
   renderCreateFoodPage,
   renderUpdateFoodPage,
+  renderFoodProgressPage,
+  updateFoodProgressPage,
 };
