@@ -13,13 +13,12 @@ import { MedicalHistory } from '../entities/medicalHistory';
 import { getUserById } from '../models/UserModel';
 
 async function addNewMedicalHistory(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
   const { authenticatedUser, isLoggedIn } = req.session;
   if (!isLoggedIn) {
     res.redirect('/login');
     return;
   }
-
-  const medicalHistory = req.body as MedicalHistory;
 
   const user = await getUserById(authenticatedUser.userId);
   if (!user) {
@@ -27,10 +26,11 @@ async function addNewMedicalHistory(req: Request, res: Response): Promise<void> 
     return;
   }
 
+  const medicalHistory = req.body as MedicalHistory;
   try {
-    const newMedicalHistory = await addMedicalHistory(medicalHistory);
+    const newMedicalHistory = await addMedicalHistory(medicalHistory, user);
     console.log(newMedicalHistory);
-    res.redirect(`/medical-history/${newMedicalHistory.medicalHistoryId}`);
+    res.redirect(`/api/users/${userId}/medicalHistory`);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -59,15 +59,16 @@ async function getMedicalHistory(req: Request, res: Response): Promise<void> {
 
 async function getAllMedicalHistoryByUser(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
+  const { isLoggedIn } = req.session;
 
-  if (!req.session.isLoggedIn) {
+  if (!isLoggedIn) {
     res.redirect('/login');
     return;
   }
 
   const user = await getUserById(userId);
+  const allMedicalHistories = await getMedicalHistoryByUserId(userId);
   try {
-    const allMedicalHistories = await getMedicalHistoryByUserId(userId);
     res.render('medicalHistory/medicalHistoryPage', { user, allMedicalHistories });
   } catch (err) {
     console.error(err);
@@ -77,6 +78,7 @@ async function getAllMedicalHistoryByUser(req: Request, res: Response): Promise<
 }
 
 async function updateMedicalHistory(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
   const { medicalHistoryId } = req.params as MedicalHistoryIdParam;
   const updatedMedicalHistory = req.body as Partial<MedicalHistory>;
 
@@ -98,7 +100,7 @@ async function updateMedicalHistory(req: Request, res: Response): Promise<void> 
 
     const updatedData = await getMedicalHistoryById(medicalHistoryId);
     console.log(updatedData);
-    res.json(updatedData);
+    res.redirect(`/api/users/${userId}/medicalHistory`);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -107,9 +109,16 @@ async function updateMedicalHistory(req: Request, res: Response): Promise<void> 
 }
 
 async function deleteMedicalHistory(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
   const { isLoggedIn, authenticatedUser } = req.session;
   if (!isLoggedIn) {
     res.redirect('/login');
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
     return;
   }
 
@@ -126,7 +135,58 @@ async function deleteMedicalHistory(req: Request, res: Response): Promise<void> 
 
   await deleteMedicalHistoryById(medicalHistoryId);
 
-  res.sendStatus(204); // 204 No Content
+  res.redirect(`/api/users/${userId}/medicalHistory`);
+}
+
+async function renderCreateMedicalHistoryPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  res.render('medicalHistory/createMedicalHistory', { user });
+}
+
+async function renderUpdateMedicalHistoryPage(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const { medicalHistoryId } = req.params as MedicalHistoryIdParam;
+  const { isLoggedIn, authenticatedUser } = req.session;
+
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (authenticatedUser.userId !== userId) {
+    console.log(userId);
+    res.sendStatus(403); // 403 forbidden
+    return;
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
+
+  const medicalHistory = await getMedicalHistoryById(medicalHistoryId);
+
+  res.render('medicalHistory/updateMedicalHistory', { user, medicalHistory });
 }
 
 export {
@@ -135,4 +195,6 @@ export {
   getAllMedicalHistoryByUser,
   updateMedicalHistory,
   deleteMedicalHistory,
+  renderCreateMedicalHistoryPage,
+  renderUpdateMedicalHistoryPage,
 };

@@ -29,6 +29,8 @@ import {
   getAllMedicalHistoryByUser,
   updateMedicalHistory,
   deleteMedicalHistory,
+  renderCreateMedicalHistoryPage,
+  renderUpdateMedicalHistoryPage,
 } from './controllers/MedicalHistoryController';
 import {
   addNewMedicationData,
@@ -120,10 +122,15 @@ app.post('/api/users/:userId/name', updateUserName);
 app.post('/api/reminders', createReminder);
 
 app.post('/api/users/:userId/medicalHistory/add', addNewMedicalHistory);
+app.get('/api/users/:userId/medicalHistory/create', renderCreateMedicalHistoryPage);
 app.get('/api/medicalHistory/:medicalHistoryId', getMedicalHistory);
 app.get('/api/users/:userId/medicalHistory', getAllMedicalHistoryByUser);
-app.post('/api/medicalHistory/:medicalHistoryId/update', updateMedicalHistory);
-app.delete('/api/medicalHistory/:medicalHistoryId', deleteMedicalHistory);
+app.get(
+  '/api/users/:userId/medicalHistory/:medicalHistoryId/update',
+  renderUpdateMedicalHistoryPage
+);
+app.post('/api/users/:userId/medicalHistory/:medicalHistoryId/edit', updateMedicalHistory);
+app.delete('/api/users/:userId/medicalHistory/:medicalHistoryId/delete', deleteMedicalHistory);
 
 app.post('/api/users/:userId/medication/add', addNewMedicationData);
 app.get('/api/users/:userId/medication/create', renderCreateMedicationPage);

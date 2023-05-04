@@ -1,16 +1,22 @@
 import { AppDataSource } from '../dataSource';
 import { MedicalHistory } from '../entities/medicalHistory';
+import { User } from '../entities/user';
 
 const medicalHistoryRepository = AppDataSource.getRepository(MedicalHistory);
 
-async function addMedicalHistory(medicalHistory: MedicalHistory): Promise<MedicalHistory> {
+async function addMedicalHistory(
+  medicalHistory: MedicalHistory,
+  user: User
+): Promise<MedicalHistory> {
   let newMedicalHistory = new MedicalHistory();
+  newMedicalHistory.medicalHistoryId = medicalHistory.medicalHistoryId;
   newMedicalHistory.conditionName = medicalHistory.conditionName;
   newMedicalHistory.treatment = medicalHistory.treatment;
   newMedicalHistory.diagnosisDate = medicalHistory.diagnosisDate;
   if (medicalHistory.note !== undefined) {
     newMedicalHistory.note = medicalHistory.note;
   }
+  newMedicalHistory.user = user;
 
   newMedicalHistory = await medicalHistoryRepository.save(newMedicalHistory);
 
@@ -20,7 +26,7 @@ async function addMedicalHistory(medicalHistory: MedicalHistory): Promise<Medica
 async function getMedicalHistoryById(medicalHistoryId: string): Promise<MedicalHistory | null> {
   const medicalHistory = await medicalHistoryRepository
     .createQueryBuilder('medicalHistory')
-    .where({ where: { medicalHistoryId } })
+    .where('medicalHistory.medicalHistoryId = :id', { id: medicalHistoryId })
     .leftJoin('medicalHistory.user', 'user')
     .select([
       'medicalHistory.medicalHistoryId',
@@ -31,14 +37,14 @@ async function getMedicalHistoryById(medicalHistoryId: string): Promise<MedicalH
       'user.userId',
     ])
     .getOne();
-  return medicalHistory || null;
+  return medicalHistory;
 }
 
 async function getMedicalHistoryByUserId(userId: string): Promise<MedicalHistory[]> {
   const medicalHistories = await medicalHistoryRepository
     .createQueryBuilder('medicalHistory')
     .leftJoinAndSelect('medicalHistory.user', 'user')
-    .where('user.userId = :userId', { userId })
+    .where({ user: { userId } })
     .select(['medicalHistory', 'user.userId'])
     .getMany();
 

@@ -37,7 +37,7 @@ async function getAllHealthDataForUser(userId: string): Promise<HealthData[]> {
 
 async function updateHealthData(
   healthDataId: string,
-  newHealthData: HealthData,
+  newHealthData: HealthData
 ): Promise<void | null> {
   await healthDataRepository
     .createQueryBuilder()
@@ -59,7 +59,7 @@ async function generateHealthStats(
   userId: string,
   start: Date,
   end: Date,
-  type: string,
+  type: string
 ): Promise<HealthDataStats[]> {
   const healthData: HealthData[] = await healthDataRepository
     .createQueryBuilder('healthData')
@@ -69,7 +69,7 @@ async function generateHealthStats(
         userId,
         start,
         end,
-      },
+      }
     )
     .getMany();
 
@@ -79,7 +79,7 @@ async function generateHealthStats(
       date: new Date(
         data.measurementDate.getFullYear(),
         data.measurementDate.getMonth(),
-        data.measurementDate.getDate(),
+        data.measurementDate.getDate()
       ),
     };
 
