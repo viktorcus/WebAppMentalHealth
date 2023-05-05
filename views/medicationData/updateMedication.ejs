@@ -50,28 +50,28 @@
         <span class="tooltip">Food</span>
       </li>
       <li>
-        <a href="/users/<%= user.userId %>/medication">
+        <a href="/api/users/<%= user.userId %>/medication">
           <i class="bx bx-first-aid"></i>
           <span class="links_name">Medication</span>
         </a>
         <span class="tooltip">Medication</span>
       </li>
       <li>
-        <a href="/users/<%= user.userId %>/medicalHistory">
+        <a href="/api/users/<%= user.userId %>/medicalHistory">
           <i class="bx bx-history"></i>
           <span class="links_name">Medical History</span>
         </a>
         <span class="tooltip">Medical History</span>
       </li>
       <li>
-        <a href="#">
+        <a href="/users/<%= user.userId %>/sleep/progress">
           <i class="bx bx-bed"></i>
           <span class="links_name">Sleep</span>
         </a>
         <span class="tooltip">Sleep</span>
       </li>
       <li>
-        <a href="#">
+        <a href="/users/<%= user.userId %>/health/progress">
           <i class="bx bx-plus-medical"></i>
           <span class="links_name">Health</span>
         </a>
@@ -92,9 +92,9 @@
       <hr />
       <section class="page-tabs">
         <div>
-          <span><a href="/users/<%= user.userId %>/medication">My Medication Data</a></span>
+          <span><a href="/api/users/<%= user.userId %>/medication">My Medication Data</a></span>
           <span>|</span>
-          <span><a href="/users/<%= user.userId %>/medication/create">Create New</a></span>
+          <span><a href="/api/users/<%= user.userId %>/medication/create">Create New</a></span>
         </div>
       </section>
       <section class="page-body">

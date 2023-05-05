@@ -85,49 +85,114 @@
         </li>
       </ul>
     </div>
-    <!-- CHANGE THE LAYOUT IN THIS SECTION -->
-    <section class="home-section">
-      <div class="text">Profile</div>
-      <div class="home-section-content">
-        <p class="start">Personal Info</p>
-        <hr>
-        <table>
-          <tr>
-            <td class="wide">Name: </td>
-            <td class="super-wide"><%= user.userName %><a class="edit-link right" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-          <tr>
-            <td class="wide">Email: </td>
-            <td class="super-wide"><%= user.email %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-          <tr>
-            <td class="wide">Gender: </td>
-            <td class="super-wide">
-              <% if (user.gender === 'Male') { %>
-              Male
-              <% } else if (user.gender === 'Female') { %>
-              Female
-              <% } else { %>
-              Other
-              <% } %>
-              <a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="wide">Birthday: </td>
-            <td class="super-wide"><%= user.birthday ? user.birthday.toUTCString().slice(0, 16) : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-          <tr>
-            <td class="wide">Place: </td>
-            <td class="super-wide"><%= user.place ? user.place : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-        </table>
-      </div>
-    </section>
-    <script>
-      let sidebar = document.querySelector('.sidebar');
-      let closeBtn = document.querySelector('#btn');
-      let searchBtn = document.querySelector('.bx-search');
+    <ul class="nav-list">
+      <li>
+        <a href="/dashboard">
+          <i class="bx bx-grid-alt"></i>
+          <span class="links_name">Dashboard</span>
+        </a>
+        <span class="tooltip">Dashboard</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>">
+          <i class="bx bx-user"></i>
+          <span class="links_name">User</span>
+        </a>
+        <span class="tooltip">User</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/activity">
+          <i class="bx bx-run"></i>
+          <span class="links_name">Activity</span>
+        </a>
+        <span class="tooltip">Activity</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/food">
+          <i class="bx bx-food-menu"></i>
+          <span class="links_name">Food</span>
+        </a>
+        <span class="tooltip">Food</span>
+      </li>
+      <li>
+        <a href="/api/users/<%= user.userId %>/medication">
+          <i class="bx bx-first-aid"></i>
+          <span class="links_name">Medication</span>
+        </a>
+        <span class="tooltip">Medication</span>
+      </li>
+      <li>
+        <a href="/api/users/<%= user.userId %>/medicalHistory">
+          <i class="bx bx-history"></i>
+          <span class="links_name">Medical History</span>
+        </a>
+        <span class="tooltip">Medical History</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/sleep/progress">
+          <i class="bx bx-bed"></i>
+          <span class="links_name">Sleep</span>
+        </a>
+        <span class="tooltip">Sleep</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/health/progress">
+          <i class="bx bx-plus-medical"></i>
+          <span class="links_name">Health</span>
+        </a>
+        <span class="tooltip">Health</span>
+      </li>
+      <li class="profile">
+        <div class="profile-details">
+          <div class="name"><%= user.userName %></div>
+          <a href="/logout"><i class="bx bx-log-out" id="btn"></i></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!-- CHANGE THE LAYOUT IN THIS SECTION -->
+  <section class="home-section">
+    <div class="text">Profile</div>
+    <div class="home-section-content">
+      <p class="start">Personal Info</p>
+      <hr>
+      <table>
+        <tr>
+          <td class="wide">Name: </td>
+          <td class="super-wide"><%= user.userName %><a class="edit-link right" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
+        </tr>
+        <tr>
+          <td class="wide">Email: </td>
+          <td class="super-wide"><%= user.email %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
+        </tr>
+        <tr>
+          <td class="wide">Gender: </td>
+          <td class="super-wide">
+            <% if (user.gender === 'Male') { %>
+            Male
+            <% } else if (user.gender === 'Female') { %>
+            Female
+            <% } else { %>
+            Other
+            <% } %>
+            <a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="wide">Birthday: </td>
+          <td class="super-wide"><%= user.birthday ? user.birthday.toUTCString().slice(0, 16) : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
+        </tr>
+        <tr>
+          <td class="wide">Place: </td>
+          <td class="super-wide"><%= user.place ? user.place : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
+        </tr>
+      </table>
+    </div>
+  </section>
+  <script>
+    let sidebar = document.querySelector('.sidebar');
+    let closeBtn = document.querySelector('#btn');
+    let searchBtn = document.querySelector('.bx-search');
 
     closeBtn.addEventListener('click', () => {
       sidebar.classList.toggle('open');
