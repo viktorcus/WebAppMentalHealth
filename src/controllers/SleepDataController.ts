@@ -48,7 +48,7 @@ async function getAllSleepDataByUser(req: Request, res: Response): Promise<void>
     return;
   }
 
-  const user = getUserById(req.session.authenticatedUser.userId);
+  const user = await getUserById(req.session.authenticatedUser.userId);
 
   try {
     const sleepData = await getAllSleepDataForUser(userId);

@@ -184,7 +184,7 @@ app.get('/api/sleep/:userId/date', getSleepDataByDateRangeFromDb);
 app.delete('/api/sleep/:sleepDataId/delete', deleteSleepDataById);
 app.get('/users/:userId/sleep/create', renderCreateSleepPage);
 app.get('/users/:userId/sleep/:sleepId/update', renderUpdateSleepPage);
-app.get('/users/:userId/sleep/', getAllSleepDataByUser);
+app.get('/users/:userId/sleep', getAllSleepDataByUser);
 
 app.post('/api/users/:userId/health/add', addHealthDataController);
 app.get('/api/health/:userId', getAllUserHealthData);
