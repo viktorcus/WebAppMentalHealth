@@ -359,3 +359,13 @@ hr {
 .progress-form span {
   margin: 0px 10px 16px 10px;
 }
+
+.update-delete {
+  margin-left: 30px;
+  display: flex;
+}
+
+.update-delete button {
+  margin-right: 5px;
+  margin-left: 5px;
+}

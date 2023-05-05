@@ -38,14 +38,14 @@
           <span class="tooltip">User</span>
         </li>
         <li>
-          <a href="activity/create.html">
+          <a href="/users/<%= user.userId %>/activity">
             <i class="bx bx-run"></i>
             <span class="links_name">Activity</span>
           </a>
           <span class="tooltip">Activity</span>
         </li>
         <li>
-          <a href="food/create.html">
+          <a href="/users/<%= user.userId %>/food">
             <i class="bx bx-food-menu"></i>
             <span class="links_name">Food</span>
           </a>
@@ -66,14 +66,14 @@
           <span class="tooltip">Medical History</span>
         </li>
         <li>
-          <a href="#">
+          <a href="/users/<%= user.userId %>/sleep/progress">
             <i class="bx bx-bed"></i>
             <span class="links_name">Sleep</span>
           </a>
           <span class="tooltip">Sleep</span>
         </li>
         <li>
-          <a href="#">
+          <a href="/users/<%= user.userId %>/health/progress">
             <i class="bx bx-plus-medical"></i>
             <span class="links_name">Health</span>
           </a>
@@ -97,8 +97,6 @@
             <span><a href="/api/users/<%= user.userId %>/medicalHistory">My Medical History</a></span>
             <span>|</span>
             <span><a href="/api/users/<%= user.userId %>/medicalHistory/create">Create New</a></span>
-
-
           </div>
         </section>
         <section class="page-body">
@@ -107,15 +105,17 @@
             <div class="data-card">
               <div class="data-card-heading">
                 <h3><%= history.conditionName %></h3>
-                <form action="/api/users/<%= user.userId %>/medicalHistory/<%= history.medicalHistoryId %>/update">
-                  <button>Update</button>
-                </form>
-                <span>|</span>
-                <form class="deleteMedicalHistory" action="/api/users/<%= user.userId %>/medicalHistory/<%= history.medicalHistoryId %>/delete">
-                  <button>Delete</button>
-                </form>
+                <div class="update-delete">
+                  <form action="/api/users/<%= user.userId %>/medicalHistory/<%= history.medicalHistoryId %>/update">
+                    <button>Update</button>
+                  </form>
+                  <span>|</span>
+                  <form class="deleteMedicalHistory" action="/api/users/<%= user.userId %>/medicalHistory/<%= history.medicalHistoryId %>/delete">
+                    <button>Delete</button>
+                  </form>
+                </div>
               </div>
-              <p>Diagnosis Date: <%= history.diagnosisDate.toISOString().slice(0,10) %></p>
+              <p>Diagnosis Date: <%= history.diagnosisDate.toUTCString().slice(0,16) %></p>
               <p>Treatment: <%= history.treatment %></p>
               <p>Note: <%= history.note ?? 'Unknown' %></p>
             </div>
