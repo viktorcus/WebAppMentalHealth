@@ -184,6 +184,7 @@ app.get('/api/sleep/:userId/date', getSleepDataByDateRangeFromDb);
 app.delete('/api/sleep/:sleepDataId/delete', deleteSleepDataById);
 app.get('/users/:userId/sleep/create', renderCreateSleepPage);
 app.get('/users/:userId/sleep/:sleepId/update', renderUpdateSleepPage);
+app.get('/users/:userId/sleep/', getAllSleepDataByUser);
 
 app.post('/api/health', addHealthDataController);
 app.get('/api/health/:userId', getAllUserHealthData);
@@ -194,6 +195,7 @@ app.post('/users/:userId/health/progress', updateHealthProgressPage);
 app.delete('/api/health/:healthDataId/delete', deleteHealthDataController);
 app.get('/users/:userId/health/create', renderCreateHealthPage);
 app.get('/users/:userId/health/:healthId/update', renderUpdateHealthPage);
+app.get('/users/:userId/health', getAllUserHealthData);
 
 scheduleJob('0 0 7 * * *', sendOneWeekReminders);
 

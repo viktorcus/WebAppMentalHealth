@@ -49,14 +49,14 @@ async function getAllUserHealthData(req: Request, res: Response): Promise<void> 
 
   try {
     const user = await getUserById(userId);
-    const healthData = await getAllHealthDataForUser(userId);
+    const allHealthData = await getAllHealthDataForUser(userId);
 
-    if (!healthData) {
+    if (!allHealthData) {
       res.sendStatus(404); // 404 not found
       return;
     }
 
-    res.render('healthData/healthPage', { user, healthData });
+    res.render('healthData/healthPage', { user, allHealthData });
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);

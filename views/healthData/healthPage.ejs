@@ -97,7 +97,7 @@
         </div>
       </section>
       <section class="page-body">
-        <% for (const data of allHealthData) { %>
+        <% for (const healthData of allHealthData) { %>
         <div class="flex-fill">
           <div class="data-card">
             <div class="data-card-heading">
@@ -110,12 +110,12 @@
                 <button>Delete</button>
               </form>
             </div>
-            <p>Weight: <%= data.weight %></p>
-            <p>Height: <%= data.height %></p>
-            <p>BMI: <%= data.BMI %></p>
-            <p>Heart Rate: <%= data.heartRate %></p>
-            <p>Blood Pressure: <%= data.bloodPressure %></p>
-            <p>Note: <%= data.note ?? 'Unknown' %></p>
+            <p>Weight: <%= healthData.weight %></p>
+            <p>Height: <%= healthData.height %></p>
+            <p>BMI: <%= healthData.BMI %></p>
+            <p>Heart Rate: <%= healthData.heartRate %></p>
+            <p>Blood Pressure: <%= healthData.bloodPressure %></p>
+            <p>Note: <%= healthData.note ?? 'Unknown' %></p>
           </div>
         </div>
         <% } %>
