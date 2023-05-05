@@ -54,6 +54,8 @@ import {
   getSleepStats,
   renderSleepProgressPage,
   updateSleepProgressPage,
+  renderCreateSleepPage,
+  renderUpdateSleepPage,
 } from './controllers/SleepDataController';
 import {
   addHealthDataController,
@@ -64,6 +66,8 @@ import {
   getHealthStats,
   renderHealthProgressPage,
   updateHealthProgressPage,
+  renderCreateHealthPage,
+  renderUpdateHealthPage,
 } from './controllers/HealthDataController';
 
 const app: Express = express();
@@ -174,18 +178,22 @@ app.post('/api/sleep', addNewSleepData);
 app.get('/api/sleep/:userId', getAllSleepDataByUser);
 app.get('/api/sleep/:sleepDataId', getSleepData);
 app.post('api/sleep/:sleepDataId/update', updateSleepDataById);
-app.get('/api/sleep/:userId', getSleepDataByDateRangeFromDb);
-app.delete('/api/sleep/:sleepDataId', deleteSleepDataById);
 app.get('/users/:userId/sleep/progress', renderSleepProgressPage);
 app.post('/users/:userId/sleep/progress', updateSleepProgressPage);
+app.get('/api/sleep/:userId/date', getSleepDataByDateRangeFromDb);
+app.delete('/api/sleep/:sleepDataId/delete', deleteSleepDataById);
+app.get('/users/:userId/sleep/create', renderCreateSleepPage);
+app.get('/users/:userId/sleep/:sleepId/update', renderUpdateSleepPage);
 
 app.post('/api/health', addHealthDataController);
 app.get('/api/health/:userId', getAllUserHealthData);
 app.get('/api/health/:healthDataId', getHealthDataById);
 app.post('api/health/:healthDataId/update', updateHealthDataController);
-app.delete('/api/health/:healthDataId', deleteHealthDataController);
 app.get('/users/:userId/health/progress', renderHealthProgressPage);
 app.post('/users/:userId/health/progress', updateHealthProgressPage);
+app.delete('/api/health/:healthDataId/delete', deleteHealthDataController);
+app.get('/users/:userId/health/create', renderCreateHealthPage);
+app.get('/users/:userId/health/:healthId/update', renderUpdateHealthPage);
 
 scheduleJob('0 0 7 * * *', sendOneWeekReminders);
 
