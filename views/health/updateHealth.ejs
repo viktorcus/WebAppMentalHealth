@@ -101,9 +101,19 @@
           <form method="POST" action="/api/users/<%= user.userId %>/health/<%= healthData.healthDataId %>/edit">
             <p class="form-header">Update Health Data</p>
             <div class="form-field">
-              <p class="info-value"><span class="info-item">Current Measurement Date : </span><%= healthData.measurementDate %></p>
-              <label class="info-item" for="medicationName">New Measurement Date:</label>
-              <input type="text" id="measurementDate" name="measurementDate" value="<%= healthData.measurementDate %>" required>
+              <p class="info-value"><span class="info-item">Current Weight : </span><%= healthData.weight %></p>
+              <label class="info-item" for="weight"> New Weight:</label>
+              <input type="text" id="weight" name="measurementDate" value="<%= healthData.weight %>" required>
+            </div>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current Height : </span><%= healthData.height %></p>
+              <label class="info-item" for="height">New Height:</label>
+              <input type="text" id="height" name="height" value="<%= healthData.height %>" required>
+            </div>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current BMI : </span><%= healthData.BMI %></p>
+              <label class="info-item" for="BMI">new BMI:</label>
+              <input type="text" id="BMI" name="BMI" value="<%= healthData.BMI %>" required>
             </div>
             <div class="form-field">
               <p class="info-value"><span class="info-item">Current Heart Rate: </span><%= healthData.heartRate %></p>
