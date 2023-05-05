@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrainCheckr | Health</title>
+  <link rel="stylesheet" href="/css/page_style.css" />
+  <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+</head>
+
+<body>
+  <div class="sidebar close">
+    <div class="logo-details">
+      <i class="bx bx-brain"></i>
+      <div class="logo_name">BrainCheckr</div>
+      <i class="bx bx-menu" id="btn"></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <a href="/dashboard">
+          <i class="bx bx-grid-alt"></i>
+          <span class="links_name">Dashboard</span>
+        </a>
+        <span class="tooltip">Dashboard</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>">
+          <i class="bx bx-user"></i>
+          <span class="links_name">User</span>
+        </a>
+        <span class="tooltip">User</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/activity">
+          <i class="bx bx-run"></i>
+          <span class="links_name">Activity</span>
+        </a>
+        <span class="tooltip">Activity</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/food">
+          <i class="bx bx-food-menu"></i>
+          <span class="links_name">Food</span>
+        </a>
+        <span class="tooltip">Food</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/medication">
+          <i class="bx bx-first-aid"></i>
+          <span class="links_name">Medication</span>
+        </a>
+        <span class="tooltip">Medication</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/medicalHistory">
+          <i class="bx bx-history"></i>
+          <span class="links_name">Medical History</span>
+        </a>
+        <span class="tooltip">Medical History</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/sleepData">
+          <i class="bx bx-bed"></i>
+          <span class="links_name">Sleep</span>
+        </a>
+        <span class="tooltip">Sleep</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/healthData">
+          <i class="bx bx-plus-medical"></i>
+          <span class="links_name">Health</span>
+        </a>
+        <span class="tooltip">Health</span>
+      </li>
+      <li class="profile">
+        <div class="profile-details">
+          <div class="name"><%= user.userName %></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <section class="home-section">
+    <div class="text">Health Data</div>
+    <div class="home-section-content">
+      <p class="start"><%= user.userName %>'s Health Data</p>
+      <hr />
+      <section class="page-tabs">
+        <div>
+          <span><a href="/users/<%= user.userId %>/health">My Health Data</a></span>
+          <span>|</span>
+          <span><a href="/users/<%= user.userId %>/health/create">Create New</a></span>
+        </div>
+      </section>
+      <section class="page-body">
+        <% for (const data of allHealthData) { %>
+        <div class="flex-fill">
+          <div class="data-card">
+            <div class="data-card-heading">
+              <h3><%= healthData.title %></h3>
+              <form action="/users/<%= user.userId %>/health/<%= healthData.healthDataId %>/update">
+                <button>Update</button>
+              </form>
+              <span>|</span>
+              <form class="deleteHealth" action="/api/users/<%= user.userId %>/health/<%= healthData.healthDataId %>/delete">
+                <button>Delete</button>
+              </form>
+            </div>
+            <p>Measurement Date: <%= data.measurementDate.toDateString() %></p>
+            <p>Heart Rate: <%= data.heartRate %></p>
+            <p>Blood Pressure: <%= data.bloodPressure %></p>
+            <p>Note: <%= data.note ?? 'Unknown' %></p>
+          </div>
+        </div>
+        <% } %>
+      </section>
+    </div>
+  </section>
+  <script>
+    let sidebar = document.querySelector('.sidebar');
+    let closeBtn = document.querySelector('#btn');
+    // let searchBtn = document.querySelector('.bx-search');
+
+    closeBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      menuBtnChange(); //calling the function
+    });
+
+    // searchBtn.addEventListener('click', () => {
+    //   // Sidebar open when you click on the search icon
+    //   sidebar.classList.toggle('open');
+    //   menuBtnChange(); //calling the function
+    // });
+
+    // the code changes sidebar button
+    function menuBtnChange() {
+      if (sidebar.classList.contains('open')) {
+        closeBtn.classList.replace('bx-menu', 'bx-menu-alt-right'); //replacing the icons class
+      } else {
+        closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
+      }
+    }
+
+    async function deleteHealth(event) {
+      event.preventDefault();
+      const form = event.target;
+      const path = form.getAttribute('action');
+
+      const response = await fetch(path, {
+        method: "DELETE"
+      })
+
+      console.log(response)
+
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        alert('failed to delete')
+      }
+    }
+    const deleteHealthForms = Array.from(document.querySelectorAll('.deleteHealth'));
+    deleteMedicationForms.forEach(form => {
+      form.addEventListener('submit', deleteHealth);
+    });
+  </script>
+</body>
+
+</html>
