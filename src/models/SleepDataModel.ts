@@ -32,7 +32,7 @@ async function getSleepDataById(sleepDataId: string): Promise<SleepData | null> 
 
 async function updateSleepData(
   sleepDataId: string,
-  sleepData: SleepData,
+  sleepData: SleepData
 ): Promise<SleepData | null> {
   let updatedSleepData = await getSleepDataById(sleepDataId);
 
@@ -60,7 +60,7 @@ async function deleteSleepData(sleepDataId: string): Promise<void> {
 async function getSleepDataByDateRange(
   userId: string,
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ): Promise<SleepData[]> {
   return sleepRepository
     .createQueryBuilder('sleepData')
@@ -74,7 +74,7 @@ async function getSleepDataByDateRange(
 async function generateSleepStats(
   userId: string,
   start: Date,
-  end: Date,
+  end: Date
 ): Promise<SleepDataStats[]> {
   // will also include userid once session management is in place
   const sleep: SleepData[] = await sleepRepository
