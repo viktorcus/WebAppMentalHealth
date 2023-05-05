@@ -32,7 +32,7 @@ async function registerUser(req: Request, res: Response): Promise<void> {
   try {
     const newUser = await addUser(userName, email, passwordHash, birthday, place, gender);
     console.log(newUser);
-    await sendEmail(email, 'Welcome!', `Thank you for joining my application!`);
+    await sendEmail(email, 'Welcome to BrainCheckr!', `Thank you for joining our application!`);
     res.redirect('/login');
   } catch (err) {
     console.error(err);
