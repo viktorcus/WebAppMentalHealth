@@ -430,6 +430,16 @@ hr {
   display: flex;
 }
 
+.form-field .info-value {
+  margin-top: 30px;
+  margin-bottom: 0px;
+}
+.form-field .info-item {
+  margin-top: 0px;
+}
+.form-field .note {
+  margin-top: 30px;
+}
 .progress-form {
   display: flex;
 }

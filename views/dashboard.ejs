@@ -65,14 +65,14 @@
           <span class="tooltip">Medical History</span>
         </li>
         <li>
-          <a href="#">
+          <a href="/users/<%= user.userId %>/sleep/progress">
             <i class="bx bx-bed"></i>
             <span class="links_name">Sleep</span>
           </a>
           <span class="tooltip">Sleep</span>
         </li>
         <li>
-          <a href="#">
+          <a href="/users/<%= user.userId %>/health/progress">
             <i class="bx bx-plus-medical"></i>
             <span class="links_name">Health</span>
           </a>
@@ -99,12 +99,12 @@
         <div class="card">
           <i class="bx bx-run card-icon"></i>
           <h3>Activity</h3>
-          <a href="#" class="card-button">Select</a>
+          <a href="/activity" class="card-button">Select</a>
         </div>
         <div class="card">
           <i class="bx bx-food-menu card-icon"></i>
           <h3>Food</h3>
-          <a href="#" class="card-button">Select</a>
+          <a href="/food" class="card-button">Select</a>
         </div>
         <div class="card">
           <i class="bx bx-first-aid card-icon"></i>
@@ -119,12 +119,12 @@
         <div class="card">
           <i class="bx bx-bed card-icon"></i>
           <h3>Sleep</h3>
-          <a href="#" class="card-button">Select</a>
+          <a href="/users/<%= user.userId %>/sleep/progress" class="card-button">Select</a>
         </div>
         <div class="card">
           <i class="bx bx-plus-medical card-icon"></i>
           <h3>Health</h3>
-          <a href="#" class="card-button">Select</a>
+          <a href="/users/<%= user.userId %>/health/progress" class="card-button">Select</a>
         </div>
       </div>
     </section>
@@ -132,28 +132,6 @@
       let sidebar = document.querySelector('.sidebar');
       let closeBtn = document.querySelector('#btn');
       let searchBtn = document.querySelector('.bx-search');
-
-    closeBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      menuBtnChange(); //calling the function
-    });
-
-    searchBtn.addEventListener('click', () => {
-      // Sidebar open when you click on the search icon
-      sidebar.classList.toggle('open');
-      menuBtnChange(); //calling the function
-    });
-
-    // the code changes sidebar button
-    function menuBtnChange() {
-      if (sidebar.classList.contains('open')) {
-        closeBtn.classList.replace('bx-menu', 'bx-menu-alt-right'); //replacing the icons class
-      } else {
-        closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
-      }
-    }
-  </script>
-</body>
 
       closeBtn.addEventListener('click', () => {
         sidebar.classList.toggle('open');

@@ -95,8 +95,6 @@
           <span><a href="/api/users/<%= user.userId %>/medication">My Medication Data</a></span>
           <span>|</span>
           <span><a href="/api/users/<%= user.userId %>/medication/create">Create New</a></span>
-
-
         </div>
       </section>
       <section class="page-body">
@@ -105,13 +103,15 @@
           <div class="data-card">
             <div class="data-card-heading">
               <h3><%= medication.medicationName %></h3>
-              <form action="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/update">
-                <button>Update</button>
-              </form>
-              <span>|</span>
-              <form class="deleteMedication" action="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/delete">
-                <button>Delete</button>
-              </form>
+              <div class="update-delete">
+                <form action="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/update">
+                  <button>Update</button>
+                </form>
+                <span>|</span>
+                <form class="deleteMedication" action="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/delete">
+                  <button>Delete</button>
+                </form>
+              </div>
             </div>
             <p>Dosage: <%= medication.dosage %></p>
             <p>Frequency: <%= medication.frequency %></p>
@@ -132,11 +132,11 @@
       menuBtnChange(); //calling the function
     });
 
-      // searchBtn.addEventListener('click', () => {
-      //   // Sidebar open when you click on the search icon
-      //   sidebar.classList.toggle('open');
-      //   menuBtnChange(); //calling the function
-      // });
+    // searchBtn.addEventListener('click', () => {
+    //   // Sidebar open when you click on the search icon
+    //   sidebar.classList.toggle('open');
+    //   menuBtnChange(); //calling the function
+    // });
 
     // the code changes sidebar button
     function menuBtnChange() {
@@ -147,27 +147,28 @@
       }
     }
 
-      async function deleteMedication (event) {
-        event.preventDefault();
-        const form = event.target;
-        const path = form.getAttribute('action');
+    async function deleteMedication(event) {
+      event.preventDefault();
+      const form = event.target;
+      const path = form.getAttribute('action');
 
-        const response = await fetch(path, {
-          method: "DELETE"
-        })
+      const response = await fetch(path, {
+        method: "DELETE"
+      })
 
-        console.log(response)
+      console.log(response)
 
-        if (response.redirected) {
-          window.location.href = response.url;
-        } else {
-          alert('failed to delete')
-        }
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        alert('failed to delete')
       }
-      const deleteMedicationForms = Array.from(document.querySelectorAll('.deleteMedication'));
-      deleteMedicationForms.forEach(form => {
-        form.addEventListener('submit', deleteMedication);
-      });
-    </script>
-  </body>
+    }
+    const deleteMedicationForms = Array.from(document.querySelectorAll('.deleteMedication'));
+    deleteMedicationForms.forEach(form => {
+      form.addEventListener('submit', deleteMedication);
+    });
+  </script>
+</body>
+
 </html>
