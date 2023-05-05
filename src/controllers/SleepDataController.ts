@@ -48,11 +48,10 @@ async function getAllSleepDataByUser(req: Request, res: Response): Promise<void>
     return;
   }
 
-  const user = getUserById(userId);
+  const user = getUserById(req.session.authenticatedUser.userId);
 
   try {
     const sleepData = await getAllSleepDataForUser(userId);
-    console.log(sleepData);
     res.render('sleepData/sleepPage', { user, sleepData });
   } catch (error) {
     console.error(error);

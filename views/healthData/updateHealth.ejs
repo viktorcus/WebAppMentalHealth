@@ -64,14 +64,14 @@
         <span class="tooltip">Medical History</span>
       </li>
       <li>
-        <a href="/users/<%= user.userId %>/sleepData">
+        <a href="/users/<%= user.userId %>/sleep">
           <i class="bx bx-bed"></i>
           <span class="links_name">Sleep</span>
         </a>
         <span class="tooltip">Sleep</span>
       </li>
       <li>
-        <a href="/users/<%= user.userId %>/healthData">
+        <a href="/users/<%= user.userId %>/health">
           <i class="bx bx-plus-medical"></i>
           <span class="links_name">Health</span>
         </a>
@@ -94,6 +94,8 @@
           <span><a href="/users/<%= user.userId %>/health">My Health Data</a></span>
           <span>|</span>
           <span><a href="/users/<%= user.userId %>/health/create">Create New</a></span>
+          <span>|</span>
+          <span><a href="/users/<%= user.userId %>/health/progress">View Progress</a></span>
         </div>
       </section>
       <section class="page-body">
