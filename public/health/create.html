@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Data</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body class="body-wrap">
+  <div>
+    <header class="page-header">
+      <p>Create Sleep Data</p>
+    </header>
+    <section class="page-tabs">
+      <div>
+        <span><a href="/health">History</a></span>
+        <span>|</span>
+        <span><a href="/health/stats">Stats</a></span>
+        <span>|</span>
+        <span><a href="/health/create">Create New</a></span>
+      </div>
+    </section>
+    <section class="page-body">
+      <div class="flex-fill">
+        <div class="data-card">
+          <h3>New Sleep Data</h3>
+          <form method="POST" action="/api/health" class="form">
+            <div>
+              <label for="Weight">Weight: </label>
+              <input name="weight" id="weight" class="text" placeholder="Weight" type="number" required />
+            </div>
+            <div>
+              <label for="height">Height: </label>
+              <input name="height" id="height" class="text" placeholder="Height" type="number" required />
+            </div>
+            <div>
+              <label for="BMI">BMI: </label>
+              <input name="BMI" id="BMI" class="text" placeholder="BMI" type="number" />
+            </div>
+            <div>
+              <label for="heartRate">Heart Rate: </label>
+              <input name="heartRate" id="heartRate" class="text" placeholder="heartRate" type="number" />
+            </div>
+            <div>
+              <label for="bloodPressure">Blood Pressure: </label>
+              <input name="bloodPressure" id="bloodPressure" class="text" placeholder="bloodPressure" type="number" />
+            </div>
+            <div>
+              <label for="note">Note (optional): </label>
+              <input name="note" id="note" class="text" placeholder="Note" type="text" />
+            </div>
+            <div>
+              <button class="btn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>
