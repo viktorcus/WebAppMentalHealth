@@ -194,3 +194,8 @@ a.guest:hover {
 .form div {
   padding: 0.5rem;
 }
+
+.wrapper {
+  display: block;
+  margin: 0.75rem;
+}
