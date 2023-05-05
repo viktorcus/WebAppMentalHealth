@@ -19,6 +19,9 @@ type AuthRequest = {
   userName: string;
   email: string;
   password: string;
+  birthday?: Date;
+  place?: string;
+  gender?: Gender;
 };
 
 type LoginAuthRequest = {

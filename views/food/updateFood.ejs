@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BrainCheckr | Medication</title>
+  <title>BrainCheckr | Update Food</title>
   <link rel="stylesheet" href="/css/page_style.css" />
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -86,57 +86,63 @@
     </ul>
   </div>
   <section class="home-section">
-    <div class="text">Medication Data</div>
+    <div class="text">Food Data</div>
     <div class="home-section-content">
-      <p class="start"><%= user.userName %>'s Medication Data</p>
+      <p class="start">Update Food Data</p>
       <hr />
       <section class="page-tabs">
         <div>
-          <span><a href="/users/<%= user.userId %>/medication">My Medication Data</a></span>
+          <span><a href="/users/<%= user.userId %>/food">My Food Data</a></span>
           <span>|</span>
-          <span><a href="/users/<%= user.userId %>/medication/create">Create New</a></span>
-
-
+          <span><a href="/users/<%= user.userId %>/food/create">Create New</a></span>
+          <span>|</span>
+          <span><a href="/users/<%= user.userId %>/food/progress">View Progress</a></span>
         </div>
       </section>
       <section class="page-body">
-        <% for (const medication of allMedicationData) { %>
-        <div class="flex-fill">
-          <div class="data-card">
-            <div class="data-card-heading">
-              <h3><%= medication.medicationName %></h3>
-              <form action="/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/update">
-                <button>Update</button>
-              </form>
-              <span>|</span>
-              <form class="deleteMedication" action="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/delete">
-                <button>Delete</button>
-              </form>
+        <div class="form-container">
+          <form method="POST" action="/api/users/<%= user.userId %>/food/<%= foodData.foodDataId %>/edit">
+            <p class="form-header">Update Food</p>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current Food Description: </span><%= foodData.meal %></p>
+              <label class="info-item" for="meal">New Food Description:</label>
+              <input type="text" id="meal" name="meal" value="<%= foodData.meal %>" required>
             </div>
-            <p>Dosage: <%= medication.dosage %></p>
-            <p>Frequency: <%= medication.frequency %></p>
-            <p>Note: <%= medication.note ?? 'Unknown' %></p>
-          </div>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current Meal Date: </span><%= foodData.mealDate.toLocaleDateString() %></p>
+              <label class="info-item" for="mealDate">New Meal Date:</label>
+              <input type="date" id="mealDate" name="mealDate" value="<%= foodData.mealDate.toLocaleString('sv').split(' ')[0] %>" required>
+            </div>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current Calorie Intake: </span><%= foodData.calorieIntake %></p>
+              <label class="info-item" for="calorieIntake">New Calorie Intake:</label>
+              <input type="text" id="calorieIntake" name="calorieIntake" value="<%= foodData.calorieIntake %>">
+            </div>
+            <div class="form-field">
+              <label class="info-item note" for="note">New Note:</label>
+              <textarea id="note" name="note" value="<%= foodData.note %>"></textarea>
+            </div>
+            <button class="add-btn">Save</button>
+          </form>
         </div>
-        <% } %>
       </section>
     </div>
   </section>
   <script>
     let sidebar = document.querySelector('.sidebar');
     let closeBtn = document.querySelector('#btn');
-    // let searchBtn = document.querySelector('.bx-search');
+    let searchBtn = document.querySelector('.bx-search');
 
     closeBtn.addEventListener('click', () => {
       sidebar.classList.toggle('open');
       menuBtnChange(); //calling the function
     });
 
-    // searchBtn.addEventListener('click', () => {
-    //   // Sidebar open when you click on the search icon
-    //   sidebar.classList.toggle('open');
-    //   menuBtnChange(); //calling the function
-    // });
+    searchBtn.addEventListener('click', () => {
+      // Sidebar open when you click on the search icon
+      sidebar.classList.toggle('open');
+      menuBtnChange(); //calling the function
+    });
 
     // the code changes sidebar button
     function menuBtnChange() {
@@ -146,28 +152,6 @@
         closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
       }
     }
-
-    async function deleteMedication(event) {
-      event.preventDefault();
-      const form = event.target;
-      const path = form.getAttribute('action');
-
-      const response = await fetch(path, {
-        method: "DELETE"
-      })
-
-      console.log(response)
-
-      if (response.redirected) {
-        window.location.href = response.url;
-      } else {
-        alert('failed to delete')
-      }
-    }
-    const deleteMedicationForms = Array.from(document.querySelectorAll('.deleteMedication'));
-    deleteMedicationForms.forEach(form => {
-      form.addEventListener('submit', deleteMedication);
-    });
   </script>
 </body>
 

@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BrainCheckr | Medication</title>
+  <title>BrainCheckr | Food</title>
   <link rel="stylesheet" href="/css/page_style.css" />
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -86,57 +86,57 @@
     </ul>
   </div>
   <section class="home-section">
-    <div class="text">Medication Data</div>
+    <div class="text">Food Data</div>
     <div class="home-section-content">
-      <p class="start"><%= user.userName %>'s Medication Data</p>
-      <hr />
+      <p class="start">Add New Food Data</p>
+      <hr>
       <section class="page-tabs">
         <div>
-          <span><a href="/users/<%= user.userId %>/medication">My Medication Data</a></span>
+          <span><a href="/users/<%= user.userId %>/food">My Food Data</a></span>
           <span>|</span>
-          <span><a href="/users/<%= user.userId %>/medication/create">Create New</a></span>
-
-
-        </div>
+          <span><a href="/users/<%= user.userId %>/food/create">Create New</a></span>
+          <span>|</span>
+          <span><a href="/users/<%= user.userId %>/food/progress">View Progress</a></span>
       </section>
-      <section class="page-body">
-        <% for (const medication of allMedicationData) { %>
-        <div class="flex-fill">
-          <div class="data-card">
-            <div class="data-card-heading">
-              <h3><%= medication.medicationName %></h3>
-              <form action="/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/update">
-                <button>Update</button>
-              </form>
-              <span>|</span>
-              <form class="deleteMedication" action="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/delete">
-                <button>Delete</button>
-              </form>
-            </div>
-            <p>Dosage: <%= medication.dosage %></p>
-            <p>Frequency: <%= medication.frequency %></p>
-            <p>Note: <%= medication.note ?? 'Unknown' %></p>
+      <div class="form-container">
+        <form method="POST" action="/api/users/<%= user.userId %>/food/add">
+          <p class="form-header">New Food</p>
+          <div class="form-field">
+            <label class="info-item" for="meal">Food Description:</label>
+            <input type="text" id="meal" name="meal" required>
           </div>
-        </div>
-        <% } %>
-      </section>
+          <div class="form-field">
+            <label class="info-item" for="mealDate">Date:</label>
+            <input type="date" id="mealDate" name="mealDate" required>
+          </div>
+          <div class="form-field">
+            <label class="info-item" for="calorieIntake">Calorie Intake:</label>
+            <input type="text" id="calorieIntake" name="calorieIntake">
+          </div>
+          <div class="form-field">
+            <label class="info-item" for="note">Note:</label>
+            <textarea id="note" name="note"></textarea>
+          </div>
+          <button class="add-btn">Add Food</button>
+        </form>
+      </div>
     </div>
   </section>
   <script>
     let sidebar = document.querySelector('.sidebar');
     let closeBtn = document.querySelector('#btn');
-    // let searchBtn = document.querySelector('.bx-search');
+    let searchBtn = document.querySelector('.bx-search');
 
     closeBtn.addEventListener('click', () => {
       sidebar.classList.toggle('open');
       menuBtnChange(); //calling the function
     });
 
-    // searchBtn.addEventListener('click', () => {
-    //   // Sidebar open when you click on the search icon
-    //   sidebar.classList.toggle('open');
-    //   menuBtnChange(); //calling the function
-    // });
+    searchBtn.addEventListener('click', () => {
+      // Sidebar open when you click on the search icon
+      sidebar.classList.toggle('open');
+      menuBtnChange(); //calling the function
+    });
 
     // the code changes sidebar button
     function menuBtnChange() {
@@ -146,28 +146,6 @@
         closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
       }
     }
-
-    async function deleteMedication(event) {
-      event.preventDefault();
-      const form = event.target;
-      const path = form.getAttribute('action');
-
-      const response = await fetch(path, {
-        method: "DELETE"
-      })
-
-      console.log(response)
-
-      if (response.redirected) {
-        window.location.href = response.url;
-      } else {
-        alert('failed to delete')
-      }
-    }
-    const deleteMedicationForms = Array.from(document.querySelectorAll('.deleteMedication'));
-    deleteMedicationForms.forEach(form => {
-      form.addEventListener('submit', deleteMedication);
-    });
   </script>
 </body>
 

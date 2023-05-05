@@ -17,6 +17,12 @@ type ActivitySearchParam = {
   keyword?: string;
 };
 
+type ActivityRefreshParam = {
+  startStr: string;
+  endStr: string;
+  keyword?: string;
+};
+
 type ActivityStats = {
   type: string;
   duration: number; // duration in minutes

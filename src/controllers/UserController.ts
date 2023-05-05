@@ -19,8 +19,7 @@ import { sendEmail } from '../services/emailService';
 import { addReminder } from '../models/ReminderModel';
 
 async function registerUser(req: Request, res: Response): Promise<void> {
-  const { userName, email, password } = req.body as AuthRequest;
-  console.log(req.body);
+  const { userName, email, password, birthday, place, gender } = req.body as AuthRequest;
 
   const user = await getUserByUserNameAndEmail(userName, email);
   if (user) {
@@ -31,7 +30,7 @@ async function registerUser(req: Request, res: Response): Promise<void> {
   const passwordHash = await argon2.hash(password);
 
   try {
-    const newUser = await addUser(userName, email, passwordHash);
+    const newUser = await addUser(userName, email, passwordHash, birthday, place, gender);
     console.log(newUser);
     await sendEmail(email, 'Welcome!', `Thank you for joining my application!`);
     res.redirect('/login');
@@ -68,6 +67,12 @@ async function logIn(req: Request, res: Response): Promise<void> {
   req.session.isLoggedIn = true;
 
   res.redirect('/dashboard');
+}
+
+async function logOut(req: Request, res: Response): Promise<void> {
+  await req.session.destroy(() => {
+    res.redirect('/');
+  });
 }
 
 async function getUserInfo(req: Request, res: Response): Promise<void> {
@@ -321,6 +326,7 @@ async function renderUpdateProfilePage(req: Request, res: Response): Promise<voi
 export {
   registerUser,
   logIn,
+  logOut,
   getUserInfo,
   updateEmailAddress,
   updatePlace,

@@ -150,6 +150,20 @@
   align-items: center;
   flex-wrap: nowrap;
 }
+.sidebar.open .profile-details #btn{
+  opacity: 1;
+}
+.sidebar .profile-details #btn{
+  color: #fff;
+  font-weight: 600;
+  opacity: 0;
+  position: absolute;
+  right: 12px;
+  font-size: 23px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  text-align: right;
+}
 .sidebar li img{
   height: 45px;
   width: 45px;
@@ -186,6 +200,7 @@
 }
 .home-section-content{
   margin-left: 28px;
+  margin-right: 28px;
 }
 .home-section-content .start{
   font-size: 20px;
@@ -336,4 +351,11 @@ hr {
 }
 .form-field .note {
   margin-top: 30px;
+}
+.progress-form {
+  display: flex;
+}
+
+.progress-form span {
+  margin: 0px 10px 16px 10px;
 }

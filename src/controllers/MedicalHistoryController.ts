@@ -19,7 +19,6 @@ async function addNewMedicalHistory(req: Request, res: Response): Promise<void> 
     res.redirect('/login');
     return;
   }
-
   const user = await getUserById(authenticatedUser.userId);
   if (!user) {
     res.sendStatus(404);

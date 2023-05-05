@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BrainCheckr | Medication</title>
+  <title>BrainCheckr | Activity</title>
   <link rel="stylesheet" href="/css/page_style.css" />
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -86,57 +86,82 @@
     </ul>
   </div>
   <section class="home-section">
-    <div class="text">Medication Data</div>
+    <div class="text">Activity Data</div>
     <div class="home-section-content">
-      <p class="start"><%= user.userName %>'s Medication Data</p>
-      <hr />
+      <p class="start">Show Activity Progress</p>
+      <hr>
       <section class="page-tabs">
         <div>
-          <span><a href="/users/<%= user.userId %>/medication">My Medication Data</a></span>
+          <span><a href="/users/<%= user.userId %>/activity">My Activity Data</a></span>
           <span>|</span>
-          <span><a href="/users/<%= user.userId %>/medication/create">Create New</a></span>
-
-
-        </div>
+          <span><a href="/users/<%= user.userId %>/activity/create">Create New</a></span>
+          <span>|</span>
+          <span><a href="/users/<%= user.userId %>/activity/progress">View Progress</a></span>
       </section>
-      <section class="page-body">
-        <% for (const medication of allMedicationData) { %>
-        <div class="flex-fill">
-          <div class="data-card">
-            <div class="data-card-heading">
-              <h3><%= medication.medicationName %></h3>
-              <form action="/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/update">
-                <button>Update</button>
-              </form>
-              <span>|</span>
-              <form class="deleteMedication" action="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/delete">
-                <button>Delete</button>
-              </form>
-            </div>
-            <p>Dosage: <%= medication.dosage %></p>
-            <p>Frequency: <%= medication.frequency %></p>
-            <p>Note: <%= medication.note ?? 'Unknown' %></p>
+      <div class="form-container">
+        <form method="POST" action="/users/<%= user.userId %>/activity/progress" id="chartSearchForm">
+          <div class="progress-form">
+            <span>
+              <div class="form-field">
+                <label class="info-item" for="chartStart">Start Date:</label>
+                <input type="date" id="chartStart" name="startStr" value="<%= start.toISOString().split('T')[0] %>" required>
+              </div>
+            </span>
+            <span>
+              <div class="form-field">
+                <label class="info-item" for="chartEnd">End Date:</label>
+                <input type="date" id="chartEnd" name="endStr" value="<%= end.toISOString().split('T')[0] %>" required>
+              </div>
+            </span>
           </div>
+        </form>
+      </div>
+      <div style="margin-left: 120px; margin-right: 120px;">
+        <div>
+          <canvas id="progressChart"></canvas>
         </div>
-        <% } %>
-      </section>
-    </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+          const ctx = document.getElementById('progressChart');
+          const chartData = JSON.parse(`<%- JSON.stringify(stats)%>`);
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: chartData.map(a => a.type),
+              datasets: [{
+                label: 'Minutes Spent',
+                data: chartData.map(a => a.duration),
+                borderWidth: 1
+              }]
+            },
+            options: {
+              backgroundColor: '#4ceb7f',
+            }
+          });
+        </script>
+      </div>
   </section>
   <script>
     let sidebar = document.querySelector('.sidebar');
     let closeBtn = document.querySelector('#btn');
-    // let searchBtn = document.querySelector('.bx-search');
+    let searchBtn = document.querySelector('.bx-search');
+
+    let chartSearchForm = document.querySelector('#chartSearchForm');
+    let chartStart = document.querySelector('#chartStart');
+    let chartEnd = document.querySelector('#chartEnd');
 
     closeBtn.addEventListener('click', () => {
       sidebar.classList.toggle('open');
       menuBtnChange(); //calling the function
     });
 
-    // searchBtn.addEventListener('click', () => {
-    //   // Sidebar open when you click on the search icon
-    //   sidebar.classList.toggle('open');
-    //   menuBtnChange(); //calling the function
-    // });
+    chartStart.addEventListener('change', () => {
+      chartSearchForm.submit()
+    });
+
+    chartEnd.addEventListener('change', () => {
+      chartSearchForm.submit()
+    });
 
     // the code changes sidebar button
     function menuBtnChange() {
@@ -146,28 +171,6 @@
         closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
       }
     }
-
-    async function deleteMedication(event) {
-      event.preventDefault();
-      const form = event.target;
-      const path = form.getAttribute('action');
-
-      const response = await fetch(path, {
-        method: "DELETE"
-      })
-
-      console.log(response)
-
-      if (response.redirected) {
-        window.location.href = response.url;
-      } else {
-        alert('failed to delete')
-      }
-    }
-    const deleteMedicationForms = Array.from(document.querySelectorAll('.deleteMedication'));
-    deleteMedicationForms.forEach(form => {
-      form.addEventListener('submit', deleteMedication);
-    });
   </script>
 </body>
 

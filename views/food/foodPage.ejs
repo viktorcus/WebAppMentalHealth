@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BrainCheckr | Medication</title>
+  <title>BrainCheckr | Food</title>
   <link rel="stylesheet" href="/css/page_style.css" />
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -86,36 +86,36 @@
     </ul>
   </div>
   <section class="home-section">
-    <div class="text">Medication Data</div>
+    <div class="text">Food Data</div>
     <div class="home-section-content">
-      <p class="start"><%= user.userName %>'s Medication Data</p>
+      <p class="start"><%= user.userName %>'s Food Data</p>
       <hr />
       <section class="page-tabs">
         <div>
-          <span><a href="/users/<%= user.userId %>/medication">My Medication Data</a></span>
+          <span><a href="/users/<%= user.userId %>/food">My Food Data</a></span>
           <span>|</span>
-          <span><a href="/users/<%= user.userId %>/medication/create">Create New</a></span>
-
-
+          <span><a href="/users/<%= user.userId %>/food/create">Create New</a></span>
+          <span>|</span>
+          <span><a href="/users/<%= user.userId %>/food/progress">View Progress</a></span>
         </div>
       </section>
       <section class="page-body">
-        <% for (const medication of allMedicationData) { %>
+        <% for (const food of foodData) { %>
         <div class="flex-fill">
           <div class="data-card">
             <div class="data-card-heading">
-              <h3><%= medication.medicationName %></h3>
-              <form action="/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/update">
+              <h3><%= food.meal %></h3>
+              <form action="/users/<%= user.userId %>/food/<%= food.foodDataId %>/update">
                 <button>Update</button>
               </form>
               <span>|</span>
-              <form class="deleteMedication" action="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/delete">
+              <form class="deleteFood" action="/api/users/<%= user.userId %>/food/<%= food.foodDataId %>/delete">
                 <button>Delete</button>
               </form>
             </div>
-            <p>Dosage: <%= medication.dosage %></p>
-            <p>Frequency: <%= medication.frequency %></p>
-            <p>Note: <%= medication.note ?? 'Unknown' %></p>
+            <p>Meal Date: <%= food.mealDate.toLocaleDateString() %></p>
+            <p>Calorie Intake: <%= food.calorieIntake ?? '' %></p>
+            <p>Note: <%= food.note ?? '' %></p>
           </div>
         </div>
         <% } %>
@@ -147,16 +147,14 @@
       }
     }
 
-    async function deleteMedication(event) {
+    async function deleteFood(event) {
       event.preventDefault();
       const form = event.target;
       const path = form.getAttribute('action');
 
       const response = await fetch(path, {
         method: "DELETE"
-      })
-
-      console.log(response)
+      });
 
       if (response.redirected) {
         window.location.href = response.url;
@@ -164,9 +162,9 @@
         alert('failed to delete')
       }
     }
-    const deleteMedicationForms = Array.from(document.querySelectorAll('.deleteMedication'));
-    deleteMedicationForms.forEach(form => {
-      form.addEventListener('submit', deleteMedication);
+    const deleteFoodForms = Array.from(document.querySelectorAll('.deleteFood'));
+    deleteFoodForms.forEach(form => {
+      form.addEventListener('submit', deleteFood);
     });
   </script>
 </body>

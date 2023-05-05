@@ -17,3 +17,8 @@ type SleepSearchParam = {
   start: Date;
   end: Date;
 };
+
+type SleepRefreshParam = {
+  startStr: string;
+  endStr: string;
+};

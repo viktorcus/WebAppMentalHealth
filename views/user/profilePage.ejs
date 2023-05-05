@@ -1,153 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BrainCheckr | Profile</title>
-    <link rel="stylesheet" href="/css/page_style.css" />
-    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-  </head>
-  <body>
-    <div class="sidebar close">
-      <div class="logo-details">
-        <i class="bx bx-brain"></i>
-        <div class="logo_name">BrainCheckr</div>
-        <i class="bx bx-menu" id="btn"></i>
-      </div>
-      <ul class="nav-list">
-        <li>
-          <a href="/dashboard">
-            <i class="bx bx-grid-alt"></i>
-            <span class="links_name">Dashboard</span>
-          </a>
-          <span class="tooltip">Dashboard</span>
-        </li>
-        <li>
-          <a href="/users/<%= user.userId %>">
-            <i class="bx bx-user"></i>
-            <span class="links_name">User</span>
-          </a>
-          <span class="tooltip">User</span>
-        </li>
-        <li>
-          <a href="activity/create.html">
-            <i class="bx bx-run"></i>
-            <span class="links_name">Activity</span>
-          </a>
-          <span class="tooltip">Activity</span>
-        </li>
-        <li>
-          <a href="food/create.html">
-            <i class="bx bx-food-menu"></i>
-            <span class="links_name">Food</span>
-          </a>
-          <span class="tooltip">Food</span>
-        </li>
-        <li>
-          <a href="/api/users/<%= user.userId %>/medication">
-            <i class="bx bx-first-aid"></i>
-            <span class="links_name">Medication</span>
-          </a>
-          <span class="tooltip">Medication</span>
-        </li>
-        <li>
-          <a href="/api/users/<%= user.userId %>/medicalHistory">
-            <i class="bx bx-history"></i>
-            <span class="links_name">Medical History</span>
-          </a>
-          <span class="tooltip">Medical History</span>
-        </li>
-        <li>
-          <a href="#">
-            <i class="bx bx-bed"></i>
-            <span class="links_name">Sleep</span>
-          </a>
-          <span class="tooltip">Sleep</span>
-        </li>
-        <li>
-          <a href="#">
-            <i class="bx bx-plus-medical"></i>
-            <span class="links_name">Health</span>
-          </a>
-          <span class="tooltip">Health</span>
-        </li>
-        <li class="profile">
-          <div class="profile-details">
-            <div class="name"><%= user.userName %></div>
-          </div>
-        </li>
-      </ul>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrainCheckr | Profile</title>
+  <link rel="stylesheet" href="/css/page_style.css" />
+  <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+</head>
+
+<body>
+  <div class="sidebar close">
+    <div class="logo-details">
+      <i class="bx bx-brain"></i>
+      <div class="logo_name">BrainCheckr</div>
+      <i class="bx bx-menu" id="btn"></i>
     </div>
-    <!-- CHANGE THE LAYOUT IN THIS SECTION -->
-    <section class="home-section">
-      <div class="text">Profile</div>
-      <div class="home-section-content">
-        <p class="start">Personal Info</p>
-        <hr>
-        <table>
-          <tr>
-            <td class="wide">Name: </td>
-            <td class="super-wide"><%= user.userName %><a class="edit-link right" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-          <tr>
-            <td class="wide">Email: </td>
-            <td class="super-wide"><%= user.email %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-          <tr>
-            <td class="wide">Gender: </td>
-            <td class="super-wide">
-              <% if (user.gender === 'Male') { %>
-              Male
-              <% } else if (user.gender === 'Female') { %>
-              Female
-              <% } else { %>
-              Other
-              <% } %>
-              <a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="wide">Birthday: </td>
-            <td class="super-wide"><%= user.birthday ? user.birthday.toUTCString().slice(0, 16) : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-          <tr>
-            <td class="wide">Place: </td>
-            <td class="super-wide"><%= user.place ? user.place : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
-          </tr>
-        </table>
-      </div>
-    </section>
-    <script>
-      let sidebar = document.querySelector('.sidebar');
-      let closeBtn = document.querySelector('#btn');
-      let searchBtn = document.querySelector('.bx-search');
+    <ul class="nav-list">
+      <li>
+        <a href="/dashboard">
+          <i class="bx bx-grid-alt"></i>
+          <span class="links_name">Dashboard</span>
+        </a>
+        <span class="tooltip">Dashboard</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>">
+          <i class="bx bx-user"></i>
+          <span class="links_name">User</span>
+        </a>
+        <span class="tooltip">User</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/activity">
+          <i class="bx bx-run"></i>
+          <span class="links_name">Activity</span>
+        </a>
+        <span class="tooltip">Activity</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/food">
+          <i class="bx bx-food-menu"></i>
+          <span class="links_name">Food</span>
+        </a>
+        <span class="tooltip">Food</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/medication">
+          <i class="bx bx-first-aid"></i>
+          <span class="links_name">Medication</span>
+        </a>
+        <span class="tooltip">Medication</span>
+      </li>
+      <li>
+        <a href="/users/<%= user.userId %>/medicalHistory">
+          <i class="bx bx-history"></i>
+          <span class="links_name">Medical History</span>
+        </a>
+        <span class="tooltip">Medical History</span>
+      </li>
+      <li>
+        <a href="#">
+          <i class="bx bx-bed"></i>
+          <span class="links_name">Sleep</span>
+        </a>
+        <span class="tooltip">Sleep</span>
+      </li>
+      <li>
+        <a href="#">
+          <i class="bx bx-plus-medical"></i>
+          <span class="links_name">Health</span>
+        </a>
+        <span class="tooltip">Health</span>
+      </li>
+      <li class="profile">
+        <div class="profile-details">
+          <div class="name"><%= user.userName %></div>
+          <a href="/logout"><i class="bx bx-log-out" id="btn"></i></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!-- CHANGE THE LAYOUT IN THIS SECTION -->
+  <section class="home-section">
+    <div class="text">Profile</div>
+    <div class="home-section-content">
+      <p class="start">Personal Info</p>
+      <hr>
+      <table>
+        <tr>
+          <td class="wide">Name: </td>
+          <td class="super-wide"><%= user.userName %><a class="edit-link right" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
+        </tr>
+        <tr>
+          <td class="wide">Email: </td>
+          <td class="super-wide"><%= user.email %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
+        </tr>
+        <tr>
+          <td class="wide">Gender: </td>
+          <td class="super-wide">
+            <% if (user.gender === 'Male') { %>
+            Male
+            <% } else if (user.gender === 'Female') { %>
+            Female
+            <% } else { %>
+            Other
+            <% } %>
+            <a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="wide">Birthday: </td>
+          <td class="super-wide"><%= user.birthday ? user.birthday.toUTCString().slice(0, 16) : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
+        </tr>
+        <tr>
+          <td class="wide">Place: </td>
+          <td class="super-wide"><%= user.place ? user.place : 'N/A' %><a class="edit-link" href="/users/<%= user.userId %>/updateProfile">Edit</a></td>
+        </tr>
+      </table>
+    </div>
+  </section>
+  <script>
+    let sidebar = document.querySelector('.sidebar');
+    let closeBtn = document.querySelector('#btn');
+    let searchBtn = document.querySelector('.bx-search');
 
-      closeBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
-        menuBtnChange(); //calling the function
-      });
+    closeBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      menuBtnChange(); //calling the function
+    });
 
-      searchBtn.addEventListener('click', () => {
-        // Sidebar open when you click on the search icon
-        sidebar.classList.toggle('open');
-        menuBtnChange(); //calling the function
-      });
+    searchBtn.addEventListener('click', () => {
+      // Sidebar open when you click on the search icon
+      sidebar.classList.toggle('open');
+      menuBtnChange(); //calling the function
+    });
 
-      // the code changes sidebar button
-      function menuBtnChange() {
-        if (sidebar.classList.contains('open')) {
-          closeBtn.classList.replace('bx-menu', 'bx-menu-alt-right'); //replacing the icons class
-        } else {
-          closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
-        }
+    // the code changes sidebar button
+    function menuBtnChange() {
+      if (sidebar.classList.contains('open')) {
+        closeBtn.classList.replace('bx-menu', 'bx-menu-alt-right'); //replacing the icons class
+      } else {
+        closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
