@@ -117,10 +117,10 @@
         <button>Save</button>
       </form>
       <br>
-      <p class="info-value"><span class="info-item">Current Birthday: </span><%= user.birthday.toUTCString().slice(4, 16) %></p>
+      <p class="info-value"><span class="info-item">Current Birthday: </span><%= user.birthday ? user.birthday.toUTCString().slice(4, 16) : '' %></p>
       <form method="POST" action="/api/users/<%= user.userId %>/birthday">
         <label class="info-item" for="birthday">New Birthday:</label>
-        <input type="date" id="birthday" name="birthday" value="<%= user.birthday.toISOString().slice(0,10) %>" required>
+        <input type="date" id="birthday" name="birthday" value="<%= user.birthday ? user.birthday.toISOString().slice(0,10) : '' %>" required>
         <button>Save</button>
       </form>
       <br>
