@@ -174,10 +174,10 @@ app.delete(
   ActivityController.deleteActivityData
 );
 
-app.post('/api/sleep', addNewSleepData);
+app.post('/api/users/:userId/sleep/add', addNewSleepData);
 app.get('/api/sleep/:userId', getAllSleepDataByUser);
 app.get('/api/sleep/:sleepDataId', getSleepData);
-app.post('api/sleep/:sleepDataId/update', updateSleepDataById);
+app.post('/users/:userId/sleep/:sleepDataId/edit', updateSleepDataById);
 app.get('/users/:userId/sleep/progress', renderSleepProgressPage);
 app.post('/users/:userId/sleep/progress', updateSleepProgressPage);
 app.get('/api/sleep/:userId/date', getSleepDataByDateRangeFromDb);
@@ -189,7 +189,7 @@ app.get('/users/:userId/sleep', getAllSleepDataByUser);
 app.post('/api/users/:userId/health/add', addHealthDataController);
 app.get('/api/health/:userId', getAllUserHealthData);
 app.get('/api/health/:healthDataId', getHealthDataById);
-app.post('api/health/:healthDataId/update', updateHealthDataController);
+app.post('/api/users/:userId/health/:healthDataId/edit', updateHealthDataController);
 app.get('/users/:userId/health/progress', renderHealthProgressPage);
 app.post('/users/:userId/health/progress', updateHealthProgressPage);
 app.delete('/api/health/:healthDataId/delete', deleteHealthDataController);

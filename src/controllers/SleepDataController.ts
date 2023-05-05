@@ -30,7 +30,7 @@ async function addNewSleepData(req: Request, res: Response): Promise<void> {
   try {
     if (user) {
       await addSleepData(sleepData, user);
-      res.redirect(`/sleep/${user.userId}/sleep`);
+      res.redirect(`/users/${user.userId}/sleep`);
     }
   } catch (err) {
     console.error(err);
@@ -98,7 +98,7 @@ async function updateSleepDataById(req: Request, res: Response): Promise<void> {
 
     const updatedSleepData = await updateSleepData(sleepDataId, newSleepData);
     console.log(updatedSleepData);
-    res.redirect(`/api/users/${req.session.authenticatedUser.userId}/sleep`);
+    res.redirect(`/users/${req.session.authenticatedUser.userId}/sleep`);
   } catch (error) {
     console.error(error);
     const databaseErrorMessage = parseDatabaseError(error);
