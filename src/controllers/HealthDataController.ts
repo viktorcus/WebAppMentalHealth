@@ -163,7 +163,7 @@ async function renderHealthProgressPage(req: Request, res: Response): Promise<vo
 
   const stats: HealthDataStats[] = await generateHealthStats(userId, start, end, type);
 
-  res.render('health/healthStats', { user, stats, start, end, type });
+  res.render('healthData/healthStats', { user, stats, start, end, type });
 }
 
 async function updateHealthProgressPage(req: Request, res: Response): Promise<void> {
@@ -199,7 +199,7 @@ async function updateHealthProgressPage(req: Request, res: Response): Promise<vo
   }
 
   const stats: HealthDataStats[] = await generateHealthStats(userId, start, end, type);
-  res.render('health/healthStats', { user, stats, start, end, type });
+  res.render('healthData/healthStats', { user, stats, start, end, type });
 }
 
 async function getHealthStats(req: Request, res: Response): Promise<void> {

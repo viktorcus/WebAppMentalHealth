@@ -223,7 +223,7 @@ async function renderSleepProgressPage(req: Request, res: Response): Promise<voi
 
   const stats: SleepDataStats[] = await generateSleepStats(userId, start, end);
 
-  res.render('sleep/sleepStats', { user, stats, start, end });
+  res.render('sleepData/sleepStats', { user, stats, start, end });
 }
 
 async function updateSleepProgressPage(req: Request, res: Response): Promise<void> {
@@ -259,7 +259,7 @@ async function updateSleepProgressPage(req: Request, res: Response): Promise<voi
   }
 
   const stats: SleepDataStats[] = await generateSleepStats(userId, start, end);
-  res.render('sleep/sleepStats', { user, stats, start, end });
+  res.render('sleepData/sleepStats', { user, stats, start, end });
 }
 
 async function renderCreateSleepPage(req: Request, res: Response): Promise<void> {
