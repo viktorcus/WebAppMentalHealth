@@ -29,8 +29,8 @@ async function addNewSleepData(req: Request, res: Response): Promise<void> {
   }
   try {
     if (user) {
-      const newSleepData = await addSleepData(sleepData, user);
-      res.redirect(`/sleep/${newSleepData.sleepDataId}`);
+      await addSleepData(sleepData, user);
+      res.redirect(`/sleep/${user.userId}/sleep`);
     }
   } catch (err) {
     console.error(err);

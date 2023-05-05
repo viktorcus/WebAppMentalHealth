@@ -101,6 +101,10 @@
         <form method="POST" action="/api/users/<%= user.userId %>/health/add">
           <p class="form-header">New Health Data</p>
           <div class="form-field">
+            <label class="info-item" for="measurementDate">Measurement Date:</label>
+            <input type="date" id="measurementDate" name="measurementDate" required>
+          </div>
+          <div class="form-field">
             <label class="info-item" for="height">Height:</label>
             <input type="text" id="height" name="height" required>
           </div>
@@ -109,16 +113,20 @@
             <input type="text" id="weight" name="weight" required>
           </div>
           <div class="form-field">
-            <label class="info-item" for="BMI">BMI:</label>
-            <input type="text" id="BMI" name="BMI" required>
+            <label class="info-item" for="bmi">BMI:</label>
+            <input type="text" id="bmi" name="bmi" required>
           </div>
           <div class="form-field">
             <label class="info-item" for="heartRate">Heart Rate:</label>
             <input type="text" id="heartRate" name="heartRate" required>
           </div>
           <div class="form-field">
-            <label class="info-item" for="bloodPressure">Blood Pressure:</label>
-            <input type="text" id="bloodPressure" name="bloodPressure" required>
+            <label class="info-item" for="bloodPressureSystolic">Blood Pressure (Systolic):</label>
+            <input type="text" id="bloodPressureSystolic" name="bloodPressureSystolic" required>
+          </div>
+          <div class="form-field">
+            <label class="info-item" for="bloodPressureDiastolic">Blood Pressure (Diastolic):</label>
+            <input type="text" id="bloodPressureDiastolic" name="bloodPressureDiastolic" required>
           </div>
           <div class="form-field">
             <label class="info-item" for="note">Note:</label>

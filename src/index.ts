@@ -186,7 +186,7 @@ app.get('/users/:userId/sleep/create', renderCreateSleepPage);
 app.get('/users/:userId/sleep/:sleepId/update', renderUpdateSleepPage);
 app.get('/users/:userId/sleep/', getAllSleepDataByUser);
 
-app.post('/api/health', addHealthDataController);
+app.post('/api/users/:userId/health/add', addHealthDataController);
 app.get('/api/health/:userId', getAllUserHealthData);
 app.get('/api/health/:healthDataId', getHealthDataById);
 app.post('api/health/:healthDataId/update', updateHealthDataController);

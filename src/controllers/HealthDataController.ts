@@ -31,7 +31,7 @@ async function addHealthDataController(req: Request, res: Response): Promise<voi
   try {
     const newHealthData = await addHealthData(healthData, user);
     console.log(newHealthData);
-    res.redirect(`/api/users/${userId}/health`);
+    res.redirect(`/users/${userId}/health`);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -97,7 +97,7 @@ async function updateHealthDataController(req: Request, res: Response): Promise<
 
     const healthData = await updateHealthData(healthDataId, newHealthData);
     console.log(healthData);
-    res.redirect(`/api/users/${authenticatedUser.userId}/health`);
+    res.redirect(`/users/${authenticatedUser.userId}/health`);
   } catch (error) {
     console.error(error);
     const databaseErrorMessage = parseDatabaseError(error);

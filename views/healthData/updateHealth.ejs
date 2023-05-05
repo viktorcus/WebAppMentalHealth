@@ -113,9 +113,9 @@
               <input type="text" id="height" name="height" value="<%= healthData.height %>" required>
             </div>
             <div class="form-field">
-              <p class="info-value"><span class="info-item">Current BMI : </span><%= healthData.BMI %></p>
-              <label class="info-item" for="BMI">new BMI:</label>
-              <input type="text" id="BMI" name="BMI" value="<%= healthData.BMI %>" required>
+              <p class="info-value"><span class="info-item">Current BMI : </span><%= healthData.bmi %></p>
+              <label class="info-item" for="bmi">new BMI:</label>
+              <input type="text" id="bmi" name="bmi" value="<%= healthData.bmi %>" required>
             </div>
             <div class="form-field">
               <p class="info-value"><span class="info-item">Current Heart Rate: </span><%= healthData.heartRate %></p>
@@ -123,9 +123,14 @@
               <input type="text" id="heartRate" name="heartRate" value="<%= healthData.heartRate %>" required>
             </div>
             <div class="form-field">
-              <p class="info-value"><span class="info-item">Current Blood Pressure: </span><%= healthData.bloodPressure %></p>
-              <label class="info-item" for="bloodPressure">New Blood Pressure:</label>
-              <input type="text" id="bloodPressure" name="bloodPressure" value="<%= healthData.bloodPressure %>" required>
+              <p class="info-value"><span class="info-item">Current Blood Pressure (Systolic): </span><%= healthData.bloodPressureSystolic %></p>
+              <label class="info-item" for="bloodPressureSystolic">New Blood Pressure (Systolic):</label>
+              <input type="text" id="bloodPressureSystolic" name="bloodPressureSystolic" value="<%= healthData.bloodPressureSystolic %>" required>
+            </div>
+            <div class="form-field">
+              <p class="info-value"><span class="info-item">Current Blood Pressure (Diastolic): </span><%= healthData.bloodPressureSystolic %></p>
+              <label class="info-item" for="bloodPressureDiastolic">New Blood Pressure (Diastolic):</label>
+              <input type="text" id="bloodPressureDiastolic" name="bloodPressureDiastolic" value="<%= healthData.bloodPressureSystolic %>" required>
             </div>
             <div class="form-field">
               <label class="info-item note" for="note">New Note:</label>
