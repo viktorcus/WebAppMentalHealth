@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BrainCheckr | Medical History</title>
+    <link rel="stylesheet" href="/css/page_style.css" />
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+  </head>
 
   <body>
     <div class="sidebar close">
@@ -105,40 +119,57 @@
               <p>Treatment: <%= history.treatment %></p>
               <p>Note: <%= history.note ?? 'Unknown' %></p>
             </div>
-            <p>Diagnosis Date: <%= medication.frequency %></p>
-            <p>Treatment: <%= medication.frequency %></p>
-            <p>Note: <%= medication.note ?? 'Unknown' %></p>
           </div>
-        </div>
-        <% } %>
-      </section>
-    </div>
-  </section>
-  <script>
-    let sidebar = document.querySelector('.sidebar');
-    let closeBtn = document.querySelector('#btn');
-    let searchBtn = document.querySelector('.bx-search');
+          <% } %>
+        </section>
+      </div>
+    </section>
+    <script>
+      let sidebar = document.querySelector('.sidebar');
+      let closeBtn = document.querySelector('#btn');
+      // let searchBtn = document.querySelector('.bx-search');
 
-    closeBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      menuBtnChange(); //calling the function
-    });
+      closeBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        menuBtnChange(); //calling the function
+      });
 
-    searchBtn.addEventListener('click', () => {
-      // Sidebar open when you click on the search icon
-      sidebar.classList.toggle('open');
-      menuBtnChange(); //calling the function
-    });
+      // searchBtn.addEventListener('click', () => {
+      //   // Sidebar open when you click on the search icon
+      //   sidebar.classList.toggle('open');
+      //   menuBtnChange(); //calling the function
+      // });
 
-    // the code changes sidebar button
-    function menuBtnChange() {
-      if (sidebar.classList.contains('open')) {
-        closeBtn.classList.replace('bx-menu', 'bx-menu-alt-right'); //replacing the icons class
-      } else {
-        closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
+      // the code changes sidebar button
+      function menuBtnChange() {
+        if (sidebar.classList.contains('open')) {
+          closeBtn.classList.replace('bx-menu', 'bx-menu-alt-right'); //replacing the icons class
+        } else {
+          closeBtn.classList.replace('bx-menu-alt-right', 'bx-menu'); //replacing the icons class
+        }
       }
-    }
-  </script>
-</body>
 
+      async function deleteMedicalHistory (event) {
+        event.preventDefault();
+        const form = event.target;
+        const path = form.getAttribute('action');
+
+        const response = await fetch(path, {
+          method: "DELETE"
+        })
+
+        console.log(response)
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else {
+          alert('failed to delete')
+        }
+      }
+      const deleteMedicalHistoryForms = Array.from(document.querySelectorAll('.deleteMedicalHistory'));
+      deleteMedicalHistoryForms.forEach(form => {
+        form.addEventListener('submit', deleteMedicalHistory);
+      });
+    </script>
+  </body>
 </html>

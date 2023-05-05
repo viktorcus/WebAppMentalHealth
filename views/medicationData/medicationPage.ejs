@@ -94,7 +94,7 @@
         <div>
           <span><a href="/api/users/<%= user.userId %>/medication">My Medication Data</a></span>
           <span>|</span>
-          <span><a href="/users/<%= user.userId %>/medication/create">Create New</a></span>
+          <span><a href="/api/users/<%= user.userId %>/medication/create">Create New</a></span>
 
 
         </div>
@@ -105,7 +105,7 @@
           <div class="data-card">
             <div class="data-card-heading">
               <h3><%= medication.medicationName %></h3>
-              <form action="/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/update">
+              <form action="/api/users/<%= user.userId %>/medication/<%= medication.medicationDataId %>/update">
                 <button>Update</button>
               </form>
               <span>|</span>
