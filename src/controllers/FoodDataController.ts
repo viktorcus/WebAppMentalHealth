@@ -332,12 +332,12 @@ async function updateFoodProgressPage(req: Request, res: Response): Promise<void
   }
 
   const startPieces: number[] = startStr.split('-').map((s) => parseInt(s, 10));
-  const start: Date = new Date(startPieces[0], startPieces[1] - 1, startPieces[2]);
+  let start: Date = new Date(startPieces[0], startPieces[1] - 1, startPieces[2]);
   const endPieces: number[] = endStr.split('-').map((s) => parseInt(s, 10));
   const end: Date = new Date(endPieces[0], endPieces[1] - 1, endPieces[2]);
 
   if (start > end) {
-    res.sendStatus(400); // invalid start/end times
+    start = end;
     return;
   }
 
