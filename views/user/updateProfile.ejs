@@ -113,9 +113,9 @@
         <label class="info-item" for="gender">New Gender:</label>
         <select id="gender" name="gender" required>
           <option value="">-- Select Gender --</option>
-          <option value="Male" <% if (user.gender === 'Male') { %>selected<% } %>>Male</option>
-          <option value="Female" <% if (user.gender === 'Female') { %>selected<% } %>>Female</option>
-          <option value="Other" <% if (user.gender === 'Other') { %>selected<% } %>>Other</option>
+          <option value="0" <% if (user.gender === 0) { %>selected<% } %>>Male</option>
+          <option value="1" <% if (user.gender === 1) { %>selected<% } %>>Female</option>
+          <option value="2" <% if (user.gender === 2) { %>selected<% } %>>Other</option>
         </select>
         <button>Save</button>
       </form>
