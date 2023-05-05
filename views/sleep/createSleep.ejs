@@ -99,12 +99,12 @@
         <form method="POST" action="/api/users/<%= user.userId %>/sleep/add">
           <p class="form-header">New Sleep Data</p>
           <div class="form-field">
-            <label class="info-item" for="sleepDate">Sleep Date:</label>
-            <input type="text" id="sleepDate" name="sleepDate" required>
+            <label class="info-item" for="sleepDate">Sleep Time:</label>
+            <input type="number" id="sleepDate" name="sleepDate" required>
           </div>
           <div class="form-field">
-            <label class="info-item" for="hoursSlept">Hours Slept:</label>
-            <input type="date" id="hoursSlept" name="hoursSlept" required>
+            <label class="info-item" for="sleepHours">Hours Slept:</label>
+            <input type="text" id="sleepHours" name="sleepHours" required>
           </div>
           <div class="form-field">
             <label class="info-item" for="sleepQuality">Sleep Quality:</label>

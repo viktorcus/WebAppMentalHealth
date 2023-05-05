@@ -101,14 +101,14 @@
           <form method="POST" action="/users/<%= user.userId %>/sleep/<%= sleepData.sleepDataId %>/edit">
             <p class="form-header">Update Sleep Data</p>
             <div class="form-field">
-              <p class="info-value"><span class="info-item">Current Sleep Date: </span><%= sleepData.sleepDate %></p>
-              <label class="info-item" for="sleepDate">New Sleep Date:</label>
+              <p class="info-value"><span class="info-item">Current Sleep Time: </span><%= sleepData.sleepDate %></p>
+              <label class="info-item" for="sleepDate">New Sleep Time:</label>
               <input type="text" id="sleepDate" name="sleepDate" value="<%= sleepData.sleepDate %>" required>
             </div>
             <div class="form-field">
-              <p class="info-value"><span class="info-item">Current Hours Slept: </span><%= sleepData.hoursSlept %></p>
-              <label class="info-item" for="hoursSlept">New Sleep Hour:</label>
-              <input type="datetime-local" id="hoursSlept" name="hoursSlept" value="<%= sleepData.hoursSlept %>" required>
+              <p class="info-value"><span class="info-item">Current Sleep Hour: </span><%= sleepData.sleepHours %></p>
+              <label class="info-item" for="sleepHours">New Sleep Hour:</label>
+              <input type="text" id="sleepHours" name="sleepHours" value="<%= sleepData.sleepHours %>" required>
             </div>
             <div class="form-field">
               <p class="info-value"><span class="info-item">Current Sleep Quality: </span><%= sleepData.sleepQuality %></p>
